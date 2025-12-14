@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mi App Personal — Contención</title>
+  <meta name="theme-color" content="#0b1224" />
+  <style>
+    :root{
+      --bg:#0b1224;
+      --card:#0f1a33;
+      --card2:#0c1630;
+      --stroke:rgba(255,255,255,.10);
+      --stroke2:rgba(255,255,255,.14);
+      --text:#f8fafc;
+      --muted:#a8b3cf;
+      --btn:#1c2a4d;
+      --btn2:#162447;
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --accent:#60a5fa;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 10% 0%, rgba(96,165,250,.15), transparent 60%),
+                  radial-gradient(1000px 700px at 90% 10%, rgba(34,197,94,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:900px;margin:0 auto;padding:18px 14px 90px}
+    .topbar{
+      display:flex; align-items:flex-start; gap:12px; justify-content:space-between;
+      margin-bottom:12px;
+    }
+    h1{font-size:18px;margin:0 0 2px}
+    .sub{font-size:13px;color:var(--muted);margin:0}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      padding:14px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    }
+    .card h2{font-size:14px;margin:0 0 10px;color:#dbeafe}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+    @media (min-width: 860px){
+      .grid{grid-template-columns: 1.2fr .8fr}
+    }
+    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
+    input, select, textarea{
+      width:100%;
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border:1px solid var(--stroke);
+      border-radius:12px;
+      padding:11px 12px;
+      font-size:14px;
+      outline:none;
+    }
+    textarea{min-height:84px;resize:vertical}
+    input:focus, select:focus, textarea:focus{border-color:rgba(96,165,250,.55)}
+    .btn{
+      appearance:none;border:none;border-radius:12px;
+      background:var(--btn);
+      color:var(--text);
+      padding:11px 12px;
+      font-weight:700;
+      font-size:14px;
+      cursor:pointer;
+      width:100%;
+      border:1px solid var(--stroke);
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{background:rgba(96,165,250,.20);border-color:rgba(96,165,250,.35)}
+    .btn.good{background:rgba(34,197,94,.18);border-color:rgba(34,197,94,.35)}
+    .btn.warn{background:rgba(245,158,11,.18);border-color:rgba(245,158,11,.35)}
+    .btn.bad{background:rgba(239,68,68,.16);border-color:rgba(239,68,68,.35)}
+    .mini{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.35}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{
+      padding:8px 10px;border-radius:999px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      font-size:12px;
+    }
+    .statrow{display:grid;grid-template-columns: 1fr 1fr;gap:10px}
+    .stat{
+      padding:12px;border-radius:14px;border:1px solid var(--stroke);
+      background:rgba(255,255,255,.02);
+    }
+    .stat .k{font-size:12px;color:var(--muted)}
+    .stat .v{font-size:18px;font-weight:800;margin-top:4px}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .item{
+      border:1px solid var(--stroke);
+      background:rgba(0,0,0,.12);
+      border-radius:14px;
+      padding:12px;
+    }
+    .item .meta{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-bottom:6px}
+    .pill{border:1px solid var(--stroke2);padding:3px 8px;border-radius:999px}
+    .item .txt{white-space:pre-wrap;font-size:13px;line-height:1.35}
+    .footerbar{
+      position:fixed;left:0;right:0;bottom:0;
+      padding:10px 12px;
+      background:rgba(11,18,36,.72);
+      border-top:1px solid var(--stroke);
+      backdrop-filter: blur(10px);
+    }
+    .footerbar .inner{max-width:900px;margin:0 auto;display:flex;gap:10px}
+    .mutedBox{
+      border:1px dashed rgba(255,255,255,.18);
+      border-radius:14px;
+      padding:10px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+      background:rgba(255,255,255,.02);
+    }
+    .hr{height:1px;background:rgba(255,255,255,.08);margin:12px 0}
+    .ok{color:#86efac}
+    .warnTxt{color:#fde68a}
+    .badTxt{color:#fecaca}
+    .smalllink{color:#93c5fd;text-decoration:none}
+    .smalllink:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <h1>Mi App Personal — Contención diaria</h1>
+        <p class="sub">Un registro simple para bajar la ansiedad, sostener impulsos y ver tu avance con claridad. Todo se guarda localmente en tu dispositivo.</p>
+      </div>
+      <div class="chips">
+        <span class="chip" id="chipSaved">Sin guardar aún</span>
+        <span class="chip" id="chipPrivacy">🔒 Local</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- IZQUIERDA: FORMULARIO -->
+      <div class="card">
+        <h2>Registro rápido (2–3 minutos)</h2>
+
+        <div class="statrow">
+          <div class="stat">
+            <div class="k">Tiempo de contención (sin llamar)</div>
+            <div class="v" id="containTime">—</div>
+            <div class="mini">Se calcula desde “Última vez que lo llamé”.</div>
+          </div>
+          <div class="stat">
+            <div class="k">Tu avance hoy</div>
+            <div class="v" id="todayScore">—</div>
+            <div class="mini">Pequeños pasos cuentan. No buscamos perfección.</div>
+          </div>
+        </div>
+
+        <label>1) ¿Cómo está tu cuerpo ahora?</label>
+        <div class="row">
+          <select id="bodyState">
+            <option value="">Elige una opción</option>
+            <option>Pesado / sin energía</option>
+            <option>Tenso / nervioso</option>
+            <option>Agitado / acelerado</option>
+            <option>Dolor en pecho / opresión</option>
+            <option>Normal / estable</option>
+            <option>Más tranquilo</option>
+          </select>
+          <select id="breath">
+            <option value="">Respiración</option>
+            <option>Superficial</option>
+            <option>Entrecortada</option>
+            <option>Normal</option>
+            <option>Más lenta</option>
+          </select>
+        </div>
+
+        <label>2) Intensidad de ansiedad (0–10)</label>
+        <input id="anx" type="number" min="0" max="10" inputmode="numeric" placeholder="Ej: 7" />
+
+        <label>3) ¿Qué impulso sientes más fuerte ahora?</label>
+        <select id="urge">
+          <option value="">Elige una opción</option>
+          <option>Llamarlo</option>
+          <option>Revisar redes / Spotify / WhatsApp</option>
+          <option>Escribirle desde otro número</option>
+          <option>Buscar pruebas / confirmar sospechas</option>
+          <option>Pensamientos repetitivos o intrusivos</option>
+          <option>Aislarme / acostarme</option>
+          <option>Llorar</option>
+          <option>Fumar</option>
+          <option>Otro</option>
+        </select>
+
+        <label>4) ¿Qué está disparando esto? (muy corto)</label>
+        <input id="trigger" type="text" placeholder="Ej: no respondió / vi una foto / recuerdo / incertidumbre" />
+
+        <label>5) ¿Qué acción de contención harás en los próximos 10 minutos?</label>
+        <select id="nextAction">
+          <option value="">Elige una opción</option>
+          <option>Volver a mi trabajo (10 min)</option>
+          <option>Tomar agua / café / comer algo pequeño</option>
+          <option>Caminar 3–5 min</option>
+          <option>Respirar 4-6 (3 ciclos)</option>
+          <option>Tejer 10 min</option>
+          <option>Escribir 5 líneas (descarga)</option>
+          <option>Hablar con alguien seguro</option>
+          <option>Ducharme / higiene</option>
+          <option>Salir a luz/aire 2 min</option>
+        </select>
+
+        <label>6) Nota breve (opcional)</label>
+        <textarea id="note" placeholder="Escribe lo mínimo: qué sientes, qué necesitas, qué no quieres hacer hoy."></textarea>
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" id="btnSave">Guardar registro</button>
+          <button class="btn" id="btnSaveAndWork">Guardar + “seguir trabajando”</button>
+        </div>
+
+        <div class="hr"></div>
+
+        <h2>Contacto: última vez que lo llamaste</h2>
+        <label>Fecha y hora de tu última llamada (para medir contención)</label>
+        <div class="row">
+          <input id="lastCallDT" type="datetime-local" />
+          <button class="btn warn" id="btnSetNow">Poner “ahorita”</button>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn good" id="btnSaveLastCall">Guardar última llamada</button>
+          <button class="btn bad" id="btnClearLastCall">Borrar dato</button>
+        </div>
+
+        <div class="hr"></div>
+
+        <h2>Frase bonita (rápida)</h2>
+        <div class="mutedBox" id="quoteBox">Pulsa el botón para una frase de contención.</div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn primary" id="btnQuote">Dame una frase linda</button>
+          <button class="btn" id="btnCopyQuote">Copiar</button>
+        </div>
+
+        <div class="mini">
+          Si en algún momento sientes que podrías hacerte daño o que no estás segura contigo, busca ayuda inmediata:
+          <br/>• En México: <b>911</b> (emergencias) o <b>Línea de la Vida 800 911 2000</b>.
+          <br/>No tienes que cargar esto sola.
+        </div>
+      </div>
+
+      <!-- DERECHA: RESUMEN + HISTORIAL -->
+      <div class="card">
+        <h2>Resumen de hoy</h2>
+
+        <div class="statrow">
+          <div class="stat">
+            <div class="k">Registros hoy</div>
+            <div class="v" id="todayCount">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Promedio ansiedad hoy</div>
+            <div class="v" id="todayAvgAnx">—</div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <h2>Resumen semanal (últimos 7 días)</h2>
+        <div class="mutedBox" id="weekSummary">—</div>
+
+        <div class="row" style="margin-top:10px">
+          <button class="btn" id="btnExport">Exportar mis datos</button>
+          <input id="importFile" type="file" accept="application/json" style="display:none" />
+          <button class="btn" id="btnImport">Importar</button>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <button class="btn bad" id="btnReset">Borrar TODO (local)</button>
+        </div>
+
+        <div class="hr"></div>
+
+        <h2>Historial (más reciente arriba)</h2>
+        <div class="list" id="history"></div>
+
+        <div class="mini">
+          Tip: si quieres “apps diferentes” sin mezclar datos, podemos crear otro repo (otra URL) o cambiar el nombre interno del almacenamiento.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerbar">
+    <div class="inner">
+      <button class="btn good" id="btnQuick10">✨ Acción 10 min (sin pensar)</button>
+      <button class="btn warn" id="btnGround">🫶 Anclaje (30 seg)</button>
+      <button class="btn primary" id="btnOpenPagesHelp">🌐 Publicar y abrir</button>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const KEY = "mi_app_personal_v1";
+  const $ = (id) => document.getElementById(id);
+
+  const state = {
+    entries: [],
+    lastCallISO: ""
+  };
+
+  const quotes = [
+    "Hoy no necesito resolver toda mi vida. Solo necesito sostener este momento.",
+    "Puedo extrañar y aun así cuidarme. Ambas cosas caben.",
+    "Mi ansiedad busca certeza; yo puedo elegir calma paso a paso.",
+    "Un impulso no es una orden. Es una ola: sube, se queda, y baja.",
+    "No tengo que perseguir la paz: puedo construirla en 10 minutos.",
+    "Hoy me trato con ternura. Estoy atravesando algo difícil.",
+    "Que duela no significa que esté mal: significa que amo y que soy humana.",
+    "Puedo pedir claridad sin abandonarme a mí misma.",
+    "Mi valor no depende de que alguien se quede o se vaya.",
+    "Hoy elijo cuidarme como cuidaría a alguien que amo."
+  ];
+
+  function load(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      if(!raw) return;
+      const obj = JSON.parse(raw);
+      if(obj && typeof obj === "object"){
+        state.entries = Array.isArray(obj.entries) ? obj.entries : [];
+        state.lastCallISO = typeof obj.lastCallISO === "string" ? obj.lastCallISO : "";
+      }
+    }catch(e){}
+  }
+
+  function save(){
+    localStorage.setItem(KEY, JSON.stringify(state));
+    setSaved("Guardado ✓");
+  }
+
+  function setSaved(txt){
+    $("chipSaved").textContent = txt;
+    setTimeout(() => { $("chipSaved").textContent = "🔒 Guardado local"; }, 1200);
+  }
+
+  function nowLocalDT(){
+    const d = new Date();
+    const pad = (n)=> String(n).padStart(2,"0");
+    const yyyy = d.getFullYear();
+    const mm = pad(d.getMonth()+1);
+    const dd = pad(d.getDate());
+    const hh = pad(d.getHours());
+    const mi = pad(d.getMinutes());
+    return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+  }
+
+  function fmtDateTime(iso){
+    if(!iso) return "—";
+    const d = new Date(iso);
+    if(Number.isNaN(d.getTime())) return "—";
+    return d.toLocaleString("es-MX", { dateStyle:"medium", timeStyle:"short" });
+  }
+
+  function hoursSince(iso){
+    if(!iso) return null;
+    const d = new Date(iso);
+    if(Number.isNaN(d.getTime())) return null;
+    const diffMs = Date.now() - d.getTime();
+    if(diffMs < 0) return 0;
+    return diffMs / (1000*60*60);
+  }
+
+  function computeContainLabel(){
+    const h = hoursSince(state.lastCallISO);
+    if(h === null) return "—";
+    const days = Math.floor(h/24);
+    const hrs = Math.floor(h%24);
+    const mins = Math.floor((h*60)%60);
+    if(days > 0) return `${days}d ${hrs}h ${mins}m`;
+    if(hrs > 0) return `${hrs}h ${mins}m`;
+    return `${mins}m`;
+  }
+
+  function startOfDay(d){
+    const x = new Date(d);
+    x.setHours(0,0,0,0);
+    return x;
+  }
+
+  function isSameDay(a,b){
+    return startOfDay(a).getTime() === startOfDay(b).getTime();
+  }
+
+  function lastNDays(n){
+    const arr = [];
+    const today = startOfDay(new Date());
+    for(let i=0;i<n;i++){
+      const d = new Date(today);
+      d.setDate(today.getDate()-i);
+      arr.push(d);
+    }
+    return arr;
+  }
+
+  function scoreToday(){
+    const today = new Date();
+    const todays = state.entries.filter(e => isSameDay(new Date(e.ts), today));
+    // Score simple: registros + acción elegida + ansiedad bajo
+    let score = 0;
+    score += Math.min(5, todays.length);               // hasta 5 puntos por registrar
+    score += todays.filter(e => e.nextAction).length;  // +1 por cada acción elegida
+    const anxVals = todays.map(e => Number(e.anx)).filter(v => !Number.isNaN(v));
+    if(anxVals.length){
+      const avg = anxVals.reduce((a,b)=>a+b,0)/anxVals.length;
+      if(avg <= 3) score += 3;
+      else if(avg <= 6) score += 2;
+      else score += 1;
+    }
+    return score;
+  }
+
+  function updateStats(){
+    $("containTime").textContent = computeContainLabel();
+
+    const today = new Date();
+    const todays = state.entries.filter(e => isSameDay(new Date(e.ts), today));
+    $("todayCount").textContent = String(todays.length);
+
+    const anxVals = todays.map(e => Number(e.anx)).filter(v => !Number.isNaN(v));
+    $("todayAvgAnx").textContent = anxVals.length
+      ? (anxVals.reduce((a,b)=>a+b,0)/anxVals.length).toFixed(1)
+      : "—";
+
+    $("todayScore").textContent = String(scoreToday());
+
+    // Week summary
+    const days = lastNDays(7);
+    const byDay = days.map(d => {
+      const items = state.entries.filter(e => isSameDay(new Date(e.ts), d));
+      const anx = items.map(e => Number(e.anx)).filter(v => !Number.isNaN(v));
+      const avg = anx.length ? (anx.reduce((a,b)=>a+b,0)/anx.length) : null;
+      return { d, count: items.length, avg };
+    });
+
+    const total = byDay.reduce((a,x)=>a+x.count,0);
+    const avgWeek = (() => {
+      const vals = state.entries
+        .filter(e => (Date.now() - new Date(e.ts).getTime()) <= 7*24*3600*1000)
+        .map(e => Number(e.anx)).filter(v => !Number.isNaN(v));
+      if(!vals.length) return null;
+      return vals.reduce((a,b)=>a+b,0)/vals.length;
+    })();
+
+    const bestDay = byDay.slice().sort((a,b)=> (b.count - a.count))[0];
+    const lines = [];
+    lines.push(`• Registros últimos 7 días: ${total}`);
+    lines.push(`• Promedio ansiedad semanal: ${avgWeek === null ? "—" : avgWeek.toFixed(1)}`);
+    lines.push(`• Día con más registros: ${bestDay.count ? bestDay.d.toLocaleDateString("es-MX",{weekday:"long"}) + " ("+bestDay.count+")" : "—"}`);
+    lines.push(`• Recordatorio: tu meta es constancia, no perfección.`);
+    $("weekSummary").textContent = lines.join("\n");
+  }
+
+  function renderHistory(){
+    const box = $("history");
+    box.innerHTML = "";
+    const sorted = [...state.entries].sort((a,b)=> new Date(b.ts) - new Date(a.ts));
+    if(!sorted.length){
+      box.innerHTML = `<div class="mutedBox">Aún no hay registros. Cuando guardes uno, aparecerá aquí.</div>`;
+      return;
+    }
+    for(const e of sorted.slice(0, 40)){
+      const div = document.createElement("div");
+      div.className = "item";
+      const pills = [
+        e.urge ? `<span class="pill">Impulso: ${escapeHtml(e.urge)}</span>` : "",
+        (e.anx !== "" && e.anx !== null && e.anx !== undefined) ? `<span class="pill">Ansiedad: ${escapeHtml(String(e.anx))}/10</span>` : "",
+        e.nextAction ? `<span class="pill">Acción: ${escapeHtml(e.nextAction)}</span>` : ""
+      ].filter(Boolean).join(" ");
+
+      div.innerHTML = `
+        <div class="meta">
+          <span class="pill">${fmtDateTime(e.ts)}</span>
+          ${pills}
+        </div>
+        <div class="txt"><b>Disparador:</b> ${escapeHtml(e.trigger || "—")}\n<b>Nota:</b> ${escapeHtml(e.note || "—")}</div>
+        <div class="mini" style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+          <a href="#" class="smalllink" data-del="${e.id}">Eliminar</a>
+        </div>
+      `;
+      box.appendChild(div);
+    }
+    box.querySelectorAll("[data-del]").forEach(a => {
+      a.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        const id = a.getAttribute("data-del");
+        state.entries = state.entries.filter(x => x.id !== id);
+        save(); updateAll();
+      });
+    });
+  }
+
+  function escapeHtml(s){
+    return String(s)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function addEntry(extraTag){
+    const entry = {
+      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random(),
+      ts: new Date().toISOString(),
+      bodyState: $("bodyState").value,
+      breath: $("breath").value,
+      anx: $("anx").value,
+      urge: $("urge").value,
+      trigger: $("trigger").value.trim(),
+      nextAction: $("nextAction").value,
+      note: $("note").value.trim(),
+      tag: extraTag || ""
+    };
+    state.entries.push(entry);
+    save();
+    // Limpieza suave (para que sea fácil repetir)
+    $("trigger").value = "";
+    $("note").value = "";
+    setSaved("Guardado ✓");
+    updateAll();
+  }
+
+  function updateAll(){
+    updateStats();
+    renderHistory();
+    // refrescar contención cada segundo
+    $("containTime").textContent = computeContainLabel();
+  }
+
+  // Botones principales
+  $("btnSave").addEventListener("click", () => addEntry(""));
+  $("btnSaveAndWork").addEventListener("click", () => addEntry("seguir trabajando"));
+
+  // Última llamada
+  $("btnSetNow").addEventListener("click", () => {
+    $("lastCallDT").value = nowLocalDT();
+  });
+  $("btnSaveLastCall").addEventListener("click", () => {
+    const v = $("lastCallDT").value;
+    if(!v){ alert("Pon una fecha y hora primero."); return; }
+    // datetime-local no trae zona; la convertimos a Date local
+    const d = new Date(v);
+    if(Number.isNaN(d.getTime())){ alert("No pude leer esa fecha/hora."); return; }
+    state.lastCallISO = d.toISOString();
+    save();
+    updateAll();
+  });
+  $("btnClearLastCall").addEventListener("click", () => {
+    state.lastCallISO = "";
+    $("lastCallDT").value = "";
+    save();
+    updateAll();
+  });
+
+  // Frases
+  function newQuote(){
+    const q = quotes[Math.floor(Math.random()*quotes.length)];
+    $("quoteBox").textContent = q;
+  }
+  $("btnQuote").addEventListener("click", newQuote);
+  $("btnCopyQuote").addEventListener("click", async () => {
+    try{
+      await navigator.clipboard.writeText($("quoteBox").textContent);
+      setSaved("Copiado ✓");
+    }catch(e){
+      alert("No pude copiar. Mantén presionado el texto y copia manualmente.");
+    }
+  });
+
+  // Barra inferior: herramientas rápidas
+  $("btnQuick10").addEventListener("click", () => {
+    const options = [
+      "Pon timer 10 min y haz SOLO una tarea pequeña del trabajo.",
+      "Toma agua y respira 3 ciclos (4 inhalar / 6 exhalar).",
+      "Camina 3–5 min, mirando el entorno (sin celular).",
+      "Escribe 5 líneas: “Lo que siento es… Lo que necesito es…”",
+      "Teje 10 min con música tranquila."
+    ];
+    alert("Acción de 10 min:\n\n" + options[Math.floor(Math.random()*options.length)]);
+  });
+
+  $("btnGround").addEventListener("click", () => {
+    alert("Anclaje (30 seg):\n\n1) Pies al piso.\n2) Nombra 3 cosas que ves.\n3) Toca 2 cosas.\n4) Una exhalación lenta (6 segundos).\n\nSolo baja un puntito. Eso basta.");
+  });
+
+  $("btnOpenPagesHelp").addEventListener("click", () => {
+    alert("Publicar y abrir tu app:\n\n1) Guarda (Commit changes).\n2) Ve a Settings → Pages.\n3) Source: Deploy from a branch.\n4) Branch: main / root → Save.\n5) Abre la URL que te da (tarda 1–3 min).\n\nLuego en Safari: Compartir → Añadir a pantalla de inicio.");
+  });
+
+  // Export / Import / Reset
+  $("btnExport").addEventListener("click", () => {
+    const data = JSON.stringify(state, null, 2);
+    const blob = new Blob([data], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "mi-app-personal-respaldo.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=> URL.revokeObjectURL(url), 800);
+  });
+
+  $("btnImport").addEventListener("click", () => $("importFile").click());
+  $("importFile").addEventListener("change", async (ev) => {
+    const file = ev.target.files && ev.target.files[0];
+    if(!file) return;
+    try{
+      const txt = await file.text();
+      const obj = JSON.parse(txt);
+      if(!obj || typeof obj !== "object") throw new Error("Formato inválido");
+      if(!Array.isArray(obj.entries)) throw new Error("Faltan entries");
+      state.entries = obj.entries;
+      state.lastCallISO = typeof obj.lastCallISO === "string" ? obj.lastCallISO : "";
+      save();
+      updateAll();
+      alert("Importación lista ✓");
+    }catch(e){
+      alert("No pude importar ese archivo. Asegúrate de que sea un respaldo de esta app.");
+    }finally{
+      $("importFile").value = "";
+    }
+  });
+
+  $("btnReset").addEventListener("click", () => {
+    const ok = confirm("¿Seguro? Esto borra TODO lo guardado en este dispositivo (no se puede deshacer).");
+    if(!ok) return;
+    state.entries = [];
+    state.lastCallISO = "";
+    localStorage.removeItem(KEY);
+    $("lastCallDT").value = "";
+    setSaved("Borrado ✓");
+    updateAll();
+  });
+
+  // Inicializar
+  load();
+  $("lastCallDT").value = state.lastCallISO ? (() => {
+    const d = new Date(state.lastCallISO);
+    if(Number.isNaN(d.getTime())) return "";
+    // convertir ISO a datetime-local (aprox local)
+    const pad = (n)=> String(n).padStart(2,"0");
+    const yyyy = d.getFullYear();
+    const mm = pad(d.getMonth()+1);
+    const dd = pad(d.getDate());
+    const hh = pad(d.getHours());
+    const mi = pad(d.getMinutes());
+    return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+  })() : "";
+
+  newQuote();
+  updateAll();
+  setInterval(() => { $("containTime").textContent = computeContainLabel(); }, 1000);
+})();
+</script>
+</body>
+</html>
