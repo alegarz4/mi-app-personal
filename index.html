@@ -1,204 +1,493 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mi App Personal</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi App Personal</title>
 
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0b1224">
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0b1224">
 
-<style>
-:root{
- --bg:#0b1224;
- --card:#101a33;
- --text:#e5e7eb;
- --muted:#9ca3af;
- --btn:#22c55e;
- --btn2:#60a5fa;
-}
-body{
- margin:0;
- font-family: system-ui, Arial;
- background:var(--bg);
- color:var(--text);
-}
-.container{
- max-width:520px;
- margin:auto;
- padding:16px;
-}
-.card{
- background:var(--card);
- border-radius:16px;
- padding:16px;
- margin-bottom:16px;
-}
-h1,h2{
- margin:0 0 8px 0;
-}
-label{
- display:block;
- margin-top:8px;
- color:var(--muted);
-}
-input,select,textarea{
- width:100%;
- padding:10px;
- border-radius:10px;
- border:none;
- margin-top:4px;
- background:#0f172a;
- color:white;
-}
-button{
- width:100%;
- margin-top:12px;
- padding:14px;
- border:none;
- border-radius:12px;
- background:var(--btn);
- color:#052e16;
- font-weight:700;
- font-size:15px;
-}
-button.alt{
- background:var(--btn2);
- color:#022c44;
-}
-small{
- color:var(--muted);
-}
-.quote{
- text-align:center;
- font-style:italic;
-}
-.time{
- text-align:center;
- font-size:18px;
- font-weight:700;
-}
-</style>
+  <style>
+    :root{
+      --bg:#0b1224;
+      --card:#101a33;
+      --stroke:rgba(255,255,255,.10);
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --btn:#22c55e;
+      --btn2:#60a5fa;
+      --warn:#fbbf24;
+      --danger:#fb7185;
+      --input:#0f172a;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(96,165,250,.18), transparent 60%),
+                  radial-gradient(900px 500px at 80% 20%, rgba(34,197,94,.15), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+
+    .container{
+      max-width:560px;
+      margin:0 auto;
+      padding:18px 14px 28px;
+    }
+
+    h1{
+      margin:8px 0 14px;
+      font-size:28px;
+      letter-spacing:.2px;
+    }
+    .sub{
+      color:var(--muted);
+      margin:-6px 0 16px;
+      font-size:13.5px;
+      line-height:1.35;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(16,26,51,.95), rgba(16,26,51,.75));
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      padding:16px;
+      margin-bottom:14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    h2{
+      margin:0 0 10px;
+      font-size:18px;
+    }
+
+    label{
+      display:block;
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    input, select, textarea{
+      width:100%;
+      margin-top:6px;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:var(--input);
+      color:var(--text);
+      outline:none;
+    }
+    textarea{min-height:84px; resize:vertical}
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .col{flex:1; min-width:160px}
+
+    button{
+      width:100%;
+      margin-top:12px;
+      padding:14px 14px;
+      border:0;
+      border-radius:14px;
+      font-weight:800;
+      font-size:15px;
+      cursor:pointer;
+      transition: transform .06s ease;
+    }
+    button:active{transform:translateY(1px)}
+    .btn{background:var(--btn); color:#052e16;}
+    .btn2{background:var(--btn2); color:#022c44;}
+    .ghost{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--text);
+    }
+
+    .pill{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color:var(--muted);
+      font-size:12px;
+      margin-top:8px;
+    }
+
+    .quote{
+      text-align:center;
+      font-style:italic;
+      color:#dbeafe;
+      line-height:1.45;
+      margin:10px 0 0;
+    }
+
+    .time{
+      text-align:center;
+      font-size:18px;
+      font-weight:900;
+      margin:10px 0 0;
+    }
+
+    .muted{color:var(--muted); font-size:13px; line-height:1.35}
+    .hr{height:1px; background:rgba(255,255,255,.08); margin:12px 0}
+    .mini{
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:8px;
+      white-space:pre-line;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="container">
+    <h1>Mi App Personal</h1>
+    <div class="sub">
+      Pequeños registros = mucha claridad. Esta app guarda todo <b>solo en tu dispositivo</b>.
+    </div>
 
-<div class="container">
+    <!-- REGISTRO DEL DÍA -->
+    <div class="card">
+      <h2>¿Cómo me siento?</h2>
 
-<h1>Mi App Personal</h1>
+      <label>Hoy me siento…</label>
+      <select id="mood">
+        <option>Tranquila</option>
+        <option>Ansiosa</option>
+        <option>Triste</option>
+        <option>Confundida</option>
+        <option>Indiferente</option>
+        <option>En calma</option>
+        <option>Esperanzada</option>
+      </select>
 
-<div class="card">
-<h2>¿Cómo me siento?</h2>
-<select id="mood">
-<option>Tranquila</option>
-<option>Ansiosa</option>
-<option>Triste</option>
-<option>Confundida</option>
-<option>En calma</option>
-<option>Esperanzada</option>
-</select>
+      <label>¿Qué pensamiento domina?</label>
+      <textarea id="thought" placeholder="Escribe 1–3 líneas. Lo suficiente."></textarea>
 
-<label>¿Qué pensamiento domina?</label>
-<textarea id="thought"></textarea>
+      <button class="btn" onclick="saveEntry()">Guardar registro</button>
 
-<button onclick="saveEntry()">Guardar registro</button>
-</div>
+      <div class="pill" id="savedCountPill">Registros guardados: 0</div>
+    </div>
 
-<div class="card">
-<h2>Última llamada</h2>
-<input type="datetime-local" id="lastCall">
-<button class="alt" onclick="saveLastCall()">Guardar hora</button>
-<p class="time" id="containTime"></p>
-</div>
+    <!-- ÚLTIMA LLAMADA (CONTENCIÓN) -->
+    <div class="card">
+      <h2>Última llamada (contención)</h2>
+      <div class="muted">Aquí solo guardas la hora de tu última llamada/contacto para ver el tiempo que llevas sosteniéndote.</div>
 
-<div class="card">
-<h2>Frase para ti</h2>
-<p class="quote" id="quote"></p>
-<button class="alt" onclick="newQuote()">Otra frase</button>
-</div>
+      <label>¿Cuándo fue la última vez que lo llamaste o hablaron?</label>
+      <input type="datetime-local" id="lastCallDT"/>
 
-<div class="card">
-<h2>Respaldo</h2>
-<button onclick="exportData()">Exportar datos</button>
-<button class="alt" onclick="importData()">Importar datos</button>
-<input type="file" id="fileInput" style="display:none">
-</div>
+      <button class="btn2" onclick="saveContainTime()">Guardar hora</button>
 
-</div>
+      <div class="time" id="containTime"></div>
+      <div class="mini" id="containHint"></div>
+    </div>
+
+    <!-- ÉL ME LLAMÓ (DETALLE) -->
+    <div class="card">
+      <h2>Él me llamó</h2>
+      <div class="muted">Esto es para observarte con cariño: antes / después. Sin juicio.</div>
+
+      <label>¿Cuándo fue?</label>
+      <input type="datetime-local" id="callDT">
+
+      <label>Duración (minutos)</label>
+      <input type="number" id="callMin" min="1" placeholder="Ej. 12">
+
+      <div class="row">
+        <div class="col">
+          <label>¿Cómo me sentía ANTES?</label>
+          <select id="callBefore">
+            <option>Tranquila</option>
+            <option>Ansiosa</option>
+            <option>Triste</option>
+            <option>Confundida</option>
+            <option>Indiferente</option>
+            <option>En calma</option>
+            <option>Esperanzada</option>
+          </select>
+        </div>
+
+        <div class="col">
+          <label>¿Cómo me sentí DESPUÉS?</label>
+          <select id="callAfter">
+            <option>Más tranquila</option>
+            <option>Igual</option>
+            <option>Más ansiosa</option>
+            <option>Más triste</option>
+            <option>Indiferente</option>
+            <option>Con esperanza</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Nota (opcional, 1–2 líneas)</label>
+      <textarea id="callNote" placeholder="Ej. Me calmó escucharlo, pero después volvió la duda."></textarea>
+
+      <button class="btn2" onclick="saveCallLog()">Guardar llamada</button>
+
+      <div class="hr"></div>
+      <div class="muted"><b>Resumen rápido</b></div>
+      <div class="mini" id="callSummary">Aún no has guardado una llamada aquí.</div>
+    </div>
+
+    <!-- FRASES -->
+    <div class="card">
+      <h2>Frase para ti</h2>
+      <p class="quote" id="quote"></p>
+      <button class="btn2" onclick="newQuote()">Otra frase</button>
+    </div>
+
+    <!-- RESPALDO -->
+    <div class="card">
+      <h2>Respaldo</h2>
+      <div class="muted">Para pasar datos entre iPad / celular / Chromebook: exportas en uno e importas en el otro.</div>
+      <button class="btn" onclick="exportData()">Exportar datos</button>
+      <button class="btn2" onclick="importData()">Importar datos</button>
+      <input type="file" id="fileInput" accept="application/json" style="display:none">
+    </div>
+
+    <div class="muted" style="text-align:center; margin-top:6px;">
+      Hecho para ti, con calma. 🤍
+    </div>
+  </div>
 
 <script>
-const quotes=[
-"Respira, ya estás haciendo lo mejor que puedes.",
-"No tienes que tener todo resuelto hoy.",
-"Eres más fuerte de lo que sientes ahora.",
-"Tu valor no depende de nadie más.",
-"Aquí estás, y eso ya es valentía."
-];
+  // ====== FRASES ======
+  const quotes = [
+    "Respira, ya estás haciendo lo mejor que puedes.",
+    "No tienes que tener todo resuelto hoy.",
+    "Eres más fuerte de lo que sientes ahora.",
+    "Tu valor no depende de nadie más.",
+    "Hoy no se trata de ganar; se trata de sostenerte con cariño.",
+    "Si hoy solo puedes con lo mínimo, eso también cuenta.",
+    "Lo que sientes es válido. Y también es pasajero.",
+    "Un paso chiquito también es un paso."
+  ];
 
-function newQuote(){
- document.getElementById("quote").innerText=
- quotes[Math.floor(Math.random()*quotes.length)];
-}
+  function newQuote(){
+    const el = document.getElementById("quote");
+    el.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+  }
 
-function saveEntry(){
- const data=JSON.parse(localStorage.getItem("entries")||"[]");
- data.push({
-  date:new Date().toISOString(),
-  mood: mood.value,
-  thought: thought.value
- });
- localStorage.setItem("entries",JSON.stringify(data));
- alert("Guardado 🤍");
- thought.value="";
-}
+  // ====== REGISTRO DIARIO ======
+  function saveEntry(){
+    const mood = document.getElementById("mood").value;
+    const thought = document.getElementById("thought").value.trim();
 
-function saveLastCall(){
- localStorage.setItem("lastCall", lastCall.value);
- updateContain();
-}
+    const entries = JSON.parse(localStorage.getItem("entries") || "[]");
+    entries.unshift({
+      date: new Date().toISOString(),
+      mood,
+      thought
+    });
+    localStorage.setItem("entries", JSON.stringify(entries));
 
-function updateContain(){
- const v=localStorage.getItem("lastCall");
- if(!v){containTime.innerText="";return;}
- const diff=Math.floor((Date.now()-new Date(v))/60000);
- containTime.innerText="Contención: "+diff+" minutos";
-}
+    document.getElementById("thought").value = "";
+    updateSavedCount();
+    alert("Guardado 🤍");
+  }
 
-function exportData(){
- const blob=new Blob([JSON.stringify(localStorage)],{type:"application/json"});
- const a=document.createElement("a");
- a.href=URL.createObjectURL(blob);
- a.download="mi_app_respaldo.json";
- a.click();
-}
+  function updateSavedCount(){
+    const entries = JSON.parse(localStorage.getItem("entries") || "[]");
+    const pill = document.getElementById("savedCountPill");
+    if(pill) pill.textContent = "Registros guardados: " + entries.length;
+  }
 
-function importData(){
- fileInput.click();
-}
+  // ====== CONTENCIÓN (ÚLTIMA LLAMADA) ======
+  // Guardamos como ISO simple para calcular tiempo.
+  const CONTAIN_KEY = "lastContainISO";
 
-fileInput.onchange=e=>{
- const reader=new FileReader();
- reader.onload=()=>{
-  const data=JSON.parse(reader.result);
-  for(let k in data){localStorage.setItem(k,data[k]);}
-  alert("Datos restaurados 🤍");
-  updateContain();
- };
- reader.readAsText(e.target.files[0]);
-}
+  function saveContainTime(){
+    const v = document.getElementById("lastCallDT").value;
+    if(!v){
+      alert("Elige fecha y hora.");
+      return;
+    }
+    // datetime-local -> Date local
+    const d = new Date(v);
+    localStorage.setItem(CONTAIN_KEY, d.toISOString());
+    updateContain();
+    alert("Hora guardada 🤍");
+  }
 
-function load(){
- newQuote();
- updateContain();
- lastCall.value=localStorage.getItem("lastCall")||"";
-}
+  function minutesToHuman(min){
+    if(min < 60) return `${min} min`;
+    const h = Math.floor(min / 60);
+    const m = min % 60;
+    if(h < 24) return `${h} h ${m} min`;
+    const days = Math.floor(h / 24);
+    const rh = h % 24;
+    return `${days} d ${rh} h ${m} min`;
+  }
 
-load();
+  function updateContain(){
+    const iso = localStorage.getItem(CONTAIN_KEY);
+    const out = document.getElementById("containTime");
+    const hint = document.getElementById("containHint");
+    if(!out || !hint) return;
 
-if ("serviceWorker" in navigator) {
- window.addEventListener("load", () => {
-  navigator.serviceWorker.register("./sw.js").catch(()=>{});
- });
-}
+    if(!iso){
+      out.textContent = "";
+      hint.textContent = "Aún no has guardado una hora aquí.";
+      return;
+    }
+
+    const diffMin = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 60000));
+    out.textContent = minutesToHuman(diffMin);
+
+    // Mensaje suave según tiempo
+    if(diffMin < 30) hint.textContent = "Primeros minutos: respira. Solo por ahora.";
+    else if(diffMin < 180) hint.textContent = "Vas sosteniéndote. No tienes que hacerlo perfecto.";
+    else if(diffMin < 1440) hint.textContent = "Un tramo importante del día. Reconócetelo.";
+    else hint.textContent = "Has logrado mucho tiempo. Eso también es amor propio.";
+  }
+
+  // actualiza cada minuto
+  setInterval(updateContain, 60 * 1000);
+
+  // ====== ÉL ME LLAMÓ (LOG) ======
+  const CALL_LOGS_KEY = "callLogs";
+  const LAST_CALL_LOG_KEY = "lastCallLog";
+
+  function saveCallLog(){
+    const dt = document.getElementById("callDT").value;
+    const min = parseInt(document.getElementById("callMin").value || "0", 10);
+    const before = document.getElementById("callBefore").value;
+    const after = document.getElementById("callAfter").value;
+    const note = document.getElementById("callNote").value.trim();
+
+    if(!dt || !min || min < 1){
+      alert("Completa fecha/hora y duración (mínimo 1 minuto).");
+      return;
+    }
+
+    const entry = {
+      datetime: dt,      // guardamos el string local
+      minutes: min,
+      before,
+      after,
+      note,
+      savedAt: new Date().toISOString()
+    };
+
+    const logs = JSON.parse(localStorage.getItem(CALL_LOGS_KEY) || "[]");
+    logs.unshift(entry);
+    localStorage.setItem(CALL_LOGS_KEY, JSON.stringify(logs));
+    localStorage.setItem(LAST_CALL_LOG_KEY, JSON.stringify(entry));
+
+    document.getElementById("callNote").value = "";
+    document.getElementById("callMin").value = "";
+
+    showCallSummary();
+    alert("Llamada guardada 🤍");
+  }
+
+  function showCallSummary(){
+    const div = document.getElementById("callSummary");
+    if(!div) return;
+
+    const saved = localStorage.getItem(LAST_CALL_LOG_KEY);
+    if(!saved){
+      div.textContent = "Aún no has guardado una llamada aquí.";
+      return;
+    }
+
+    const c = JSON.parse(saved);
+    const d = new Date(c.datetime);
+
+    const lines = [];
+    lines.push(`Última llamada: ${d.toLocaleDateString()} ${d.toLocaleTimeString()} · ${c.minutes} min`);
+    lines.push(`Antes: ${c.before} · Después: ${c.after}`);
+    if(c.note) lines.push(`Nota: ${c.note}`);
+
+    div.textContent = lines.join("\n");
+  }
+
+  // ====== EXPORT / IMPORT ======
+  function exportData(){
+    // Guardamos todo localStorage en un JSON
+    const data = {};
+    for(let i=0;i<localStorage.length;i++){
+      const k = localStorage.key(i);
+      data[k] = localStorage.getItem(k);
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "mi_app_respaldo.json";
+    a.click();
+  }
+
+  function importData(){
+    document.getElementById("fileInput").click();
+  }
+
+  document.getElementById("fileInput").addEventListener("change", (e) => {
+    const f = e.target.files && e.target.files[0];
+    if(!f) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      try{
+        const data = JSON.parse(reader.result);
+        for(const k in data){
+          localStorage.setItem(k, data[k]);
+        }
+        alert("Datos restaurados 🤍");
+        hydrate();
+      }catch(err){
+        alert("No pude leer ese archivo. Asegúrate de usar el respaldo de esta app.");
+      }
+    };
+    reader.readAsText(f);
+  });
+
+  // ====== CARGA INICIAL ======
+  function hydrate(){
+    newQuote();
+    updateSavedCount();
+
+    // contención: llenar input si existe
+    const iso = localStorage.getItem(CONTAIN_KEY);
+    const inp = document.getElementById("lastCallDT");
+    if(inp){
+      if(iso){
+        const d = new Date(iso);
+        // convertir ISO -> datetime-local (aprox local)
+        const pad = (n) => String(n).padStart(2,"0");
+        const yyyy = d.getFullYear();
+        const mm = pad(d.getMonth()+1);
+        const dd = pad(d.getDate());
+        const hh = pad(d.getHours());
+        const mi = pad(d.getMinutes());
+        inp.value = `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+      } else {
+        inp.value = "";
+      }
+    }
+
+    updateContain();
+    showCallSummary();
+  }
+
+  hydrate();
+
+  // ====== SERVICE WORKER (PWA) ======
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(()=>{});
+    });
+  }
 </script>
 
 </body>
