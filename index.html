@@ -1,828 +1,221 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mi App Personal — Regulación emocional</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi App Personal</title>
 
-<!-- (Opcional) Si ya creaste manifest.json, descomenta esto:
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b1220">
--->
+<link rel="manifest" href="manifest.webmanifest">
 
 <style>
 :root{
-  --bg:#0b1220; --card:#111a2e; --muted:#9fb0d0; --text:#e9efff;
-  --good:#5be38f; --warn:#ffd166; --bad:#ff6b6b; --line:#1f2b48;
-  --chip:#0c1428; --chipOn:#12244a;
-  --btn:#5aa7ff;
+  --bg:#0b1224;
+  --card:#101a33;
+  --text:#f8fafc;
+  --muted:#a8b3cf;
+  --btn:#1c2a4d;
+  --good:#22c55e;
+  --save:#4ade80;
 }
+
 *{box-sizing:border-box}
+
 body{
   margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto;
-  background:linear-gradient(160deg,#070b14,var(--bg));
+  font-family:system-ui,Arial,sans-serif;
+  background:var(--bg);
   color:var(--text);
 }
-header{
-  padding:14px 16px;
-  background:rgba(11,18,32,.95);
-  border-bottom:1px solid var(--line);
-  position:sticky; top:0; z-index:10;
-}
-h1{margin:0;font-size:16px}
-.sub{font-size:12px;color:var(--muted);margin-top:4px}
-main{padding:16px;max-width:1100px;margin:auto}
-.card{
-  background:rgba(17,26,46,.95);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-}
-h2{font-size:14px;margin:0 0 10px}
-label{font-size:12px;color:var(--muted);display:block;margin:10px 0 6px}
-input,select,textarea{
-  width:100%;padding:10px;border-radius:10px;
-  border:1px solid var(--line);
-  background:#0c1428;color:var(--text);
-  outline:none;
-}
-textarea{resize:vertical;min-height:60px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.col{flex:1;min-width:220px}
-.btn{
-  width:100%;
-  padding:12px 14px;border-radius:12px;border:none;
-  cursor:pointer;font-weight:900;
-  background:var(--btn);
-  color:#031321;
-}
-.btn:active{transform:translateY(1px)}
-.btn.main{background:var(--good);color:#06210f}
-.btn.sec{background:transparent;color:var(--text);border:1px solid var(--line)}
-.btn.warn{background:var(--warn);color:#2b2000}
-.btn.bad{background:var(--bad);color:#2a0b0b}
-.small{font-size:11px;color:var(--muted)}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{
-  padding:8px 10px;border-radius:999px;
-  border:1px solid var(--line);
-  background:var(--chip);font-size:12px;
-  cursor:pointer; user-select:none;
-}
-.chip[data-on="1"]{background:var(--chipOn)}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--muted);text-align:left;font-weight:900}
-.tag{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0c1428;color:var(--muted);font-size:11px}
-hr{border:none;border-top:1px solid var(--line);margin:12px 0}
-.pill{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:#0c1428;color:var(--muted);font-size:12px}
-.right{margin-left:auto}
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}
-@media (max-width: 980px){ .grid{grid-template-columns:1fr} }
 
-/* Modal */
-.modal{
-  display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,.55);
-  z-index:50;
-  align-items:center; justify-content:center;
+.container{
+  max-width:520px;
+  margin:auto;
   padding:16px;
 }
-.panel{
-  width:min(760px, 100%);
-  background:#0b1220;
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:14px;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
+
+h1{
+  font-size:28px;
+  margin-bottom:16px;
 }
-.panel h3{margin:0 0 8px; font-size:15px}
-.panel p{margin:0 0 10px; color:var(--muted); font-size:12px}
-.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:6px;background:#0c1428;color:var(--muted);font-size:11px}
+
+.card{
+  background:var(--card);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:18px;
+  border:1px solid rgba(255,255,255,.08);
+}
+
+h2{
+  margin-top:0;
+}
+
+select,textarea,input{
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  border-radius:12px;
+  border:none;
+  background:#0f172a;
+  color:var(--text);
+}
+
+button{
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border-radius:12px;
+  border:none;
+  font-size:16px;
+  font-weight:700;
+  background:var(--btn);
+  color:var(--text);
+}
+
+.save{background:var(--save); color:#052e16;}
+.good{background:var(--good); color:#052e16;}
+
+.small{
+  font-size:14px;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+.center{text-align:center}
 </style>
 </head>
-
 <body>
-<header>
-  <div class="row">
-    <div>
-      <h1>Mi App Personal</h1>
-      <div class="sub">Uso personal · discreto · se guarda en este dispositivo (local)</div>
-    </div>
-    <div class="right row">
-      <span class="pill" id="todayPill">Hoy: —</span>
-      <span class="pill" id="sinceHimPill">Él me llamó hace: —</span>
-    </div>
-  </div>
-</header>
 
-<main>
+<div class="container">
 
-<div class="grid">
+<h1>Mi App Personal</h1>
 
-  <!-- IZQUIERDA -->
-  <div>
+<div class="card">
+  <h2>¿Cómo me siento?</h2>
+  <select id="mood">
+    <option>Tranquila</option>
+    <option>Ansiosa</option>
+    <option>Triste</option>
+    <option>Indiferente</option>
+    <option>En paz</option>
+    <option>Confundida</option>
+  </select>
 
-    <div class="card">
-      <h2>Registro rápido (1 minuto)</h2>
+  <textarea id="thought" placeholder="¿Qué pensamiento domina?"></textarea>
 
-      <div class="row">
-        <div class="col">
-          <label>Hora</label>
-          <input type="time" id="time">
-        </div>
-        <div class="col">
-          <label>Nivel de ansiedad (0–10)</label>
-          <input type="number" id="anxiety" min="0" max="10" value="5">
-        </div>
-      </div>
-
-      <label>¿Cómo me siento?</label>
-      <select id="mood">
-        <option value="tranquila">Tranquila</option>
-        <option value="indiferente">Indiferente</option>
-        <option value="ansiosa">Ansiosa</option>
-        <option value="triste">Triste</option>
-        <option value="miedo">Con miedo</option>
-        <option value="confundida">Confundida</option>
-        <option value="enojada">Enojada</option>
-        <option value="esperanzada">Esperanzada</option>
-      </select>
-
-      <label>¿Qué pensamiento domina? (1 frase)</label>
-      <input id="thought" placeholder="Ej. ‘Si no llama, significa que…’">
-
-      <label>Impulso principal</label>
-      <select id="urge">
-        <option value="llamar">Llamar</option>
-        <option value="revisar">Revisar apps / redes</option>
-        <option value="escribir">Escribir / buscar contacto</option>
-        <option value="intrusivos">Pensamientos repetitivos o intrusivos</option>
-      </select>
-
-      <label>¿Actué el impulso?</label>
-      <select id="acted">
-        <option value="resisti">No, lo resistí</option>
-        <option value="actue">Sí, actué</option>
-      </select>
-
-      <label>Acción de cuidado (elige 1–2)</label>
-      <div class="chips" id="careChips">
-        <div class="chip" data-key="respirar">Respiré</div>
-        <div class="chip" data-key="pendientes">Seguí con pendientes</div>
-        <div class="chip" data-key="esperar">Esperé</div>
-        <div class="chip" data-key="noaccion">No llamé / no revisé</div>
-        <div class="chip" data-key="agua">Agua / té</div>
-        <div class="chip" data-key="mover">Me moví</div>
-      </div>
-
-      <label>Nota (opcional)</label>
-      <textarea id="note" placeholder="Ej. Me cuidé aunque fue difícil"></textarea>
-
-      <div class="row" style="margin-top:10px">
-        <div class="col"><button class="btn main" id="save">Guardar registro</button></div>
-        <div class="col"><button class="btn sec" id="quick">Guardar “seguí trabajando”</button></div>
-      </div>
-
-      <div class="row" style="margin-top:10px">
-        <div class="col"><button class="btn warn" id="himCalledBtn">Él me llamó</button></div>
-      </div>
-
-      <div class="row" style="margin-top:10px">
-        <span class="tag">Tip: registra primero, decide después</span>
-        <span class="small" id="saveMsg"></span>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Registros de hoy</h2>
-      <div class="small">Incluye registros normales y “él me llamó”.</div>
-      <div style="overflow:auto;border-radius:12px;border:1px solid var(--line);margin-top:10px">
-        <table>
-          <thead>
-            <tr>
-              <th>Hora</th>
-              <th>Tipo</th>
-              <th>Ans.</th>
-              <th>Detalle</th>
-            </tr>
-          </thead>
-          <tbody id="log">
-            <tr><td colspan="4" class="small">Aún no hay registros.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- DERECHA -->
-  <div>
-
-    <div class="card">
-      <h2>Frase para ti</h2>
-      <div id="quote" style="font-weight:900;font-size:14px">“Respira, ya estás haciendo lo mejor que puedes.”</div>
-      <div class="small" style="margin-top:6px">Úsala 3–5 minutos como ancla.</div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" id="newQuote">Otra frase ✨</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Resumen semanal (últimos 7 días)</h2>
-      <div class="small">Para ver avance real, aunque un día se sienta pesado.</div>
-
-      <div class="row" style="margin-top:10px">
-        <span class="pill" id="wkEntries">Registros: —</span>
-        <span class="pill" id="wkAvg">Ansiedad prom.: —</span>
-        <span class="pill" id="wkCalls">Llamadas: —</span>
-        <span class="pill" id="wkMinutes">Min. llamada: —</span>
-      </div>
-
-      <div style="overflow:auto;border-radius:12px;border:1px solid var(--line);margin-top:10px">
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Reg.</th>
-              <th>Ans. prom.</th>
-              <th>Resistí</th>
-              <th>Actué</th>
-              <th>Llamadas</th>
-              <th>Min.</th>
-            </tr>
-          </thead>
-          <tbody id="weekTable">
-            <tr><td colspan="7" class="small">Aún no hay datos.</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <hr>
-      <div class="small">
-        Lectura sana: si sube la ansiedad pero también sube “resistí” o “cuidado”, eso es progreso.
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Respaldo</h2>
-      <div class="small">Exporta/importa tus datos (solo tú los tienes). Útil si cambias de equipo.</div>
-      <div class="row" style="margin-top:10px">
-        <div class="col"><button class="btn main" id="exportBtn">Exportar datos</button></div>
-        <div class="col">
-          <label style="margin-top:0">Importar datos</label>
-          <input type="file" id="importFile" accept="application/json">
-        </div>
-      </div>
-      <div class="row" style="margin-top:10px">
-        <div class="col"><button class="btn bad" id="wipeBtn">Borrar TODO (con cuidado)</button></div>
-      </div>
-      <div class="small" id="backupMsg" style="margin-top:8px"></div>
-    </div>
-
-  </div>
-
+  <button class="save" onclick="saveMood()">Guardar registro</button>
 </div>
 
-</main>
+<div class="card">
+  <h2>Él me llamó</h2>
 
-<!-- MODAL: Él me llamó -->
-<div class="modal" id="callModal" aria-modal="true" role="dialog">
-  <div class="panel">
-    <div class="row">
-      <div>
-        <h3>Registro: “Él me llamó”</h3>
-        <p>Registras la llamada sin que te arrastre: <b>duración</b>, alivio durante y ansiedad después.</p>
-      </div>
-      <div class="right">
-        <span class="tag">Cerrar: <span class="kbd">Esc</span></span>
-      </div>
-    </div>
+  <label>Fecha y hora</label>
+  <input type="datetime-local" id="callTime">
 
-    <div class="row">
-      <div class="col">
-        <label>Hora de inicio</label>
-        <input type="time" id="callTime">
-      </div>
-      <div class="col">
-        <label>Duración (minutos)</label>
-        <input type="number" id="callMinutes" min="0" max="600" value="10">
-      </div>
-    </div>
+  <label>Duración (minutos)</label>
+  <input type="number" id="callDuration" placeholder="Ej. 12">
 
-    <div class="row">
-      <div class="col">
-        <label>Alivio DURANTE la llamada (0–10)</label>
-        <input type="number" id="callRelief" min="0" max="10" value="6">
-      </div>
-      <div class="col">
-        <label>Ansiedad DESPUÉS (0–10)</label>
-        <input type="number" id="callAfterAnx" min="0" max="10" value="6">
-      </div>
-    </div>
+  <button onclick="saveCall()">Guardar llamada</button>
 
-    <div class="row">
-      <div class="col">
-        <label>Emoción predominante DESPUÉS</label>
-        <select id="callEmotion">
-          <option value="tranquilidad">Tranquilidad</option>
-          <option value="alegria">Alegría</option>
-          <option value="angustia">Angustia</option>
-          <option value="miedo">Miedo</option>
-          <option value="tristeza">Tristeza</option>
-          <option value="confusion">Confusión</option>
-          <option value="esperanza">Esperanza</option>
-          <option value="indiferencia">Indiferencia</option>
-        </select>
-      </div>
-      <div class="col">
-        <label>¿Qué pasó en tu cuerpo? (opcional)</label>
-        <select id="callBody">
-          <option value="normal">Normal / neutro</option>
-          <option value="pecho">Pecho apretado</option>
-          <option value="nudo">Nudo en el estómago</option>
-          <option value="temblor">Temblor / inquietud</option>
-          <option value="cansancio">Cansancio / cuerpo pesado</option>
-          <option value="llanto">Ganas de llorar</option>
-        </select>
-      </div>
-    </div>
+  <div class="small" id="lastCallInfo"></div>
+</div>
 
-    <label>Nota corta (opcional)</label>
-    <textarea id="callNote" placeholder="Ej. Durante sentí calma; después volvió la angustia."></textarea>
+<div class="card">
+  <h2>Frase para ti</h2>
+  <p id="quote" class="center"></p>
+  <button onclick="newQuote()">Otra frase</button>
+</div>
 
-    <div class="row" style="margin-top:10px">
-      <button class="btn main" id="saveCall">Guardar llamada</button>
-      <button class="btn sec" id="closeCall">Cerrar</button>
-    </div>
+<div class="card">
+  <h2>Resumen</h2>
+  <div id="summary"></div>
+</div>
 
-    <div class="small" style="margin-top:10px">
-      Tip: después de una llamada, date 10–20 min de autocuidado antes de “comprobar” o buscar certezas.
-    </div>
-  </div>
+<div class="card">
+  <h2>Respaldo</h2>
+  <button class="good" onclick="exportData()">Exportar datos</button>
+  <button onclick="importData()">Importar datos</button>
+  <input type="file" id="fileInput" hidden>
+</div>
+
 </div>
 
 <script>
-(() => {
-  const KEY = "mi_app_personal_v2";
+let data = JSON.parse(localStorage.getItem("appData")) || {
+  moods:[],
+  calls:[]
+};
 
-  const quotes = [
-    "Respira, ya estás haciendo lo mejor que puedes.",
-    "Puedo sentir esto sin actuar; va a pasar.",
-    "La urgencia baja si no la alimento.",
-    "No tengo que resolverlo hoy.",
-    "Mi valor no depende de una respuesta.",
-    "Un impulso es una ola: sube y baja.",
-    "Hoy elijo paz, aunque duela un poco.",
-    "Registrar es cuidarme: me devuelve control.",
-    "Puedo extrañar y aun así poner límites.",
-    "No necesito certeza perfecta para cuidarme."
-  ];
+const quotes = [
+ "Respira, ya estás haciendo lo mejor que puedes.",
+ "No tienes que tener todo resuelto hoy.",
+ "Tu proceso es válido.",
+ "Estás aprendiendo a cuidarte.",
+ "Eres más fuerte de lo que crees."
+];
 
-  const $ = (id) => document.getElementById(id);
-
-  const ui = {
-    todayPill: $("todayPill"),
-    sinceHimPill: $("sinceHimPill"),
-
-    time: $("time"),
-    anxiety: $("anxiety"),
-    mood: $("mood"),
-    thought: $("thought"),
-    urge: $("urge"),
-    acted: $("acted"),
-    note: $("note"),
-    careChips: [...document.querySelectorAll("#careChips .chip")],
-    saveMsg: $("saveMsg"),
-
-    log: $("log"),
-
-    quote: $("quote"),
-    newQuote: $("newQuote"),
-
-    weekTable: $("weekTable"),
-    wkEntries: $("wkEntries"),
-    wkAvg: $("wkAvg"),
-    wkCalls: $("wkCalls"),
-    wkMinutes: $("wkMinutes"),
-
-    save: $("save"),
-    quick: $("quick"),
-    himCalledBtn: $("himCalledBtn"),
-
-    callModal: $("callModal"),
-    callTime: $("callTime"),
-    callMinutes: $("callMinutes"),
-    callRelief: $("callRelief"),
-    callAfterAnx: $("callAfterAnx"),
-    callEmotion: $("callEmotion"),
-    callBody: $("callBody"),
-    callNote: $("callNote"),
-    saveCall: $("saveCall"),
-    closeCall: $("closeCall"),
-
-    exportBtn: $("exportBtn"),
-    importFile: $("importFile"),
-    wipeBtn: $("wipeBtn"),
-    backupMsg: $("backupMsg"),
-  };
-
-  function todayISO(d = new Date()){
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const day = String(d.getDate()).padStart(2,"0");
-    return `${y}-${m}-${day}`;
-  }
-
-  function nowTime(){
-    const d = new Date();
-    const hh = String(d.getHours()).padStart(2,"0");
-    const mm = String(d.getMinutes()).padStart(2,"0");
-    return `${hh}:${mm}`;
-  }
-
-  function clamp010(n){
-    n = Number(n);
-    if (!Number.isFinite(n)) return 0;
-    return Math.max(0, Math.min(10, n));
-  }
-
-  function clampInt(n, min, max, fallback){
-    n = Number(n);
-    if (!Number.isFinite(n)) return fallback;
-    n = Math.round(n);
-    return Math.max(min, Math.min(max, n));
-  }
-
-  function load(){
-    try { return JSON.parse(localStorage.getItem(KEY) || "[]"); }
-    catch { return []; }
-  }
-
-  function saveAll(data){
-    localStorage.setItem(KEY, JSON.stringify(data));
-  }
-
-  function showMsg(el, t){
-    el.textContent = t;
-    setTimeout(()=> el.textContent="", 1600);
-  }
-
-  function selectedCare(){
-    return ui.careChips.filter(c => c.dataset.on === "1").map(c => c.dataset.key);
-  }
-
-  function resetCare(){
-    ui.careChips.forEach(c => c.dataset.on = "0");
-  }
-
-  function avg(nums){
-    if (!nums.length) return null;
-    return nums.reduce((a,b)=>a+b,0)/nums.length;
-  }
-
-  function lastNDaysISO(n){
-    const out = [];
-    const base = new Date();
-    for (let i=0;i<n;i++){
-      const d = new Date(base);
-      d.setDate(base.getDate()-i);
-      out.push(todayISO(d));
-    }
-    return out.reverse();
-  }
-
-  function prettyType(t){
-    return ({ regular:"Registro", quick:"Rápido", him_call:"Él me llamó" })[t] || t;
-  }
-
-  function prettyUrge(u){
-    return ({
-      llamar:"Llamar",
-      revisar:"Revisar apps / redes",
-      escribir:"Escribir / buscar contacto",
-      intrusivos:"Pensamientos repetitivos o intrusivos"
-    })[u] || u;
-  }
-
-  function formatSince(ms){
-    if (ms == null) return "—";
-    const s = Math.max(0, Math.floor(ms/1000));
-    const min = Math.floor(s/60);
-    const hr = Math.floor(min/60);
-    const day = Math.floor(hr/24);
-    const remHr = hr % 24;
-    const remMin = min % 60;
-    if (day > 0) return `${day}d ${remHr}h`;
-    if (hr > 0) return `${hr}h ${remMin}m`;
-    return `${min}m`;
-  }
-
-  function lastHimCallDateTime(all){
-    // Busca el último evento "him_call"
-    const calls = all.filter(e => e.type === "him_call" && e.date && e.time);
-    if (!calls.length) return null;
-
-    calls.sort((a,b) => {
-      const da = new Date(`${a.date}T${a.time}:00`);
-      const db = new Date(`${b.date}T${b.time}:00`);
-      return da - db;
-    });
-    const last = calls[calls.length-1];
-    const dt = new Date(`${last.date}T${last.time}:00`);
-    if (Number.isNaN(dt.getTime())) return null;
-    return dt;
-  }
-
-  function updateSincePill(){
-    const all = load();
-    const last = lastHimCallDateTime(all);
-    if (!last){
-      ui.sinceHimPill.textContent = `Él me llamó hace: —`;
-      return;
-    }
-    const diff = Date.now() - last.getTime();
-    ui.sinceHimPill.textContent = `Él me llamó hace: ${formatSince(diff)}`;
-  }
-
-  function addEntry(entry){
-    const data = load();
-    data.push(entry);
-    saveAll(data);
-    renderToday();
-    renderWeek();
-    updateSincePill();
-  }
-
-  function renderToday(){
-    const t = todayISO();
-    ui.todayPill.textContent = `Hoy: ${t}`;
-
-    const data = load().filter(e => e.date === t).sort((a,b)=>(a.time||"").localeCompare(b.time||""));
-    ui.log.innerHTML = "";
-
-    if (!data.length){
-      ui.log.innerHTML = `<tr><td colspan="4" class="small">Aún no hay registros.</td></tr>`;
-      return;
-    }
-
-    const recent = data.slice(-14).reverse();
-    recent.forEach(e => {
-      let anx = "—";
-      let detail = "—";
-
-      if (e.type === "him_call"){
-        anx = (e.afterAnx ?? "—");
-        detail = `Duración ${e.minutes} min · Alivio ${e.relief}/10 · Después ${e.afterAnx}/10 · ${e.emotion}`;
-        if (e.note) detail += ` · Nota: ${escapeHTML(e.note)}`;
-      } else {
-        anx = (e.anx ?? "—");
-        const care = (e.care && e.care.length) ? e.care.join(", ") : "—";
-        detail = `${e.mood ? ("Mood: "+e.mood+" · ") : ""}${e.thought ? ("Pens.: "+escapeHTML(e.thought)+" · ") : ""}${prettyUrge(e.urge)} · ${e.acted==="resisti" ? "Resistí" : "Actué"} · ${care}`;
-        if (e.note) detail += ` · Nota: ${escapeHTML(e.note)}`;
-      }
-
-      ui.log.innerHTML += `
-        <tr>
-          <td>${e.time || ""}</td>
-          <td>${prettyType(e.type)}</td>
-          <td>${anx}</td>
-          <td><span class="small">${detail}</span></td>
-        </tr>
-      `;
-    });
-  }
-
-  function renderWeek(){
-    const days = lastNDaysISO(7);
-    const all = load();
-
-    ui.weekTable.innerHTML = "";
-    let any = false;
-
-    let weekEntries = 0;
-    let anxAvgs = [];
-    let callCount = 0;
-    let totalMinutes = 0;
-
-    days.forEach(date => {
-      const entries = all.filter(e => e.date === date);
-      if (!entries.length) return;
-
-      any = true;
-
-      const regular = entries.filter(e => e.type !== "him_call");
-      const calls = entries.filter(e => e.type === "him_call");
-
-      const resisted = regular.filter(e => e.acted === "resisti").length;
-      const acted = regular.filter(e => e.acted === "actue").length;
-
-      const anxNums = [
-        ...regular.map(e => Number(e.anx)).filter(n => Number.isFinite(n)),
-        ...calls.map(e => Number(e.afterAnx)).filter(n => Number.isFinite(n))
-      ];
-      const a = avg(anxNums);
-
-      const mins = calls.map(c => Number(c.minutes)).filter(n => Number.isFinite(n)).reduce((x,y)=>x+y,0);
-
-      ui.weekTable.innerHTML += `
-        <tr>
-          <td>${date}</td>
-          <td>${entries.length}</td>
-          <td>${a == null ? "—" : a.toFixed(1)}</td>
-          <td>${resisted}</td>
-          <td>${acted}</td>
-          <td>${calls.length}</td>
-          <td>${mins}</td>
-        </tr>
-      `;
-
-      weekEntries += entries.length;
-      if (a != null) anxAvgs.push(a);
-      callCount += calls.length;
-      totalMinutes += mins;
-    });
-
-    if (!any){
-      ui.weekTable.innerHTML = `<tr><td colspan="7" class="small">Aún no hay datos.</td></tr>`;
-    }
-
-    const wkAvg = avg(anxAvgs);
-
-    ui.wkEntries.textContent = `Registros: ${weekEntries || 0}`;
-    ui.wkAvg.textContent = `Ansiedad prom.: ${wkAvg == null ? "—" : wkAvg.toFixed(1)}`;
-    ui.wkCalls.textContent = `Llamadas: ${callCount || 0}`;
-    ui.wkMinutes.textContent = `Min. llamada: ${totalMinutes || 0}`;
-  }
-
-  function escapeHTML(s){
-    return String(s).replace(/[&<>"']/g, (m)=>({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    })[m]);
-  }
-
-  function openCall(){
-    ui.callModal.style.display = "flex";
-    ui.callTime.value = nowTime();
-    ui.callMinutes.value = 10;
-    ui.callRelief.value = 6;
-    ui.callAfterAnx.value = clamp010(ui.anxiety.value || 6);
-    ui.callEmotion.value = "tranquilidad";
-    ui.callBody.value = "normal";
-    ui.callNote.value = "";
-  }
-  function closeCall(){
-    ui.callModal.style.display = "none";
-  }
-
-  function init(){
-    ui.time.value = nowTime();
-
-    ui.careChips.forEach(ch => {
-      ch.dataset.on = "0";
-      ch.addEventListener("click", ()=> {
-        ch.dataset.on = (ch.dataset.on === "1") ? "0" : "1";
-      });
-    });
-
-    ui.quote.textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
-
-    renderToday();
-    renderWeek();
-    updateSincePill();
-
-    setInterval(updateSincePill, 60000); // actualiza cada minuto
-  }
-
-  // Guardar registro normal
-  ui.save.addEventListener("click", ()=> {
-    const entry = {
-      type: "regular",
-      date: todayISO(),
-      time: ui.time.value || nowTime(),
-      anx: clamp010(ui.anxiety.value),
-      mood: ui.mood.value,
-      thought: (ui.thought.value || "").trim(),
-      urge: ui.urge.value,
-      acted: ui.acted.value,
-      care: selectedCare(),
-      note: (ui.note.value || "").trim()
-    };
-    addEntry(entry);
-    resetCare();
-    ui.note.value = "";
-    ui.thought.value = "";
-    ui.time.value = nowTime();
-    showMsg(ui.saveMsg, "Guardado ✓");
+function saveMood(){
+  data.moods.push({
+    date:new Date().toISOString(),
+    mood:mood.value,
+    thought:thought.value
   });
+  thought.value="";
+  save();
+}
 
-  // Guardar rápido
-  ui.quick.addEventListener("click", ()=> {
-    const entry = {
-      type: "quick",
-      date: todayISO(),
-      time: nowTime(),
-      anx: clamp010(ui.anxiety.value),
-      mood: ui.mood.value,
-      thought: "",
-      urge: "intrusivos",
-      acted: "resisti",
-      care: ["pendientes","respirar","noaccion"],
-      note: ""
-    };
-    addEntry(entry);
-    resetCare();
-    ui.note.value = "";
-    ui.thought.value = "";
-    ui.time.value = nowTime();
-    showMsg(ui.saveMsg, "Rápido ✓");
+function saveCall(){
+  data.calls.push({
+    time:callTime.value,
+    duration:callDuration.value
   });
+  callTime.value="";
+  callDuration.value="";
+  save();
+}
 
-  // Frases
-  ui.newQuote.addEventListener("click", ()=> {
-    ui.quote.textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
-  });
+function save(){
+  localStorage.setItem("appData",JSON.stringify(data));
+  updateUI();
+}
 
-  // Modal “Él me llamó”
-  ui.himCalledBtn.addEventListener("click", openCall);
-  ui.closeCall.addEventListener("click", closeCall);
-  ui.callModal.addEventListener("click", (e)=>{ if (e.target === ui.callModal) closeCall(); });
-  document.addEventListener("keydown", (e)=>{ if (e.key === "Escape") closeCall(); });
+function newQuote(){
+  quote.textContent = quotes[Math.floor(Math.random()*quotes.length)];
+}
 
-  ui.saveCall.addEventListener("click", ()=> {
-    const entry = {
-      type: "him_call",
-      date: todayISO(),
-      time: ui.callTime.value || nowTime(),
-      minutes: clampInt(ui.callMinutes.value, 0, 600, 10),
-      relief: clamp010(ui.callRelief.value),
-      afterAnx: clamp010(ui.callAfterAnx.value),
-      emotion: ui.callEmotion.value,
-      body: ui.callBody.value,
-      note: (ui.callNote.value || "").trim()
-    };
-    addEntry(entry);
-    closeCall();
-    showMsg(ui.saveMsg, "Llamada registrada ✓");
-  });
+function updateUI(){
+  if(data.calls.length){
+    let c = data.calls[data.calls.length-1];
+    lastCallInfo.textContent = `Última llamada: ${c.time} (${c.duration} min)`;
+  }
 
-  // Respaldo: exportar
-  ui.exportBtn.addEventListener("click", ()=> {
-    const data = load();
-    const blob = new Blob([JSON.stringify({version:2, exportedAt:new Date().toISOString(), data}, null, 2)], {type:"application/json"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "mi-app-personal-backup.json";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-    showMsg(ui.backupMsg, "Exportado ✓");
-  });
+  summary.innerHTML = `
+    Registros emocionales: ${data.moods.length}<br>
+    Llamadas registradas: ${data.calls.length}
+  `;
+}
 
-  // Respaldo: importar
-  ui.importFile.addEventListener("change", async (e)=> {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    try{
-      const text = await file.text();
-      const obj = JSON.parse(text);
-      const incoming = Array.isArray(obj) ? obj : (obj.data || []);
-      if (!Array.isArray(incoming)) throw new Error("Formato inválido");
+function exportData(){
+  const blob = new Blob([JSON.stringify(data)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="mi_app_personal.json";
+  a.click();
+}
 
-      // merge simple
-      const current = load();
-      const merged = current.concat(incoming);
-      saveAll(merged);
+function importData(){
+  fileInput.click();
+}
 
-      renderToday();
-      renderWeek();
-      updateSincePill();
-      showMsg(ui.backupMsg, "Importado ✓");
-      ui.importFile.value = "";
-    }catch(err){
-      showMsg(ui.backupMsg, "No se pudo importar (archivo inválido).");
-      ui.importFile.value = "";
-    }
-  });
+fileInput.onchange = e=>{
+  const file=e.target.files[0];
+  const reader=new FileReader();
+  reader.onload=()=>{ data=JSON.parse(reader.result); save(); };
+  reader.readAsText(file);
+};
 
-  // Borrar todo
-  ui.wipeBtn.addEventListener("click", ()=> {
-    const ok = confirm("¿Seguro? Esto borra TODOS tus registros en este dispositivo.");
-    if (!ok) return;
-    localStorage.removeItem(KEY);
-    renderToday();
-    renderWeek();
-    updateSincePill();
-    showMsg(ui.backupMsg, "Borrado ✓");
-  });
-
-  init();
-})();
+newQuote();
+updateUI();
 </script>
 
 </body>
