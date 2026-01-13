@@ -212,7 +212,6 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
         <span class="pill" id="wkEntries">Registros: —</span>
         <span class="pill" id="wkAvg">Ansiedad prom.: —</span>
         <span class="pill" id="wkCalls">Llamadas: —</span>
-        <span class="pill" id="wkCallMin">Min. llamadas: —</span>
       </div>
 
       <div style="overflow:auto;border-radius:12px;border:1px solid var(--line);margin-top:10px">
@@ -226,11 +225,10 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
               <th>Actué</th>
               <th>% cuidado</th>
               <th>Llamadas</th>
-              <th>Min.</th>
             </tr>
           </thead>
           <tbody id="weekTable">
-            <tr><td colspan="8" class="small">Aún no hay datos.</td></tr>
+            <tr><td colspan="7" class="small">Aún no hay datos.</td></tr>
           </tbody>
         </table>
       </div>
@@ -266,23 +264,16 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
         <input type="time" id="callTime">
       </div>
       <div class="col">
-        <label>Duración de la llamada (minutos)</label>
-        <input type="number" id="callDuration" min="0" step="1" value="10">
+        <label>¿Cuánto alivio sentiste DURANTE la llamada? (0–10)</label>
+        <input type="number" id="callRelief" min="0" max="10" value="6">
       </div>
     </div>
 
     <div class="row">
-      <div class="col">
-        <label>¿Cuánto alivio sentiste DURANTE la llamada? (0–10)</label>
-        <input type="number" id="callRelief" min="0" max="10" value="6">
-      </div>
       <div class="col">
         <label>¿Cómo quedó tu ansiedad DESPUÉS? (0–10)</label>
         <input type="number" id="callAfterAnx" min="0" max="10" value="6">
       </div>
-    </div>
-
-    <div class="row">
       <div class="col">
         <label>¿Qué emoción predominó DESPUÉS? (elige 1)</label>
         <select id="callEmotion">
@@ -293,13 +284,6 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
           <option value="tristeza">Tristeza</option>
           <option value="confusion">Confusión</option>
           <option value="esperanza">Esperanza</option>
-        </select>
-      </div>
-      <div class="col">
-        <label>¿Me llamó? (opcional)</label>
-        <select id="callWasCall">
-          <option value="si" selected>Sí</option>
-          <option value="no">No (solo registro de “no ocurrió”)</option>
         </select>
       </div>
     </div>
@@ -367,7 +351,6 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
     wkEntries: $("wkEntries"),
     wkAvg: $("wkAvg"),
     wkCalls: $("wkCalls"),
-    wkCallMin: $("wkCallMin"),
 
     save: $("save"),
     quick: $("quick"),
@@ -375,11 +358,9 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
 
     callModal: $("callModal"),
     callTime: $("callTime"),
-    callDuration: $("callDuration"),
     callRelief: $("callRelief"),
     callAfterAnx: $("callAfterAnx"),
     callEmotion: $("callEmotion"),
-    callWasCall: $("callWasCall"),
     callBody: $("callBody"),
     callNote: $("callNote"),
     saveCall: $("saveCall"),
@@ -438,12 +419,6 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
     return Math.max(0, Math.min(10, n));
   }
 
-  function clampMin(n){
-    n = Number(n);
-    if (!Number.isFinite(n)) return 0;
-    return Math.max(0, Math.floor(n));
-  }
-
   function friendlyUrge(v){
     return ({
       llamar: "Llamar",
@@ -489,15 +464,9 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
     recent.forEach(e => {
       const careTxt = (e.care && e.care.length) ? e.care.join(", ") : "—";
       const urgeTxt = e.eventType === "call" ? "—" : friendlyUrge(e.urge);
-
-      let actionTxt = "";
-      if (e.eventType === "call"){
-        const dur = clampMin(e.callDuration || 0);
-        const label = (e.callWasCall === "no") ? "No llamó" : "Llamada";
-        actionTxt = `${label} · ${dur} min · Alivio ${e.callRelief}/10 · Después ${e.callAfterAnx}/10 · ${e.callEmotion}`;
-      } else {
-        actionTxt = (e.acted === "resisti" ? "Resistí" : "Actué");
-      }
+      const actionTxt = e.eventType === "call"
+        ? `Alivio ${e.callRelief}/10 · Después ${e.callAfterAnx}/10 · ${e.callEmotion}`
+        : (e.acted === "resisti" ? "Resistí" : "Actué");
 
       ui.log.innerHTML += `
         <tr>
@@ -518,7 +487,6 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
     let weekEntries = 0;
     let anxList = [];
     let callCount = 0;
-    let callMinutes = 0;
 
     ui.weekTable.innerHTML = "";
     let any = false;
@@ -528,9 +496,8 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
       if (!entries.length) return;
 
       any = true;
-
       const regular = entries.filter(e => e.eventType !== "call");
-      const calls = entries.filter(e => e.eventType === "call" && (e.callWasCall !== "no"));
+      const calls = entries.filter(e => e.eventType === "call");
       const resisted = regular.filter(e => e.acted === "resisti").length;
       const acted = regular.filter(e => e.acted === "actue").length;
       const withCare = regular.filter(e => (e.care||[]).length > 0).length;
@@ -538,15 +505,11 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
       // ansiedad diaria: promedio de registros normales (anxiety) + llamadas (callAfterAnx)
       const anxNums = [
         ...regular.map(e => Number(e.anxiety)).filter(n => Number.isFinite(n)),
-        ...entries.filter(e=>e.eventType==="call").map(e => Number(e.callAfterAnx)).filter(n => Number.isFinite(n))
+        ...calls.map(e => Number(e.callAfterAnx)).filter(n => Number.isFinite(n))
       ];
       const a = avg(anxNums);
 
       const pctCare = regular.length ? Math.round((withCare/regular.length)*100) : 0;
-
-      const mins = entries
-        .filter(e => e.eventType === "call" && (e.callWasCall !== "no"))
-        .reduce((s,e)=> s + clampMin(e.callDuration||0), 0);
 
       ui.weekTable.innerHTML += `
         <tr>
@@ -557,18 +520,16 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
           <td>${acted}</td>
           <td>${pctCare}%</td>
           <td>${calls.length}</td>
-          <td>${mins}</td>
         </tr>
       `;
 
       weekEntries += entries.length;
       if (a != null) anxList.push(a);
       callCount += calls.length;
-      callMinutes += mins;
     });
 
     if (!any){
-      ui.weekTable.innerHTML = `<tr><td colspan="8" class="small">Aún no hay datos.</td></tr>`;
+      ui.weekTable.innerHTML = `<tr><td colspan="7" class="small">Aún no hay datos.</td></tr>`;
     }
 
     const wkAvg = avg(anxList);
@@ -577,7 +538,6 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
     ui.wkEntries.textContent = `Registros: ${weekEntries || 0}`;
     ui.wkAvg.textContent = `Ansiedad prom.: ${wkAvg == null ? "—" : wkAvg.toFixed(1)}`;
     ui.wkCalls.textContent = `Llamadas: ${callCount || 0}`;
-    ui.wkCallMin.textContent = `Min. llamadas: ${callMinutes || 0}`;
   }
 
   function addEntry(entry){
@@ -649,11 +609,9 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
   function openCall(){
     ui.callModal.style.display = "flex";
     ui.callTime.value = nowTime();
-    ui.callDuration.value = 10;
     ui.callRelief.value = 6;
     ui.callAfterAnx.value = clamp010(ui.anxiety.value || 6);
     ui.callEmotion.value = "tranquilidad";
-    ui.callWasCall.value = "si";
     ui.callBody.value = "normal";
     ui.callNote.value = "";
   }
@@ -671,11 +629,9 @@ hr{border:none;border-top:1px solid var(--line);margin:12px 0}
       eventType: "call",
       date: todayISO(),
       time: ui.callTime.value || nowTime(),
-      callDuration: clampMin(ui.callDuration.value),
       callRelief: clamp010(ui.callRelief.value),
       callAfterAnx: clamp010(ui.callAfterAnx.value),
       callEmotion: ui.callEmotion.value,
-      callWasCall: ui.callWasCall.value,
       callBody: ui.callBody.value,
       note: (ui.callNote.value || "").trim()
     };
