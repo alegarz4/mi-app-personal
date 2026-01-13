@@ -1,222 +1,896 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mi App Personal</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mi App Personal</title>
 
-<link rel="manifest" href="manifest.webmanifest">
+  <!-- PWA (si ya tienes estos archivos en tu repo) -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0b1224">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
 
-<style>
-:root{
-  --bg:#0b1224;
-  --card:#101a33;
-  --text:#f8fafc;
-  --muted:#a8b3cf;
-  --btn:#1c2a4d;
-  --good:#22c55e;
-  --save:#4ade80;
-}
+  <style>
+    :root{
+      --bg:#0b1224;
+      --bg2:#070d1a;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.10);
+      --stroke2: rgba(255,255,255,.14);
+      --text:#f8fafc;
+      --muted:#a8b3cf;
+      --muted2:#8ea0c7;
 
-*{box-sizing:border-box}
+      --blue:#5aa2ff;
+      --green:#22c55e;
+      --amber:#fbbf24;
+      --red:#fb7185;
 
-body{
-  margin:0;
-  font-family:system-ui,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
+      --shadow: 0 18px 55px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
 
-.container{
-  max-width:520px;
-  margin:auto;
-  padding:16px;
-}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% -10%, rgba(90,162,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 95% 10%, rgba(34,197,94,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+    }
 
-h1{
-  font-size:28px;
-  margin-bottom:16px;
-}
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter: blur(10px);
+      background: rgba(11,18,36,.72);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .wrap{max-width: 920px; margin:0 auto; padding:14px 14px 28px;}
+    .row{display:flex; gap:12px; align-items:center; flex-wrap:wrap;}
+    .space{justify-content:space-between}
+    h1{
+      margin:6px 0 2px;
+      font-size: 26px;
+      letter-spacing:.2px;
+    }
+    .sub{color:var(--muted); font-size:13px}
+    .pill{
+      padding:8px 10px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      border-radius:999px;
+      font-size:13px;
+      color:var(--text);
+    }
 
-.card{
-  background:var(--card);
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:18px;
-  border:1px solid rgba(255,255,255,.08);
-}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+      margin-top:14px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns: 1fr;}
+    }
 
-h2{
-  margin-top:0;
-}
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:14px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size: 18px;
+    }
+    label{
+      display:block;
+      font-size: 13px;
+      color: var(--muted);
+      margin:10px 0 6px;
+    }
+    input, select, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+    }
+    textarea{min-height: 70px; resize: vertical;}
+    .two{display:grid; grid-template-columns: 1fr 1fr; gap:12px;}
+    @media (max-width: 520px){
+      .two{grid-template-columns: 1fr;}
+    }
 
-select,textarea,input{
-  width:100%;
-  padding:12px;
-  margin-top:8px;
-  border-radius:12px;
-  border:none;
-  background:#0f172a;
-  color:var(--text);
-}
+    .chips{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;}
+    .chip{
+      padding:10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      font-size: 13px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .05s ease, background .2s ease, border .2s ease;
+    }
+    .chip:active{transform: translateY(1px)}
+    .chip[data-on="1"]{
+      background: rgba(34,197,94,.18);
+      border-color: rgba(34,197,94,.40);
+    }
 
-button{
-  width:100%;
-  padding:14px;
-  margin-top:12px;
-  border-radius:12px;
-  border:none;
-  font-size:16px;
-  font-weight:700;
-  background:var(--btn);
-  color:var(--text);
-}
+    .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+    button{
+      border:none;
+      border-radius: 14px;
+      padding:12px 14px;
+      font-weight: 800;
+      cursor:pointer;
+      width:100%;
+      font-size: 15px;
+    }
+    .btnGreen{background: var(--green); color:#052e16;}
+    .btnBlue{background: var(--blue); color:#052e16;}
+    .btnGhost{background: rgba(255,255,255,.08); color: var(--text); border:1px solid rgba(255,255,255,.12);}
+    .btnWarn{background: rgba(251,191,36,.92); color:#2b2000;}
+    .btnRed{background: rgba(251,113,133,.92); color:#2b0a12;}
+    .small{font-size: 13px; color: var(--muted); line-height:1.35}
 
-.save{background:var(--save); color:#052e16;}
-.good{background:var(--good); color:#052e16;}
+    .notice{
+      padding:10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--muted2);
+      font-size: 13px;
+      margin-top:10px;
+    }
 
-.small{
-  font-size:14px;
-  color:var(--muted);
-  margin-top:6px;
-}
+    .list{
+      margin-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .item{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      border-radius: 16px;
+      padding:12px;
+    }
+    .item .top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .tag{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      font-weight:700;
+    }
+    .tag.call{background: rgba(90,162,255,.16); border-color: rgba(90,162,255,.35);}
+    .muted{color: var(--muted); font-size: 13px;}
+    .mono{font-variant-numeric: tabular-nums;}
 
-.center{text-align:center}
-</style>
+    table{
+      width:100%;
+      border-collapse: collapse;
+      margin-top:10px;
+      overflow:hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    th,td{
+      padding:10px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      font-size: 13px;
+      text-align:left;
+    }
+    th{color: var(--muted); font-weight:800; background: rgba(255,255,255,.06);}
+    tr:last-child td{border-bottom:none;}
+
+    /* Modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:14px;
+      background: rgba(0,0,0,.55);
+      z-index:50;
+    }
+    .modal .panel{
+      width:min(720px, 100%);
+      background: rgba(11,18,36,.92);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding:14px;
+    }
+    .modal h3{margin:0 0 6px; font-size: 18px;}
+    .modal .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+    .modal .actions button{width:auto; min-width: 140px;}
+  </style>
 </head>
+
 <body>
+<header>
+  <div class="wrap">
+    <div class="row space">
+      <div>
+        <h1>Mi App Personal</h1>
+        <div class="sub">Privado · se guarda solo en este dispositivo (no se sube a internet)</div>
+      </div>
+      <div class="row">
+        <span class="pill mono" id="todayPill">Hoy: —</span>
+        <span class="pill mono" id="containPill">Contención: —</span>
+      </div>
+    </div>
+  </div>
+</header>
 
-<div class="container">
+<main class="wrap">
+  <div class="grid">
 
-<h1>Mi App Personal</h1>
+    <!-- Col 1 -->
+    <div class="card">
+      <h2>Registro rápido (1–2 min)</h2>
 
-<div class="card">
-  <h2>¿Cómo me siento?</h2>
-  <select id="mood">
-    <option>Tranquila</option>
-    <option>Ansiosa</option>
-    <option>Triste</option>
-    <option>Indiferente</option>
-    <option>En paz</option>
-    <option>Confundida</option>
-  </select>
+      <div class="two">
+        <div>
+          <label>Hora</label>
+          <input type="time" id="time">
+        </div>
+        <div>
+          <label>Nivel de ansiedad (0–10)</label>
+          <input type="number" id="anxiety" min="0" max="10" value="5">
+        </div>
+      </div>
 
-  <textarea id="thought" placeholder="¿Qué pensamiento domina?"></textarea>
+      <label>¿Cómo me siento?</label>
+      <select id="mood">
+        <option value="tranquila">Tranquila</option>
+        <option value="indiferente">Indiferente</option>
+        <option value="ansiosa">Ansiosa</option>
+        <option value="triste">Triste</option>
+        <option value="enojada">Enojada</option>
+        <option value="confundida">Confundida</option>
+        <option value="con esperanza">Con esperanza</option>
+      </select>
 
-  <button class="save" onclick="saveMood()">Guardar registro</button>
-</div>
+      <label>Impulso principal</label>
+      <select id="urge">
+        <option value="llamar">Llamar</option>
+        <option value="revisar">Revisar apps / redes</option>
+        <option value="escribir">Escribir / buscar contacto</option>
+        <option value="intrusivos">Pensamientos repetitivos o intrusivos</option>
+      </select>
 
-<div class="card">
-  <h2>Él me llamó</h2>
+      <label>¿Qué pensamiento domina? (opcional)</label>
+      <textarea id="thought" placeholder="Ej. “Si no llama, es que no le importo”"></textarea>
 
-  <label>Fecha y hora</label>
-  <input type="datetime-local" id="callTime">
+      <label>Acción de cuidado (elige 1–2)</label>
+      <div class="chips" id="careChips">
+        <div class="chip" data-key="respirar">Respiré</div>
+        <div class="chip" data-key="pendientes">Seguí trabajando</div>
+        <div class="chip" data-key="esperar">Esperé sin buscar</div>
+        <div class="chip" data-key="noaccion">No llamé / no revisé</div>
+        <div class="chip" data-key="agua">Agua / café / té</div>
+        <div class="chip" data-key="mover">Me moví</div>
+        <div class="chip" data-key="tejer">Tejí / hobby</div>
+      </div>
 
-  <label>Duración (minutos)</label>
-  <input type="number" id="callDuration" placeholder="Ej. 12">
+      <label>Nota (opcional)</label>
+      <textarea id="note" placeholder="Ej. Fue difícil, pero pude sostenerme"></textarea>
 
-  <button onclick="saveCall()">Guardar llamada</button>
+      <div class="btnRow">
+        <button class="btnGreen" id="saveBtn">Guardar registro</button>
+        <button class="btnGhost" id="resetCareBtn" type="button">Limpiar cuidados</button>
+      </div>
 
-  <div class="small" id="lastCallInfo"></div>
-</div>
+      <div class="notice" id="msg" style="display:none;"></div>
+    </div>
 
-<div class="card">
-  <h2>Frase para ti</h2>
-  <p id="quote" class="center"></p>
-  <button onclick="newQuote()">Otra frase</button>
-</div>
+    <!-- Col 2 -->
+    <div class="card">
+      <h2>Él me llamó</h2>
 
-<div class="card">
-  <h2>Resumen</h2>
-  <div id="summary"></div>
-</div>
+      <div class="small">
+        Esta sección es para registrar la llamada **cuando suceda**, sin perseguirla.
+        Te ayuda a ver el tiempo entre llamadas (contención).
+      </div>
 
-<div class="card">
-  <h2>Respaldo</h2>
-  <button class="good" onclick="exportData()">Exportar datos</button>
-  <button onclick="importData()">Importar datos</button>
-  <input type="file" id="fileInput" hidden>
-</div>
+      <div class="btnRow">
+        <button class="btnBlue" id="callBtn" type="button">Registrar “Él me llamó”</button>
+      </div>
 
+      <div class="notice mono" id="lastCallBox">Última llamada: —</div>
+
+      <h2 style="margin-top:14px;">Frase para ti</h2>
+      <div class="item">
+        <div class="muted" style="margin-bottom:8px;">Hoy, una frase suave:</div>
+        <div id="quote" style="font-size:15px; font-weight:800; line-height:1.35;"></div>
+        <div class="btnRow">
+          <button class="btnGhost" id="newQuote" type="button">Otra frase</button>
+        </div>
+      </div>
+
+      <h2 style="margin-top:14px;">Respaldo</h2>
+      <div class="btnRow">
+        <button class="btnGreen" id="exportBtn" type="button">Exportar datos</button>
+        <button class="btnGhost" id="importBtn" type="button">Importar datos</button>
+        <input id="importFile" type="file" accept="application/json" style="display:none;">
+      </div>
+
+      <div class="small" style="margin-top:10px;">
+        Tip: si cambias de dispositivo, **Exportar** → envías el archivo a tu correo/Drive → **Importar**.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid" style="margin-top:14px;">
+    <div class="card">
+      <h2>Registros de hoy</h2>
+      <div class="small">Se guardan con fecha/hora. Puedes borrar solo un registro si te equivocas.</div>
+      <div class="list" id="todayList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Resumen semanal (últimos 7 días)</h2>
+      <div class="small">Lo que buscamos aquí es claridad, no perfección.</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Día</th>
+            <th>Registros</th>
+            <th>Ansiedad prom.</th>
+            <th>“Él me llamó”</th>
+            <th>Duración total</th>
+          </tr>
+        </thead>
+        <tbody id="weekTable">
+          <tr><td colspan="5" class="muted">Aún no hay datos esta semana.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="btnRow" style="margin-top:12px;">
+        <button class="btnRed" id="wipeBtn" type="button">Borrar TODO (solo si estás segura)</button>
+      </div>
+      <div class="small" style="margin-top:10px;">
+        * Borrar todo elimina los datos del dispositivo (no se pueden recuperar).
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal: Él me llamó -->
+<div class="modal" id="callModal" aria-hidden="true">
+  <div class="panel" role="dialog" aria-modal="true">
+    <div class="row space">
+      <h3>Registrar llamada</h3>
+      <button class="btnGhost" id="closeCall" type="button">Cerrar</button>
+    </div>
+
+    <div class="two">
+      <div>
+        <label>Hora de la llamada</label>
+        <input type="time" id="callTime">
+      </div>
+      <div>
+        <label>Duración (minutos)</label>
+        <input type="number" id="callDuration" min="0" step="1" value="10">
+      </div>
+    </div>
+
+    <div class="two">
+      <div>
+        <label>¿Qué sentí durante?</label>
+        <select id="callEmotion">
+          <option value="tranquilidad">Tranquilidad</option>
+          <option value="alegria">Alegría</option>
+          <option value="nostalgia">Nostalgia</option>
+          <option value="ansiedad">Ansiedad</option>
+          <option value="culpa">Culpa</option>
+          <option value="confusion">Confusión</option>
+        </select>
+      </div>
+      <div>
+        <label>¿Cómo quedó mi cuerpo después?</label>
+        <select id="callBody">
+          <option value="ligera">Ligera</option>
+          <option value="normal">Normal</option>
+          <option value="pesada">Pesada</option>
+          <option value="pecho_apretado">Pecho apretado</option>
+          <option value="nudo_garganta">Nudo en garganta</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="two">
+      <div>
+        <label>Ansiedad DESPUÉS (0–10)</label>
+        <input type="number" id="callAfterAnx" min="0" max="10" value="6">
+      </div>
+      <div>
+        <label>¿Me ayudó a calmarme? (0–10)</label>
+        <input type="number" id="callRelief" min="0" max="10" value="6">
+      </div>
+    </div>
+
+    <label>Nota (opcional)</label>
+    <textarea id="callNote" placeholder="Ej. Me calmé al oír su voz, luego me dio angustia"></textarea>
+
+    <div class="actions">
+      <button class="btnBlue" id="saveCall" type="button">Guardar llamada</button>
+      <button class="btnGhost" id="cancelCall" type="button">Cancelar</button>
+    </div>
+
+    <div class="small" style="margin-top:10px;">
+      Esto no juzga. Solo registra para que tu mente no te “inventé” el día completo.
+    </div>
+  </div>
 </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("appData")) || {
-  moods:[],
-  calls:[]
-};
+(() => {
+  // 🔑 Nueva llave (y leemos la anterior si existe, para no perder datos)
+  const KEY_NEW = "mi_app_personal_v2";
+  const KEY_OLD = "registro_ansiedad_integrado_v1";
 
-const quotes = [
- "Respira, ya estás haciendo lo mejor que puedes.",
- "No tienes que tener todo resuelto hoy.",
- "Tu proceso es válido.",
- "Estás aprendiendo a cuidarte.",
- "Eres más fuerte de lo que crees."
-];
+  const ui = {
+    time: document.getElementById("time"),
+    anxiety: document.getElementById("anxiety"),
+    mood: document.getElementById("mood"),
+    urge: document.getElementById("urge"),
+    thought: document.getElementById("thought"),
+    note: document.getElementById("note"),
+    careChips: Array.from(document.querySelectorAll("#careChips .chip")),
+    saveBtn: document.getElementById("saveBtn"),
+    resetCareBtn: document.getElementById("resetCareBtn"),
+    msg: document.getElementById("msg"),
+    todayPill: document.getElementById("todayPill"),
+    containPill: document.getElementById("containPill"),
+    todayList: document.getElementById("todayList"),
+    weekTable: document.getElementById("weekTable"),
 
-function saveMood(){
-  data.moods.push({
-    date:new Date().toISOString(),
-    mood:mood.value,
-    thought:thought.value
-  });
-  thought.value="";
-  save();
-}
+    callBtn: document.getElementById("callBtn"),
+    lastCallBox: document.getElementById("lastCallBox"),
+    callModal: document.getElementById("callModal"),
+    closeCall: document.getElementById("closeCall"),
+    cancelCall: document.getElementById("cancelCall"),
+    saveCall: document.getElementById("saveCall"),
+    callTime: document.getElementById("callTime"),
+    callDuration: document.getElementById("callDuration"),
+    callEmotion: document.getElementById("callEmotion"),
+    callBody: document.getElementById("callBody"),
+    callAfterAnx: document.getElementById("callAfterAnx"),
+    callRelief: document.getElementById("callRelief"),
+    callNote: document.getElementById("callNote"),
 
-function saveCall(){
-  data.calls.push({
-    time:callTime.value,
-    duration:callDuration.value
-  });
-  callTime.value="";
-  callDuration.value="";
-  save();
-}
+    quote: document.getElementById("quote"),
+    newQuote: document.getElementById("newQuote"),
 
-function save(){
-  localStorage.setItem("appData",JSON.stringify(data));
-  updateUI();
-}
+    exportBtn: document.getElementById("exportBtn"),
+    importBtn: document.getElementById("importBtn"),
+    importFile: document.getElementById("importFile"),
+    wipeBtn: document.getElementById("wipeBtn"),
+  };
 
-function newQuote(){
-  quote.textContent = quotes[Math.floor(Math.random()*quotes.length)];
-}
-
-function updateUI(){
-  if(data.calls.length){
-    let c = data.calls[data.calls.length-1];
-    lastCallInfo.textContent = `Última llamada: ${c.time} (${c.duration} min)`;
+  function todayISO(){
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth()+1).padStart(2,"0");
+    const dd = String(d.getDate()).padStart(2,"0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+  function nowTime(){
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2,"0");
+    const mi = String(d.getMinutes()).padStart(2,"0");
+    return `${hh}:${mi}`;
+  }
+  function clamp010(n){
+    const x = Number(n);
+    if (Number.isNaN(x)) return 0;
+    return Math.max(0, Math.min(10, x));
+  }
+  function showMsg(text){
+    ui.msg.textContent = text;
+    ui.msg.style.display = "block";
+    clearTimeout(showMsg._t);
+    showMsg._t = setTimeout(()=> ui.msg.style.display="none", 1800);
   }
 
-  summary.innerHTML = `
-    Registros emocionales: ${data.moods.length}<br>
-    Llamadas registradas: ${data.calls.length}
-  `;
-}
+  function load(){
+    // intentamos KEY_NEW
+    try{
+      const raw = localStorage.getItem(KEY_NEW);
+      if (raw) return JSON.parse(raw);
+    }catch(e){}
+    // si no existe, intentamos migrar KEY_OLD
+    try{
+      const old = localStorage.getItem(KEY_OLD);
+      if (old){
+        const data = JSON.parse(old);
+        localStorage.setItem(KEY_NEW, JSON.stringify(data));
+        return data;
+      }
+    }catch(e){}
+    return [];
+  }
+  function saveAll(data){
+    localStorage.setItem(KEY_NEW, JSON.stringify(data));
+  }
 
-function exportData(){
-  const blob = new Blob([JSON.stringify(data)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="mi_app_personal.json";
-  a.click();
-}
+  function selectedCare(){
+    return ui.careChips
+      .filter(c => c.dataset.on === "1")
+      .map(c => c.dataset.key);
+  }
+  function resetCare(){
+    ui.careChips.forEach(c => c.dataset.on="0");
+  }
 
-function importData(){
-  fileInput.click();
-}
+  function lastNDaysISO(n){
+    const out = [];
+    const base = new Date();
+    base.setHours(12,0,0,0);
+    for (let i=0;i<n;i++){
+      const d = new Date(base);
+      d.setDate(base.getDate() - i);
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const dd = String(d.getDate()).padStart(2,"0");
+      out.push(`${yyyy}-${mm}-${dd}`);
+    }
+    return out.reverse();
+  }
 
-fileInput.onchange = e=>{
-  const file=e.target.files[0];
-  const reader=new FileReader();
-  reader.onload=()=>{ data=JSON.parse(reader.result); save(); };
-  reader.readAsText(file);
-};
+  function fmtDateTime(dateISO, timeHHMM){
+    if (!dateISO) return "—";
+    const [y,m,d] = dateISO.split("-");
+    return `${d}/${m}/${y} ${timeHHMM || ""}`.trim();
+  }
 
-newQuote();
-updateUI();
+  function computeContainmentHours(lastCallISO){
+    if (!lastCallISO) return null;
+    const t = new Date(lastCallISO);
+    if (Number.isNaN(t.getTime())) return null;
+    const diffMs = Date.now() - t.getTime();
+    const h = diffMs / (1000*60*60);
+    if (h < 0) return null;
+    return h;
+  }
+
+  function updatePills(){
+    const all = load();
+    const t = todayISO();
+    const todayEntries = all.filter(e => e.date === t);
+    ui.todayPill.textContent = `Hoy: ${todayEntries.length}`;
+
+    const lastCall = [...all].reverse().find(e => e.eventType === "call");
+    if (lastCall && lastCall.callISO){
+      const h = computeContainmentHours(lastCall.callISO);
+      if (h == null) ui.containPill.textContent = "Contención: —";
+      else if (h < 1) ui.containPill.textContent = `Contención: ${Math.floor(h*60)} min`;
+      else ui.containPill.textContent = `Contención: ${h.toFixed(1)} h`;
+      ui.lastCallBox.textContent = `Última llamada: ${fmtDateTime(lastCall.date, lastCall.time)} · ${Number(lastCall.callDurationMin||0)} min`;
+    }else{
+      ui.containPill.textContent = "Contención: —";
+      ui.lastCallBox.textContent = "Última llamada: —";
+    }
+  }
+
+  function renderToday(){
+    const all = load();
+    const t = todayISO();
+    const entries = all.filter(e => e.date === t).sort((a,b)=> (a.time||"").localeCompare(b.time||""));
+
+    ui.todayList.innerHTML = "";
+    if (!entries.length){
+      ui.todayList.innerHTML = `<div class="notice">Aún no hay registros hoy. Cuando puedas, haz uno breve.</div>`;
+      updatePills();
+      return;
+    }
+
+    entries.forEach((e, idx) => {
+      const wrap = document.createElement("div");
+      wrap.className = "item";
+
+      const isCall = e.eventType === "call";
+      const tag = isCall ? `<span class="tag call">Él me llamó</span>` : `<span class="tag">Registro</span>`;
+      const right = isCall
+        ? `<span class="muted mono">${Number(e.callDurationMin||0)} min</span>`
+        : `<span class="muted mono">Ansiedad: ${clamp010(e.anxiety)}</span>`;
+
+      const mainLine = isCall
+        ? `<div class="muted">Durante: <b>${e.callEmotion||"—"}</b> · Cuerpo: <b>${e.callBody||"—"}</b> · Después: <b>${clamp010(e.callAfterAnx)}</b>/10</div>`
+        : `<div class="muted">Mood: <b>${e.mood||"—"}</b> · Impulso: <b>${e.urge||"—"}</b></div>`;
+
+      const thought = (!isCall && e.thought) ? `<div class="muted" style="margin-top:6px">Pensamiento: ${escapeHtml(e.thought)}</div>` : ``;
+      const note = (e.note) ? `<div class="muted" style="margin-top:6px">Nota: ${escapeHtml(e.note)}</div>` : ``;
+      const care = (!isCall && Array.isArray(e.care) && e.care.length)
+        ? `<div class="muted" style="margin-top:6px">Cuidado: ${e.care.map(escapeHtml).join(", ")}</div>`
+        : ``;
+
+      wrap.innerHTML = `
+        <div class="top">
+          <div class="row">
+            ${tag}
+            <span class="muted mono">${fmtDateTime(e.date, e.time)}</span>
+          </div>
+          ${right}
+        </div>
+        <div style="margin-top:8px">${mainLine}${thought}${care}${note}</div>
+        <div class="btnRow" style="margin-top:10px">
+          <button class="btnGhost" data-del="${e._id}">Borrar este</button>
+        </div>
+      `;
+
+      ui.todayList.appendChild(wrap);
+    });
+
+    // delete buttons
+    ui.todayList.querySelectorAll("button[data-del]").forEach(btn => {
+      btn.addEventListener("click", ()=>{
+        const id = btn.getAttribute("data-del");
+        const all2 = load().filter(x => String(x._id) !== String(id));
+        saveAll(all2);
+        renderToday();
+        renderWeek();
+        showMsg("Registro borrado");
+      });
+    });
+
+    updatePills();
+  }
+
+  function renderWeek(){
+    const all = load();
+    const days = lastNDaysISO(7);
+    ui.weekTable.innerHTML = "";
+    let any = false;
+
+    days.forEach(date => {
+      const entries = all.filter(e => e.date === date);
+      if (!entries.length) return;
+      any = true;
+
+      const regular = entries.filter(e => e.eventType !== "call");
+      const calls = entries.filter(e => e.eventType === "call");
+
+      const count = entries.length;
+      const avgAnx = regular.length
+        ? (regular.reduce((s,e)=> s + clamp010(e.anxiety), 0) / regular.length).toFixed(1)
+        : "—";
+
+      const callCount = calls.length;
+      const durTotal = calls.reduce((s,e)=> s + Number(e.callDurationMin||0), 0);
+
+      const [y,m,d] = date.split("-");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="mono">${d}/${m}</td>
+        <td class="mono">${count}</td>
+        <td class="mono">${avgAnx}</td>
+        <td class="mono">${callCount}</td>
+        <td class="mono">${durTotal} min</td>
+      `;
+      ui.weekTable.appendChild(tr);
+    });
+
+    if (!any){
+      ui.weekTable.innerHTML = `<tr><td colspan="5" class="muted">Aún no hay datos esta semana.</td></tr>`;
+    }
+  }
+
+  function addEntry(entry){
+    const data = load();
+    data.push(entry);
+    saveAll(data);
+    renderToday();
+    renderWeek();
+  }
+
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // --- Quotes
+  const QUOTES = [
+    "Respira. Estás haciendo lo mejor que puedes.",
+    "Una ola no dura para siempre. Tú tampoco te quedas aquí para siempre.",
+    "No necesitas resolver toda tu vida hoy. Solo este momento.",
+    "Tu valor no depende de si te eligen. Tu valor ya existe.",
+    "Hoy no se trata de controlar todo, se trata de cuidarte un poco.",
+    "Un impulso es una ola: obsérvala, nómbrala, déjala pasar.",
+    "Puedes amar y al mismo tiempo poner límites que te protejan.",
+    "Hacer “contacto cero” por ratos también es amor propio.",
+    "Tu paz vale más que una explicación que no llega.",
+    "Hoy: suave contigo. Mañana: un paso más."
+  ];
+  function newQuote(){
+    const q = QUOTES[Math.floor(Math.random()*QUOTES.length)];
+    ui.quote.textContent = q;
+  }
+
+  // --- Modal calls
+  function openCall(){
+    ui.callModal.style.display = "flex";
+    ui.callTime.value = nowTime();
+    ui.callDuration.value = 10;
+    ui.callRelief.value = 6;
+    ui.callAfterAnx.value = clamp010(ui.anxiety.value || 6);
+    ui.callEmotion.value = "tranquilidad";
+    ui.callBody.value = "normal";
+    ui.callNote.value = "";
+  }
+  function closeCall(){
+    ui.callModal.style.display = "none";
+  }
+
+  // --- Init
+  function init(){
+    // defaults
+    ui.time.value = nowTime();
+
+    ui.careChips.forEach(ch => {
+      ch.dataset.on = "0";
+      ch.addEventListener("click", ()=> {
+        ch.dataset.on = (ch.dataset.on === "1") ? "0" : "1";
+      });
+    });
+
+    ui.resetCareBtn.addEventListener("click", ()=>{
+      resetCare();
+      showMsg("Cuidados limpiados");
+    });
+
+    ui.saveBtn.addEventListener("click", ()=>{
+      const entry = {
+        _id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
+        eventType: "regular",
+        date: todayISO(),
+        time: ui.time.value || nowTime(),
+        anxiety: clamp010(ui.anxiety.value),
+        mood: ui.mood.value,
+        urge: ui.urge.value,
+        thought: (ui.thought.value || "").trim(),
+        care: selectedCare(),
+        note: (ui.note.value || "").trim()
+      };
+      addEntry(entry);
+      // “limpieza suave” para que no se sienta pesado
+      ui.thought.value = "";
+      ui.note.value = "";
+      resetCare();
+      showMsg("Guardado ✓");
+    });
+
+    // Calls
+    ui.callBtn.addEventListener("click", openCall);
+    ui.closeCall.addEventListener("click", closeCall);
+    ui.cancelCall.addEventListener("click", closeCall);
+    ui.callModal.addEventListener("click", (e)=>{ if (e.target === ui.callModal) closeCall(); });
+
+    ui.saveCall.addEventListener("click", ()=>{
+      const date = todayISO();
+      const time = ui.callTime.value || nowTime();
+      const yyyy = date.split("-")[0];
+      const mm = date.split("-")[1];
+      const dd = date.split("-")[2];
+      const callISO = `${yyyy}-${mm}-${dd}T${time}:00`;
+
+      const dur = Math.max(0, Math.floor(Number(ui.callDuration.value || 0)));
+
+      const entry = {
+        _id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
+        eventType: "call",
+        date,
+        time,
+        callISO,
+        callDurationMin: dur,
+        callRelief: clamp010(ui.callRelief.value),
+        callAfterAnx: clamp010(ui.callAfterAnx.value),
+        callEmotion: ui.callEmotion.value,
+        callBody: ui.callBody.value,
+        note: (ui.callNote.value || "").trim()
+      };
+      addEntry(entry);
+      closeCall();
+      showMsg("Llamada registrada ✓");
+    });
+
+    // Quotes
+    ui.newQuote.addEventListener("click", newQuote);
+    newQuote();
+
+    // Export / Import
+    ui.exportBtn.addEventListener("click", ()=>{
+      const data = load();
+      const blob = new Blob([JSON.stringify({version:"v2", data}, null, 2)], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `mi-app-personal-respaldo-${todayISO()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showMsg("Exportado ✓");
+    });
+
+    ui.importBtn.addEventListener("click", ()=> ui.importFile.click());
+    ui.importFile.addEventListener("change", async ()=>{
+      const file = ui.importFile.files && ui.importFile.files[0];
+      if (!file) return;
+      try{
+        const text = await file.text();
+        const obj = JSON.parse(text);
+        const incoming = Array.isArray(obj) ? obj : (obj.data || []);
+        if (!Array.isArray(incoming)) throw new Error("Formato inválido");
+        saveAll(incoming);
+        renderToday();
+        renderWeek();
+        showMsg("Importado ✓");
+      }catch(e){
+        alert("No pude importar ese archivo. ¿Seguro es un JSON de respaldo de esta app?");
+      }finally{
+        ui.importFile.value = "";
+      }
+    });
+
+    ui.wipeBtn.addEventListener("click", ()=>{
+      const ok = confirm("¿Borrar TODO? Esto elimina los datos solo de este dispositivo y no se puede deshacer.");
+      if (!ok) return;
+      localStorage.removeItem(KEY_NEW);
+      // no tocamos KEY_OLD por si acaso, pero si quieres, puedes borrarlo también:
+      // localStorage.removeItem(KEY_OLD);
+      renderToday();
+      renderWeek();
+      showMsg("Borrado");
+    });
+
+    // First render
+    renderToday();
+    renderWeek();
+    updatePills();
+
+    // pill refresh (contención)
+    setInterval(updatePills, 15_000);
+  }
+
+  // Service worker (si existe)
+  if ("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  }
+
+  init();
+})();
 </script>
-
 </body>
 </html>
