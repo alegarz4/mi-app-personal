@@ -1,544 +1,420 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mi App Personal</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registro discreto de regulación emocional</title>
 
-  <!-- PWA (si ya tienes estos archivos en tu repo) -->
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#0b1224">
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{
+  --bg:#0b1220; --card:#111a2e; --muted:#9fb0d0; --text:#e9efff;
+  --good:#5be38f; --warn:#ffd166; --bad:#ff6b6b; --line:#1f2b48;
+  --chip:#0c1428; --chipOn:#12244a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto;
+  background:linear-gradient(160deg,#070b14,var(--bg));
+  color:var(--text);
+}
+header{
+  padding:14px 16px;
+  background:rgba(11,18,32,.95);
+  border-bottom:1px solid var(--line);
+  position:sticky; top:0; z-index:10;
+}
+h1{margin:0;font-size:16px}
+.sub{font-size:12px;color:var(--muted);margin-top:4px}
+main{padding:16px;max-width:1100px;margin:auto}
+.card{
+  background:rgba(17,26,46,.95);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+h2{font-size:14px;margin:0 0 10px}
+label{font-size:12px;color:var(--muted);display:block;margin:10px 0 6px}
+input,select,textarea{
+  width:100%;padding:10px;border-radius:10px;
+  border:1px solid var(--line);
+  background:#0c1428;color:var(--text);
+  outline:none;
+}
+textarea{resize:vertical;min-height:60px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.col{flex:1;min-width:220px}
+.btn{
+  padding:10px 14px;border-radius:10px;border:none;
+  cursor:pointer;font-weight:800;
+}
+.btn.main{background:var(--good);color:#06210f}
+.btn.sec{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn.warn{background:var(--warn);color:#2b2000}
+.btn.bad{background:var(--bad);color:#2a0b0b}
+.small{font-size:11px;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  padding:8px 10px;border-radius:999px;
+  border:1px solid var(--line);
+  background:var(--chip);font-size:12px;
+  cursor:pointer; user-select:none;
+}
+.chip[data-on="1"]{background:var(--chipOn)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);text-align:left;font-weight:800}
+.tag{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0c1428;color:var(--muted);font-size:11px}
+hr{border:none;border-top:1px solid var(--line);margin:12px 0}
+.pill{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:#0c1428;color:var(--muted);font-size:12px}
+.right{margin-left:auto}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}
+@media (max-width: 980px){ .grid{grid-template-columns:1fr} }
 
-  <style>
-    :root{
-      --bg:#0b1224;
-      --bg2:#070d1a;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.08);
-      --stroke: rgba(255,255,255,.10);
-      --stroke2: rgba(255,255,255,.14);
-      --text:#f8fafc;
-      --muted:#a8b3cf;
-      --muted2:#8ea0c7;
-
-      --blue:#5aa2ff;
-      --green:#22c55e;
-      --amber:#fbbf24;
-      --red:#fb7185;
-
-      --shadow: 0 18px 55px rgba(0,0,0,.45);
-      --radius: 18px;
-    }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--text);
-      background:
-        radial-gradient(1200px 700px at 20% -10%, rgba(90,162,255,.22), transparent 60%),
-        radial-gradient(900px 700px at 95% 10%, rgba(34,197,94,.18), transparent 55%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-    }
-
-    header{
-      position:sticky;
-      top:0;
-      z-index:20;
-      backdrop-filter: blur(10px);
-      background: rgba(11,18,36,.72);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .wrap{max-width: 920px; margin:0 auto; padding:14px 14px 28px;}
-    .row{display:flex; gap:12px; align-items:center; flex-wrap:wrap;}
-    .space{justify-content:space-between}
-    h1{
-      margin:6px 0 2px;
-      font-size: 26px;
-      letter-spacing:.2px;
-    }
-    .sub{color:var(--muted); font-size:13px}
-    .pill{
-      padding:8px 10px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      border-radius:999px;
-      font-size:13px;
-      color:var(--text);
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:14px;
-      margin-top:14px;
-    }
-    @media (max-width: 860px){
-      .grid{grid-template-columns: 1fr;}
-    }
-
-    .card{
-      background: var(--card);
-      border: 1px solid var(--stroke);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding:14px;
-    }
-    .card h2{
-      margin:0 0 10px;
-      font-size: 18px;
-    }
-    label{
-      display:block;
-      font-size: 13px;
-      color: var(--muted);
-      margin:10px 0 6px;
-    }
-    input, select, textarea{
-      width:100%;
-      padding:12px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
-      outline: none;
-      font-size: 14px;
-    }
-    textarea{min-height: 70px; resize: vertical;}
-    .two{display:grid; grid-template-columns: 1fr 1fr; gap:12px;}
-    @media (max-width: 520px){
-      .two{grid-template-columns: 1fr;}
-    }
-
-    .chips{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;}
-    .chip{
-      padding:10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      font-size: 13px;
-      cursor:pointer;
-      user-select:none;
-      transition: transform .05s ease, background .2s ease, border .2s ease;
-    }
-    .chip:active{transform: translateY(1px)}
-    .chip[data-on="1"]{
-      background: rgba(34,197,94,.18);
-      border-color: rgba(34,197,94,.40);
-    }
-
-    .btnRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
-    button{
-      border:none;
-      border-radius: 14px;
-      padding:12px 14px;
-      font-weight: 800;
-      cursor:pointer;
-      width:100%;
-      font-size: 15px;
-    }
-    .btnGreen{background: var(--green); color:#052e16;}
-    .btnBlue{background: var(--blue); color:#052e16;}
-    .btnGhost{background: rgba(255,255,255,.08); color: var(--text); border:1px solid rgba(255,255,255,.12);}
-    .btnWarn{background: rgba(251,191,36,.92); color:#2b2000;}
-    .btnRed{background: rgba(251,113,133,.92); color:#2b0a12;}
-    .small{font-size: 13px; color: var(--muted); line-height:1.35}
-
-    .notice{
-      padding:10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      color: var(--muted2);
-      font-size: 13px;
-      margin-top:10px;
-    }
-
-    .list{
-      margin-top:10px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .item{
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.16);
-      border-radius: 16px;
-      padding:12px;
-    }
-    .item .top{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    .tag{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      font-weight:700;
-    }
-    .tag.call{background: rgba(90,162,255,.16); border-color: rgba(90,162,255,.35);}
-    .muted{color: var(--muted); font-size: 13px;}
-    .mono{font-variant-numeric: tabular-nums;}
-
-    table{
-      width:100%;
-      border-collapse: collapse;
-      margin-top:10px;
-      overflow:hidden;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.10);
-    }
-    th,td{
-      padding:10px 10px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      font-size: 13px;
-      text-align:left;
-    }
-    th{color: var(--muted); font-weight:800; background: rgba(255,255,255,.06);}
-    tr:last-child td{border-bottom:none;}
-
-    /* Modal */
-    .modal{
-      position:fixed;
-      inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:14px;
-      background: rgba(0,0,0,.55);
-      z-index:50;
-    }
-    .modal .panel{
-      width:min(720px, 100%);
-      background: rgba(11,18,36,.92);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding:14px;
-    }
-    .modal h3{margin:0 0 6px; font-size: 18px;}
-    .modal .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
-    .modal .actions button{width:auto; min-width: 140px;}
-  </style>
+/* Modal */
+.modal{
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:50;
+  align-items:center; justify-content:center;
+  padding:16px;
+}
+.panel{
+  width:min(760px, 100%);
+  background:#0b1220;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.panel h3{margin:0 0 8px; font-size:15px}
+.panel p{margin:0 0 10px; color:var(--muted); font-size:12px}
+.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:6px;background:#0c1428;color:var(--muted);font-size:11px}
+</style>
 </head>
 
 <body>
 <header>
-  <div class="wrap">
-    <div class="row space">
-      <div>
-        <h1>Mi App Personal</h1>
-        <div class="sub">Privado · se guarda solo en este dispositivo (no se sube a internet)</div>
-      </div>
-      <div class="row">
-        <span class="pill mono" id="todayPill">Hoy: —</span>
-        <span class="pill mono" id="containPill">Contención: —</span>
-      </div>
+  <div class="row">
+    <div>
+      <h1>Registro discreto de regulación emocional</h1>
+      <div class="sub">Uso personal · privado · pensado para el trabajo · (se guarda en este equipo)</div>
+    </div>
+    <div class="right row">
+      <span class="pill" id="todayPill">Hoy: —</span>
+      <span class="pill" id="weekPill">Semana: —</span>
     </div>
   </div>
 </header>
 
-<main class="wrap">
-  <div class="grid">
+<main>
 
-    <!-- Col 1 -->
+<div class="grid">
+
+  <!-- LEFT -->
+  <div>
+
     <div class="card">
-      <h2>Registro rápido (1–2 min)</h2>
+      <h2>Registro rápido (1 minuto)</h2>
 
-      <div class="two">
-        <div>
+      <div class="row">
+        <div class="col">
           <label>Hora</label>
           <input type="time" id="time">
         </div>
-        <div>
+        <div class="col">
           <label>Nivel de ansiedad (0–10)</label>
           <input type="number" id="anxiety" min="0" max="10" value="5">
         </div>
       </div>
 
-      <label>¿Cómo me siento?</label>
-      <select id="mood">
-        <option value="tranquila">Tranquila</option>
-        <option value="indiferente">Indiferente</option>
-        <option value="ansiosa">Ansiosa</option>
-        <option value="triste">Triste</option>
-        <option value="enojada">Enojada</option>
-        <option value="confundida">Confundida</option>
-        <option value="con esperanza">Con esperanza</option>
-      </select>
-
       <label>Impulso principal</label>
       <select id="urge">
         <option value="llamar">Llamar</option>
-        <option value="revisar">Revisar apps / redes</option>
+        <option value="revisar">Revisar apps</option>
         <option value="escribir">Escribir / buscar contacto</option>
-        <option value="intrusivos">Pensamientos repetitivos o intrusivos</option>
+        <option value="rumiar">Pensamientos repetitivos o intrusivos</option>
       </select>
 
-      <label>¿Qué pensamiento domina? (opcional)</label>
-      <textarea id="thought" placeholder="Ej. “Si no llama, es que no le importo”"></textarea>
+      <label>¿Actué el impulso?</label>
+      <select id="acted">
+        <option value="resisti">No, lo resistí</option>
+        <option value="actue">Sí, actué</option>
+      </select>
 
       <label>Acción de cuidado (elige 1–2)</label>
       <div class="chips" id="careChips">
         <div class="chip" data-key="respirar">Respiré</div>
-        <div class="chip" data-key="pendientes">Seguí trabajando</div>
-        <div class="chip" data-key="esperar">Esperé sin buscar</div>
+        <div class="chip" data-key="pendientes">Seguí con pendientes</div>
+        <div class="chip" data-key="esperar">Esperé</div>
         <div class="chip" data-key="noaccion">No llamé / no revisé</div>
-        <div class="chip" data-key="agua">Agua / café / té</div>
+        <div class="chip" data-key="agua">Agua / té</div>
         <div class="chip" data-key="mover">Me moví</div>
-        <div class="chip" data-key="tejer">Tejí / hobby</div>
       </div>
 
       <label>Nota (opcional)</label>
-      <textarea id="note" placeholder="Ej. Fue difícil, pero pude sostenerme"></textarea>
+      <textarea id="note" placeholder="Ej. Me cuidé aunque fue difícil"></textarea>
 
-      <div class="btnRow">
-        <button class="btnGreen" id="saveBtn">Guardar registro</button>
-        <button class="btnGhost" id="resetCareBtn" type="button">Limpiar cuidados</button>
+      <div class="row" style="margin-top:10px">
+        <button class="btn main" id="save">Guardar</button>
+        <button class="btn sec" id="quick">Guardar “seguí trabajando”</button>
+        <button class="btn warn" id="callBtn">Él me llamó</button>
       </div>
 
-      <div class="notice" id="msg" style="display:none;"></div>
+      <div class="row" style="margin-top:10px">
+        <span class="tag">Tip: registra primero, decide después</span>
+        <span class="small" id="saveMsg"></span>
+      </div>
     </div>
 
-    <!-- Col 2 -->
     <div class="card">
-      <h2>Él me llamó</h2>
-
-      <div class="small">
-        Esta sección es para registrar la llamada **cuando suceda**, sin perseguirla.
-        Te ayuda a ver el tiempo entre llamadas (contención).
-      </div>
-
-      <div class="btnRow">
-        <button class="btnBlue" id="callBtn" type="button">Registrar “Él me llamó”</button>
-      </div>
-
-      <div class="notice mono" id="lastCallBox">Última llamada: —</div>
-
-      <h2 style="margin-top:14px;">Frase para ti</h2>
-      <div class="item">
-        <div class="muted" style="margin-bottom:8px;">Hoy, una frase suave:</div>
-        <div id="quote" style="font-size:15px; font-weight:800; line-height:1.35;"></div>
-        <div class="btnRow">
-          <button class="btnGhost" id="newQuote" type="button">Otra frase</button>
-        </div>
-      </div>
-
-      <h2 style="margin-top:14px;">Respaldo</h2>
-      <div class="btnRow">
-        <button class="btnGreen" id="exportBtn" type="button">Exportar datos</button>
-        <button class="btnGhost" id="importBtn" type="button">Importar datos</button>
-        <input id="importFile" type="file" accept="application/json" style="display:none;">
-      </div>
-
-      <div class="small" style="margin-top:10px;">
-        Tip: si cambias de dispositivo, **Exportar** → envías el archivo a tu correo/Drive → **Importar**.
+      <h2>Registros de hoy</h2>
+      <div class="small">Incluye registros normales y registros de “él me llamó”.</div>
+      <div style="overflow:auto;border-radius:12px;border:1px solid var(--line);margin-top:10px">
+        <table>
+          <thead>
+            <tr>
+              <th>Hora</th>
+              <th>Ans.</th>
+              <th>Evento</th>
+              <th>Impulso</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="log">
+            <tr><td colspan="5" class="small">Aún no hay registros.</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
   </div>
 
-  <div class="grid" style="margin-top:14px;">
+  <!-- RIGHT -->
+  <div>
+
     <div class="card">
-      <h2>Registros de hoy</h2>
-      <div class="small">Se guardan con fecha/hora. Puedes borrar solo un registro si te equivocas.</div>
-      <div class="list" id="todayList"></div>
+      <h2>Frase para acompañarte</h2>
+      <div id="quote" style="font-weight:900;font-size:14px">“No llamar ahora es cuidarme.”</div>
+      <div class="small" style="margin-top:6px">Úsala 5 minutos como ancla.</div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn sec" id="newQuote">Otra frase ✨</button>
+      </div>
     </div>
 
     <div class="card">
       <h2>Resumen semanal (últimos 7 días)</h2>
-      <div class="small">Lo que buscamos aquí es claridad, no perfección.</div>
-      <table>
-        <thead>
-          <tr>
-            <th>Día</th>
-            <th>Registros</th>
-            <th>Ansiedad prom.</th>
-            <th>“Él me llamó”</th>
-            <th>Duración total</th>
-          </tr>
-        </thead>
-        <tbody id="weekTable">
-          <tr><td colspan="5" class="muted">Aún no hay datos esta semana.</td></tr>
-        </tbody>
-      </table>
+      <div class="small">Esto te ayuda a ver avances sin depender del “cómo me siento ahorita”.</div>
 
-      <div class="btnRow" style="margin-top:12px;">
-        <button class="btnRed" id="wipeBtn" type="button">Borrar TODO (solo si estás segura)</button>
+      <div class="row" style="margin-top:10px">
+        <span class="pill" id="wkEntries">Registros: —</span>
+        <span class="pill" id="wkAvg">Ansiedad prom.: —</span>
+        <span class="pill" id="wkCalls">Llamadas: —</span>
+        <span class="pill" id="wkCallMin">Min. llamadas: —</span>
       </div>
-      <div class="small" style="margin-top:10px;">
-        * Borrar todo elimina los datos del dispositivo (no se pueden recuperar).
+
+      <div style="overflow:auto;border-radius:12px;border:1px solid var(--line);margin-top:10px">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Reg.</th>
+              <th>Ans. prom.</th>
+              <th>Resistí</th>
+              <th>Actué</th>
+              <th>% cuidado</th>
+              <th>Llamadas</th>
+              <th>Min.</th>
+            </tr>
+          </thead>
+          <tbody id="weekTable">
+            <tr><td colspan="8" class="small">Aún no hay datos.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr>
+      <div class="small">
+        Lectura sana: si un día sube la ansiedad pero también suben “resistí” y “cuidado”, eso es progreso real.
       </div>
     </div>
+
   </div>
+
+</div>
+
 </main>
 
 <!-- Modal: Él me llamó -->
-<div class="modal" id="callModal" aria-hidden="true">
-  <div class="panel" role="dialog" aria-modal="true">
-    <div class="row space">
-      <h3>Registrar llamada</h3>
-      <button class="btnGhost" id="closeCall" type="button">Cerrar</button>
+<div class="modal" id="callModal" aria-modal="true" role="dialog">
+  <div class="panel">
+    <div class="row">
+      <div>
+        <h3>Registro: “Él me llamó”</h3>
+        <p>Esto integra la llamada sin que te arrastre: registras cómo te sentiste <b>durante</b> y <b>después</b>.</p>
+      </div>
+      <div class="right">
+        <span class="tag">Cerrar: <span class="kbd">Esc</span></span>
+      </div>
     </div>
 
-    <div class="two">
-      <div>
-        <label>Hora de la llamada</label>
+    <div class="row">
+      <div class="col">
+        <label>Hora</label>
         <input type="time" id="callTime">
       </div>
-      <div>
-        <label>Duración (minutos)</label>
+      <div class="col">
+        <label>Duración de la llamada (minutos)</label>
         <input type="number" id="callDuration" min="0" step="1" value="10">
       </div>
     </div>
 
-    <div class="two">
-      <div>
-        <label>¿Qué sentí durante?</label>
+    <div class="row">
+      <div class="col">
+        <label>¿Cuánto alivio sentiste DURANTE la llamada? (0–10)</label>
+        <input type="number" id="callRelief" min="0" max="10" value="6">
+      </div>
+      <div class="col">
+        <label>¿Cómo quedó tu ansiedad DESPUÉS? (0–10)</label>
+        <input type="number" id="callAfterAnx" min="0" max="10" value="6">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label>¿Qué emoción predominó DESPUÉS? (elige 1)</label>
         <select id="callEmotion">
           <option value="tranquilidad">Tranquilidad</option>
           <option value="alegria">Alegría</option>
-          <option value="nostalgia">Nostalgia</option>
-          <option value="ansiedad">Ansiedad</option>
-          <option value="culpa">Culpa</option>
+          <option value="angustia">Angustia</option>
+          <option value="miedo">Miedo</option>
+          <option value="tristeza">Tristeza</option>
           <option value="confusion">Confusión</option>
+          <option value="esperanza">Esperanza</option>
         </select>
       </div>
-      <div>
-        <label>¿Cómo quedó mi cuerpo después?</label>
-        <select id="callBody">
-          <option value="ligera">Ligera</option>
-          <option value="normal">Normal</option>
-          <option value="pesada">Pesada</option>
-          <option value="pecho_apretado">Pecho apretado</option>
-          <option value="nudo_garganta">Nudo en garganta</option>
+      <div class="col">
+        <label>¿Me llamó? (opcional)</label>
+        <select id="callWasCall">
+          <option value="si" selected>Sí</option>
+          <option value="no">No (solo registro de “no ocurrió”)</option>
         </select>
       </div>
     </div>
 
-    <div class="two">
-      <div>
-        <label>Ansiedad DESPUÉS (0–10)</label>
-        <input type="number" id="callAfterAnx" min="0" max="10" value="6">
-      </div>
-      <div>
-        <label>¿Me ayudó a calmarme? (0–10)</label>
-        <input type="number" id="callRelief" min="0" max="10" value="6">
-      </div>
+    <label>¿Qué pasó en tu cuerpo? (opcional)</label>
+    <select id="callBody">
+      <option value="normal">Normal / neutro</option>
+      <option value="pecho">Pecho apretado</option>
+      <option value="nudo">Nudo en el estómago</option>
+      <option value="temblor">Temblor / inquietud</option>
+      <option value="cansancio">Cansancio / cuerpo pesado</option>
+      <option value="llanto">Ganas de llorar</option>
+    </select>
+
+    <label>Nota corta (opcional)</label>
+    <textarea id="callNote" placeholder="Ej. Durante sentí calma; después volvió el miedo."></textarea>
+
+    <div class="row" style="margin-top:10px">
+      <button class="btn main" id="saveCall">Guardar llamada</button>
+      <button class="btn sec" id="closeCall">Cerrar</button>
     </div>
 
-    <label>Nota (opcional)</label>
-    <textarea id="callNote" placeholder="Ej. Me calmé al oír su voz, luego me dio angustia"></textarea>
-
-    <div class="actions">
-      <button class="btnBlue" id="saveCall" type="button">Guardar llamada</button>
-      <button class="btnGhost" id="cancelCall" type="button">Cancelar</button>
-    </div>
-
-    <div class="small" style="margin-top:10px;">
-      Esto no juzga. Solo registra para que tu mente no te “inventé” el día completo.
+    <div class="small" style="margin-top:10px">
+      Tip clínico: después de una llamada, intenta 10–20 minutos de autocuidado (pendientes, agua, respirar) antes de “comprobar” o “buscar certeza”.
     </div>
   </div>
 </div>
 
 <script>
 (() => {
-  // 🔑 Nueva llave (y leemos la anterior si existe, para no perder datos)
-  const KEY_NEW = "mi_app_personal_v2";
-  const KEY_OLD = "registro_ansiedad_integrado_v1";
+  const KEY = "registro_ansiedad_integrado_v1";
+
+  const quotes = [
+    "No llamar ahora es cuidarme.",
+    "Puedo sentir esto sin actuar; va a pasar.",
+    "Respirar primero, decidir después.",
+    "No tengo que resolverlo hoy.",
+    "Mi valor no depende de una respuesta.",
+    "La urgencia baja si no la alimento.",
+    "Puedo recibir cariño sin perseguirlo.",
+    "Un impulso es una ola: sube y baja.",
+    "Hoy elijo paz, aunque duela un poco.",
+    "Estoy haciendo lo mejor que puedo."
+  ];
+
+  const $ = (id) => document.getElementById(id);
 
   const ui = {
-    time: document.getElementById("time"),
-    anxiety: document.getElementById("anxiety"),
-    mood: document.getElementById("mood"),
-    urge: document.getElementById("urge"),
-    thought: document.getElementById("thought"),
-    note: document.getElementById("note"),
-    careChips: Array.from(document.querySelectorAll("#careChips .chip")),
-    saveBtn: document.getElementById("saveBtn"),
-    resetCareBtn: document.getElementById("resetCareBtn"),
-    msg: document.getElementById("msg"),
-    todayPill: document.getElementById("todayPill"),
-    containPill: document.getElementById("containPill"),
-    todayList: document.getElementById("todayList"),
-    weekTable: document.getElementById("weekTable"),
+    todayPill: $("todayPill"),
+    weekPill: $("weekPill"),
+    time: $("time"),
+    anxiety: $("anxiety"),
+    urge: $("urge"),
+    acted: $("acted"),
+    note: $("note"),
+    careChips: [...document.querySelectorAll("#careChips .chip")],
+    saveMsg: $("saveMsg"),
 
-    callBtn: document.getElementById("callBtn"),
-    lastCallBox: document.getElementById("lastCallBox"),
-    callModal: document.getElementById("callModal"),
-    closeCall: document.getElementById("closeCall"),
-    cancelCall: document.getElementById("cancelCall"),
-    saveCall: document.getElementById("saveCall"),
-    callTime: document.getElementById("callTime"),
-    callDuration: document.getElementById("callDuration"),
-    callEmotion: document.getElementById("callEmotion"),
-    callBody: document.getElementById("callBody"),
-    callAfterAnx: document.getElementById("callAfterAnx"),
-    callRelief: document.getElementById("callRelief"),
-    callNote: document.getElementById("callNote"),
+    log: $("log"),
 
-    quote: document.getElementById("quote"),
-    newQuote: document.getElementById("newQuote"),
+    quote: $("quote"),
+    newQuote: $("newQuote"),
 
-    exportBtn: document.getElementById("exportBtn"),
-    importBtn: document.getElementById("importBtn"),
-    importFile: document.getElementById("importFile"),
-    wipeBtn: document.getElementById("wipeBtn"),
+    weekTable: $("weekTable"),
+    wkEntries: $("wkEntries"),
+    wkAvg: $("wkAvg"),
+    wkCalls: $("wkCalls"),
+    wkCallMin: $("wkCallMin"),
+
+    save: $("save"),
+    quick: $("quick"),
+    callBtn: $("callBtn"),
+
+    callModal: $("callModal"),
+    callTime: $("callTime"),
+    callDuration: $("callDuration"),
+    callRelief: $("callRelief"),
+    callAfterAnx: $("callAfterAnx"),
+    callEmotion: $("callEmotion"),
+    callWasCall: $("callWasCall"),
+    callBody: $("callBody"),
+    callNote: $("callNote"),
+    saveCall: $("saveCall"),
+    closeCall: $("closeCall"),
   };
 
-  function todayISO(){
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth()+1).padStart(2,"0");
-    const dd = String(d.getDate()).padStart(2,"0");
-    return `${yyyy}-${mm}-${dd}`;
+  function todayISO(d = new Date()){
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
   }
+
   function nowTime(){
     const d = new Date();
     const hh = String(d.getHours()).padStart(2,"0");
-    const mi = String(d.getMinutes()).padStart(2,"0");
-    return `${hh}:${mi}`;
-  }
-  function clamp010(n){
-    const x = Number(n);
-    if (Number.isNaN(x)) return 0;
-    return Math.max(0, Math.min(10, x));
-  }
-  function showMsg(text){
-    ui.msg.textContent = text;
-    ui.msg.style.display = "block";
-    clearTimeout(showMsg._t);
-    showMsg._t = setTimeout(()=> ui.msg.style.display="none", 1800);
+    const mm = String(d.getMinutes()).padStart(2,"0");
+    return `${hh}:${mm}`;
   }
 
   function load(){
-    // intentamos KEY_NEW
-    try{
-      const raw = localStorage.getItem(KEY_NEW);
-      if (raw) return JSON.parse(raw);
-    }catch(e){}
-    // si no existe, intentamos migrar KEY_OLD
-    try{
-      const old = localStorage.getItem(KEY_OLD);
-      if (old){
-        const data = JSON.parse(old);
-        localStorage.setItem(KEY_NEW, JSON.stringify(data));
-        return data;
-      }
-    }catch(e){}
-    return [];
+    try {
+      return JSON.parse(localStorage.getItem(KEY) || "[]");
+    } catch {
+      return [];
+    }
   }
+
   function saveAll(data){
-    localStorage.setItem(KEY_NEW, JSON.stringify(data));
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+
+  function showMsg(t){
+    ui.saveMsg.textContent = t;
+    setTimeout(()=> ui.saveMsg.textContent="", 1400);
   }
 
   function selectedCare(){
@@ -546,161 +422,162 @@
       .filter(c => c.dataset.on === "1")
       .map(c => c.dataset.key);
   }
+
   function resetCare(){
-    ui.careChips.forEach(c => c.dataset.on="0");
+    ui.careChips.forEach(c => c.dataset.on = "0");
+  }
+
+  function avg(nums){
+    if (!nums.length) return null;
+    return nums.reduce((a,b)=>a+b,0)/nums.length;
+  }
+
+  function clamp010(n){
+    n = Number(n);
+    if (!Number.isFinite(n)) return 0;
+    return Math.max(0, Math.min(10, n));
+  }
+
+  function clampMin(n){
+    n = Number(n);
+    if (!Number.isFinite(n)) return 0;
+    return Math.max(0, Math.floor(n));
+  }
+
+  function friendlyUrge(v){
+    return ({
+      llamar: "Llamar",
+      revisar: "Revisar apps",
+      escribir: "Escribir / buscar contacto",
+      rumiar: "Pensamientos repetitivos o intrusivos"
+    })[v] || v;
+  }
+
+  function friendlyEventType(v){
+    return ({
+      regular: "Registro",
+      quick: "Rápido",
+      call: "Él me llamó"
+    })[v] || v;
   }
 
   function lastNDaysISO(n){
     const out = [];
     const base = new Date();
-    base.setHours(12,0,0,0);
     for (let i=0;i<n;i++){
       const d = new Date(base);
-      d.setDate(base.getDate() - i);
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth()+1).padStart(2,"0");
-      const dd = String(d.getDate()).padStart(2,"0");
-      out.push(`${yyyy}-${mm}-${dd}`);
+      d.setDate(base.getDate()-i);
+      out.push(todayISO(d));
     }
     return out.reverse();
   }
 
-  function fmtDateTime(dateISO, timeHHMM){
-    if (!dateISO) return "—";
-    const [y,m,d] = dateISO.split("-");
-    return `${d}/${m}/${y} ${timeHHMM || ""}`.trim();
-  }
-
-  function computeContainmentHours(lastCallISO){
-    if (!lastCallISO) return null;
-    const t = new Date(lastCallISO);
-    if (Number.isNaN(t.getTime())) return null;
-    const diffMs = Date.now() - t.getTime();
-    const h = diffMs / (1000*60*60);
-    if (h < 0) return null;
-    return h;
-  }
-
-  function updatePills(){
-    const all = load();
-    const t = todayISO();
-    const todayEntries = all.filter(e => e.date === t);
-    ui.todayPill.textContent = `Hoy: ${todayEntries.length}`;
-
-    const lastCall = [...all].reverse().find(e => e.eventType === "call");
-    if (lastCall && lastCall.callISO){
-      const h = computeContainmentHours(lastCall.callISO);
-      if (h == null) ui.containPill.textContent = "Contención: —";
-      else if (h < 1) ui.containPill.textContent = `Contención: ${Math.floor(h*60)} min`;
-      else ui.containPill.textContent = `Contención: ${h.toFixed(1)} h`;
-      ui.lastCallBox.textContent = `Última llamada: ${fmtDateTime(lastCall.date, lastCall.time)} · ${Number(lastCall.callDurationMin||0)} min`;
-    }else{
-      ui.containPill.textContent = "Contención: —";
-      ui.lastCallBox.textContent = "Última llamada: —";
-    }
-  }
-
   function renderToday(){
-    const all = load();
     const t = todayISO();
-    const entries = all.filter(e => e.date === t).sort((a,b)=> (a.time||"").localeCompare(b.time||""));
+    ui.todayPill.textContent = `Hoy: ${t}`;
 
-    ui.todayList.innerHTML = "";
-    if (!entries.length){
-      ui.todayList.innerHTML = `<div class="notice">Aún no hay registros hoy. Cuando puedas, haz uno breve.</div>`;
-      updatePills();
+    const data = load().filter(e => e.date === t).sort((a,b)=>(a.time||"").localeCompare(b.time||""));
+    ui.log.innerHTML = "";
+
+    if (!data.length){
+      ui.log.innerHTML = `<tr><td colspan="5" class="small">Aún no hay registros.</td></tr>`;
       return;
     }
 
-    entries.forEach((e, idx) => {
-      const wrap = document.createElement("div");
-      wrap.className = "item";
+    // últimos 12
+    const recent = data.slice(-12).reverse();
+    recent.forEach(e => {
+      const careTxt = (e.care && e.care.length) ? e.care.join(", ") : "—";
+      const urgeTxt = e.eventType === "call" ? "—" : friendlyUrge(e.urge);
 
-      const isCall = e.eventType === "call";
-      const tag = isCall ? `<span class="tag call">Él me llamó</span>` : `<span class="tag">Registro</span>`;
-      const right = isCall
-        ? `<span class="muted mono">${Number(e.callDurationMin||0)} min</span>`
-        : `<span class="muted mono">Ansiedad: ${clamp010(e.anxiety)}</span>`;
+      let actionTxt = "";
+      if (e.eventType === "call"){
+        const dur = clampMin(e.callDuration || 0);
+        const label = (e.callWasCall === "no") ? "No llamó" : "Llamada";
+        actionTxt = `${label} · ${dur} min · Alivio ${e.callRelief}/10 · Después ${e.callAfterAnx}/10 · ${e.callEmotion}`;
+      } else {
+        actionTxt = (e.acted === "resisti" ? "Resistí" : "Actué");
+      }
 
-      const mainLine = isCall
-        ? `<div class="muted">Durante: <b>${e.callEmotion||"—"}</b> · Cuerpo: <b>${e.callBody||"—"}</b> · Después: <b>${clamp010(e.callAfterAnx)}</b>/10</div>`
-        : `<div class="muted">Mood: <b>${e.mood||"—"}</b> · Impulso: <b>${e.urge||"—"}</b></div>`;
-
-      const thought = (!isCall && e.thought) ? `<div class="muted" style="margin-top:6px">Pensamiento: ${escapeHtml(e.thought)}</div>` : ``;
-      const note = (e.note) ? `<div class="muted" style="margin-top:6px">Nota: ${escapeHtml(e.note)}</div>` : ``;
-      const care = (!isCall && Array.isArray(e.care) && e.care.length)
-        ? `<div class="muted" style="margin-top:6px">Cuidado: ${e.care.map(escapeHtml).join(", ")}</div>`
-        : ``;
-
-      wrap.innerHTML = `
-        <div class="top">
-          <div class="row">
-            ${tag}
-            <span class="muted mono">${fmtDateTime(e.date, e.time)}</span>
-          </div>
-          ${right}
-        </div>
-        <div style="margin-top:8px">${mainLine}${thought}${care}${note}</div>
-        <div class="btnRow" style="margin-top:10px">
-          <button class="btnGhost" data-del="${e._id}">Borrar este</button>
-        </div>
+      ui.log.innerHTML += `
+        <tr>
+          <td>${e.time || ""}</td>
+          <td>${(e.eventType === "call") ? e.callAfterAnx : (e.anxiety ?? "")}</td>
+          <td>${friendlyEventType(e.eventType)}</td>
+          <td>${urgeTxt}</td>
+          <td><span class="small">${actionTxt}${e.eventType !== "call" ? (" · " + careTxt) : ""}</span></td>
+        </tr>
       `;
-
-      ui.todayList.appendChild(wrap);
     });
-
-    // delete buttons
-    ui.todayList.querySelectorAll("button[data-del]").forEach(btn => {
-      btn.addEventListener("click", ()=>{
-        const id = btn.getAttribute("data-del");
-        const all2 = load().filter(x => String(x._id) !== String(id));
-        saveAll(all2);
-        renderToday();
-        renderWeek();
-        showMsg("Registro borrado");
-      });
-    });
-
-    updatePills();
   }
 
   function renderWeek(){
-    const all = load();
     const days = lastNDaysISO(7);
+    const all = load();
+
+    let weekEntries = 0;
+    let anxList = [];
+    let callCount = 0;
+    let callMinutes = 0;
+
     ui.weekTable.innerHTML = "";
     let any = false;
 
     days.forEach(date => {
       const entries = all.filter(e => e.date === date);
       if (!entries.length) return;
+
       any = true;
 
       const regular = entries.filter(e => e.eventType !== "call");
-      const calls = entries.filter(e => e.eventType === "call");
+      const calls = entries.filter(e => e.eventType === "call" && (e.callWasCall !== "no"));
+      const resisted = regular.filter(e => e.acted === "resisti").length;
+      const acted = regular.filter(e => e.acted === "actue").length;
+      const withCare = regular.filter(e => (e.care||[]).length > 0).length;
 
-      const count = entries.length;
-      const avgAnx = regular.length
-        ? (regular.reduce((s,e)=> s + clamp010(e.anxiety), 0) / regular.length).toFixed(1)
-        : "—";
+      // ansiedad diaria: promedio de registros normales (anxiety) + llamadas (callAfterAnx)
+      const anxNums = [
+        ...regular.map(e => Number(e.anxiety)).filter(n => Number.isFinite(n)),
+        ...entries.filter(e=>e.eventType==="call").map(e => Number(e.callAfterAnx)).filter(n => Number.isFinite(n))
+      ];
+      const a = avg(anxNums);
 
-      const callCount = calls.length;
-      const durTotal = calls.reduce((s,e)=> s + Number(e.callDurationMin||0), 0);
+      const pctCare = regular.length ? Math.round((withCare/regular.length)*100) : 0;
 
-      const [y,m,d] = date.split("-");
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td class="mono">${d}/${m}</td>
-        <td class="mono">${count}</td>
-        <td class="mono">${avgAnx}</td>
-        <td class="mono">${callCount}</td>
-        <td class="mono">${durTotal} min</td>
+      const mins = entries
+        .filter(e => e.eventType === "call" && (e.callWasCall !== "no"))
+        .reduce((s,e)=> s + clampMin(e.callDuration||0), 0);
+
+      ui.weekTable.innerHTML += `
+        <tr>
+          <td>${date}</td>
+          <td>${entries.length}</td>
+          <td>${a == null ? "—" : a.toFixed(1)}</td>
+          <td>${resisted}</td>
+          <td>${acted}</td>
+          <td>${pctCare}%</td>
+          <td>${calls.length}</td>
+          <td>${mins}</td>
+        </tr>
       `;
-      ui.weekTable.appendChild(tr);
+
+      weekEntries += entries.length;
+      if (a != null) anxList.push(a);
+      callCount += calls.length;
+      callMinutes += mins;
     });
 
     if (!any){
-      ui.weekTable.innerHTML = `<tr><td colspan="5" class="muted">Aún no hay datos esta semana.</td></tr>`;
+      ui.weekTable.innerHTML = `<tr><td colspan="8" class="small">Aún no hay datos.</td></tr>`;
     }
+
+    const wkAvg = avg(anxList);
+
+    ui.weekPill.textContent = `Semana: ${days[0]} → ${days[days.length-1]}`;
+    ui.wkEntries.textContent = `Registros: ${weekEntries || 0}`;
+    ui.wkAvg.textContent = `Ansiedad prom.: ${wkAvg == null ? "—" : wkAvg.toFixed(1)}`;
+    ui.wkCalls.textContent = `Llamadas: ${callCount || 0}`;
+    ui.wkCallMin.textContent = `Min. llamadas: ${callMinutes || 0}`;
   }
 
   function addEntry(entry){
@@ -711,53 +588,8 @@
     renderWeek();
   }
 
-  function escapeHtml(str){
-    return String(str)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-  // --- Quotes
-  const QUOTES = [
-    "Respira. Estás haciendo lo mejor que puedes.",
-    "Una ola no dura para siempre. Tú tampoco te quedas aquí para siempre.",
-    "No necesitas resolver toda tu vida hoy. Solo este momento.",
-    "Tu valor no depende de si te eligen. Tu valor ya existe.",
-    "Hoy no se trata de controlar todo, se trata de cuidarte un poco.",
-    "Un impulso es una ola: obsérvala, nómbrala, déjala pasar.",
-    "Puedes amar y al mismo tiempo poner límites que te protejan.",
-    "Hacer “contacto cero” por ratos también es amor propio.",
-    "Tu paz vale más que una explicación que no llega.",
-    "Hoy: suave contigo. Mañana: un paso más."
-  ];
-  function newQuote(){
-    const q = QUOTES[Math.floor(Math.random()*QUOTES.length)];
-    ui.quote.textContent = q;
-  }
-
-  // --- Modal calls
-  function openCall(){
-    ui.callModal.style.display = "flex";
-    ui.callTime.value = nowTime();
-    ui.callDuration.value = 10;
-    ui.callRelief.value = 6;
-    ui.callAfterAnx.value = clamp010(ui.anxiety.value || 6);
-    ui.callEmotion.value = "tranquilidad";
-    ui.callBody.value = "normal";
-    ui.callNote.value = "";
-  }
-  function closeCall(){
-    ui.callModal.style.display = "none";
-  }
-
-  // --- Init
   function init(){
-    // defaults
     ui.time.value = nowTime();
-
     ui.careChips.forEach(ch => {
       ch.dataset.on = "0";
       ch.addEventListener("click", ()=> {
@@ -765,132 +597,96 @@
       });
     });
 
-    ui.resetCareBtn.addEventListener("click", ()=>{
-      resetCare();
-      showMsg("Cuidados limpiados");
-    });
+    // Quote init
+    ui.quote.textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
 
-    ui.saveBtn.addEventListener("click", ()=>{
-      const entry = {
-        _id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
-        eventType: "regular",
-        date: todayISO(),
-        time: ui.time.value || nowTime(),
-        anxiety: clamp010(ui.anxiety.value),
-        mood: ui.mood.value,
-        urge: ui.urge.value,
-        thought: (ui.thought.value || "").trim(),
-        care: selectedCare(),
-        note: (ui.note.value || "").trim()
-      };
-      addEntry(entry);
-      // “limpieza suave” para que no se sienta pesado
-      ui.thought.value = "";
-      ui.note.value = "";
-      resetCare();
-      showMsg("Guardado ✓");
-    });
-
-    // Calls
-    ui.callBtn.addEventListener("click", openCall);
-    ui.closeCall.addEventListener("click", closeCall);
-    ui.cancelCall.addEventListener("click", closeCall);
-    ui.callModal.addEventListener("click", (e)=>{ if (e.target === ui.callModal) closeCall(); });
-
-    ui.saveCall.addEventListener("click", ()=>{
-      const date = todayISO();
-      const time = ui.callTime.value || nowTime();
-      const yyyy = date.split("-")[0];
-      const mm = date.split("-")[1];
-      const dd = date.split("-")[2];
-      const callISO = `${yyyy}-${mm}-${dd}T${time}:00`;
-
-      const dur = Math.max(0, Math.floor(Number(ui.callDuration.value || 0)));
-
-      const entry = {
-        _id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
-        eventType: "call",
-        date,
-        time,
-        callISO,
-        callDurationMin: dur,
-        callRelief: clamp010(ui.callRelief.value),
-        callAfterAnx: clamp010(ui.callAfterAnx.value),
-        callEmotion: ui.callEmotion.value,
-        callBody: ui.callBody.value,
-        note: (ui.callNote.value || "").trim()
-      };
-      addEntry(entry);
-      closeCall();
-      showMsg("Llamada registrada ✓");
-    });
-
-    // Quotes
-    ui.newQuote.addEventListener("click", newQuote);
-    newQuote();
-
-    // Export / Import
-    ui.exportBtn.addEventListener("click", ()=>{
-      const data = load();
-      const blob = new Blob([JSON.stringify({version:"v2", data}, null, 2)], {type:"application/json"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `mi-app-personal-respaldo-${todayISO()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-      showMsg("Exportado ✓");
-    });
-
-    ui.importBtn.addEventListener("click", ()=> ui.importFile.click());
-    ui.importFile.addEventListener("change", async ()=>{
-      const file = ui.importFile.files && ui.importFile.files[0];
-      if (!file) return;
-      try{
-        const text = await file.text();
-        const obj = JSON.parse(text);
-        const incoming = Array.isArray(obj) ? obj : (obj.data || []);
-        if (!Array.isArray(incoming)) throw new Error("Formato inválido");
-        saveAll(incoming);
-        renderToday();
-        renderWeek();
-        showMsg("Importado ✓");
-      }catch(e){
-        alert("No pude importar ese archivo. ¿Seguro es un JSON de respaldo de esta app?");
-      }finally{
-        ui.importFile.value = "";
-      }
-    });
-
-    ui.wipeBtn.addEventListener("click", ()=>{
-      const ok = confirm("¿Borrar TODO? Esto elimina los datos solo de este dispositivo y no se puede deshacer.");
-      if (!ok) return;
-      localStorage.removeItem(KEY_NEW);
-      // no tocamos KEY_OLD por si acaso, pero si quieres, puedes borrarlo también:
-      // localStorage.removeItem(KEY_OLD);
-      renderToday();
-      renderWeek();
-      showMsg("Borrado");
-    });
-
-    // First render
     renderToday();
     renderWeek();
-    updatePills();
-
-    // pill refresh (contención)
-    setInterval(updatePills, 15_000);
   }
 
-  // Service worker (si existe)
-  if ("serviceWorker" in navigator){
-    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  // Buttons
+  ui.save.addEventListener("click", ()=> {
+    const entry = {
+      eventType: "regular",
+      date: todayISO(),
+      time: ui.time.value || nowTime(),
+      anxiety: clamp010(ui.anxiety.value),
+      urge: ui.urge.value,
+      acted: ui.acted.value,
+      care: selectedCare(),
+      note: (ui.note.value || "").trim()
+    };
+    addEntry(entry);
+    resetCare();
+    ui.note.value = "";
+    ui.time.value = nowTime();
+    showMsg("Guardado ✓");
+  });
+
+  ui.quick.addEventListener("click", ()=> {
+    const entry = {
+      eventType: "quick",
+      date: todayISO(),
+      time: nowTime(),
+      anxiety: clamp010(ui.anxiety.value),
+      urge: "rumiar",
+      acted: "resisti",
+      care: ["pendientes","respirar","noaccion"],
+      note: ""
+    };
+    addEntry(entry);
+    resetCare();
+    ui.note.value = "";
+    ui.time.value = nowTime();
+    showMsg("Rápido ✓");
+  });
+
+  ui.newQuote.addEventListener("click", ()=> {
+    ui.quote.textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
+  });
+
+  // Call modal
+  function openCall(){
+    ui.callModal.style.display = "flex";
+    ui.callTime.value = nowTime();
+    ui.callDuration.value = 10;
+    ui.callRelief.value = 6;
+    ui.callAfterAnx.value = clamp010(ui.anxiety.value || 6);
+    ui.callEmotion.value = "tranquilidad";
+    ui.callWasCall.value = "si";
+    ui.callBody.value = "normal";
+    ui.callNote.value = "";
   }
+  function closeCall(){
+    ui.callModal.style.display = "none";
+  }
+
+  ui.callBtn.addEventListener("click", openCall);
+  ui.closeCall.addEventListener("click", closeCall);
+  ui.callModal.addEventListener("click", (e)=>{ if (e.target === ui.callModal) closeCall(); });
+  document.addEventListener("keydown", (e)=>{ if (e.key === "Escape") closeCall(); });
+
+  ui.saveCall.addEventListener("click", ()=> {
+    const entry = {
+      eventType: "call",
+      date: todayISO(),
+      time: ui.callTime.value || nowTime(),
+      callDuration: clampMin(ui.callDuration.value),
+      callRelief: clamp010(ui.callRelief.value),
+      callAfterAnx: clamp010(ui.callAfterAnx.value),
+      callEmotion: ui.callEmotion.value,
+      callWasCall: ui.callWasCall.value,
+      callBody: ui.callBody.value,
+      note: (ui.callNote.value || "").trim()
+    };
+    addEntry(entry);
+    closeCall();
+    showMsg("Llamada registrada ✓");
+  });
 
   init();
 })();
 </script>
+
 </body>
 </html>
