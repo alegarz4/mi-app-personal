@@ -53,595 +53,171 @@ textarea{resize:vertical;min-height:60px}
 .btn.main{background:var(--good);color:#06210f}
 .btn.sec{background:transparent;color:var(--text);border:1px solid var(--line)}
 .btn.warn{background:var(--warn);color:#2b2000}
-.btn.bad{background:var(--bad);color:#2a0b0b}
 .small{font-size:11px;color:var(--muted)}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{
   padding:8px 10px;border-radius:999px;
   border:1px solid var(--line);
   background:var(--chip);font-size:12px;
-  cursor:pointer; user-select:none;
+  cursor:pointer;
 }
 .chip[data-on="1"]{background:var(--chipOn)}
 table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--muted);text-align:left;font-weight:800}
-.tag{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0c1428;color:var(--muted);font-size:11px}
-hr{border:none;border-top:1px solid var(--line);margin:12px 0}
-.pill{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:#0c1428;color:var(--muted);font-size:12px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);text-align:left}
+.tag{padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0c1428;font-size:11px}
+.pill{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:#0c1428;font-size:12px}
 .right{margin-left:auto}
 .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}
-@media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+@media(max-width:980px){.grid{grid-template-columns:1fr}}
 
-/* Modal */
 .modal{
   display:none; position:fixed; inset:0;
   background:rgba(0,0,0,.55);
-  z-index:50;
   align-items:center; justify-content:center;
-  padding:16px;
 }
 .panel{
-  width:min(760px, 100%);
   background:#0b1220;
-  border:1px solid var(--line);
   border-radius:16px;
   padding:14px;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  width:min(760px,100%);
 }
-.panel h3{margin:0 0 8px; font-size:15px}
-.panel p{margin:0 0 10px; color:var(--muted); font-size:12px}
-.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:6px;background:#0c1428;color:var(--muted);font-size:11px}
 </style>
 </head>
 
 <body>
+
 <header>
-  <div class="row">
-    <div>
-      <h1>Registro discreto de regulación emocional</h1>
-      <div class="sub">Uso personal · privado · pensado para el trabajo · (se guarda en este equipo)</div>
-    </div>
-    <div class="right row">
-      <span class="pill" id="todayPill">Hoy: —</span>
-      <span class="pill" id="weekPill">Semana: —</span>
-    </div>
-  </div>
+<div class="row">
+<div>
+<h1>Registro discreto de regulación emocional</h1>
+<div class="sub">Uso personal · privado · guardado solo en este equipo</div>
+</div>
+<div class="right row">
+<span class="pill" id="todayPill">Hoy: —</span>
+<span class="pill" id="weekPill">Semana: —</span>
+</div>
+</div>
 </header>
 
 <main>
-
 <div class="grid">
 
-  <!-- LEFT -->
-  <div>
+<div>
+<div class="card">
+<h2>Registro rápido</h2>
 
-    <div class="card">
-      <h2>Registro rápido (1 minuto)</h2>
+<label>Hora</label>
+<input type="time" id="time">
 
-      <div class="row">
-        <div class="col">
-          <label>Hora</label>
-          <input type="time" id="time">
-        </div>
-        <div class="col">
-          <label>Nivel de ansiedad (0–10)</label>
-          <input type="number" id="anxiety" min="0" max="10" value="5">
-        </div>
-      </div>
+<label>Nivel ansiedad</label>
+<input type="number" id="anxiety" min="0" max="10" value="5">
 
-      <label>Impulso principal</label>
-      <select id="urge">
-        <option value="llamar">Llamar</option>
-        <option value="revisar">Revisar apps</option>
-        <option value="escribir">Escribir / buscar contacto</option>
-        <option value="rumiar">Pensamientos repetitivos o intrusivos</option>
-      </select>
+<label>Impulso</label>
+<select id="urge">
+<option value="llamar">Llamar</option>
+<option value="revisar">Revisar apps</option>
+<option value="escribir">Escribir</option>
+<option value="rumiar">Pensamientos repetitivos</option>
+</select>
 
-      <label>¿Actué el impulso?</label>
-      <select id="acted">
-        <option value="resisti">No, lo resistí</option>
-        <option value="actue">Sí, actué</option>
-      </select>
+<label>¿Actué?</label>
+<select id="acted">
+<option value="resisti">Resistí</option>
+<option value="actue">Actué</option>
+</select>
 
-      <label>Acción de cuidado (elige 1–2)</label>
-      <div class="chips" id="careChips">
-        <div class="chip" data-key="respirar">Respiré</div>
-        <div class="chip" data-key="pendientes">Seguí con pendientes</div>
-        <div class="chip" data-key="esperar">Esperé</div>
-        <div class="chip" data-key="noaccion">No llamé / no revisé</div>
-        <div class="chip" data-key="agua">Agua / té</div>
-        <div class="chip" data-key="mover">Me moví</div>
-      </div>
-
-      <label>Nota (opcional)</label>
-      <textarea id="note" placeholder="Ej. Me cuidé aunque fue difícil"></textarea>
-
-      <div class="row" style="margin-top:10px">
-        <button class="btn main" id="save">Guardar</button>
-        <button class="btn sec" id="quick">Guardar “seguí trabajando”</button>
-        <button class="btn warn" id="callBtn">Él me llamó</button>
-      </div>
-
-      <div class="row" style="margin-top:10px">
-        <span class="tag">Tip: registra primero, decide después</span>
-        <span class="small" id="saveMsg"></span>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Registros de hoy</h2>
-      <div class="small">Incluye registros normales y registros de “él me llamó”.</div>
-      <div style="overflow:auto;border-radius:12px;border:1px solid var(--line);margin-top:10px">
-        <table>
-          <thead>
-            <tr>
-              <th>Hora</th>
-              <th>Ans.</th>
-              <th>Evento</th>
-              <th>Impulso</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody id="log">
-            <tr><td colspan="5" class="small">Aún no hay registros.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- RIGHT -->
-  <div>
-
-    <div class="card">
-      <h2>Frase para acompañarte</h2>
-      <div id="quote" style="font-weight:900;font-size:14px">“No llamar ahora es cuidarme.”</div>
-      <div class="small" style="margin-top:6px">Úsala 5 minutos como ancla.</div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn sec" id="newQuote">Otra frase ✨</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Resumen semanal (últimos 7 días)</h2>
-      <div class="small">Esto te ayuda a ver avances sin depender del “cómo me siento ahorita”.</div>
-
-      <div class="row" style="margin-top:10px">
-        <span class="pill" id="wkEntries">Registros: —</span>
-        <span class="pill" id="wkAvg">Ansiedad prom.: —</span>
-        <span class="pill" id="wkCalls">Llamadas: —</span>
-      </div>
-
-      <div style="overflow:auto;border-radius:12px;border:1px solid var(--line);margin-top:10px">
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Reg.</th>
-              <th>Ans. prom.</th>
-              <th>Resistí</th>
-              <th>Actué</th>
-              <th>% cuidado</th>
-              <th>Llamadas</th>
-            </tr>
-          </thead>
-          <tbody id="weekTable">
-            <tr><td colspan="7" class="small">Aún no hay datos.</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <hr>
-      <div class="small">
-        Lectura sana: si un día sube la ansiedad pero también suben “resistí” y “cuidado”, eso es progreso real.
-      </div>
-    </div>
-
-  </div>
-
+<label>Acción de cuidado</label>
+<div class="chips" id="careChips">
+<div class="chip" data-key="respirar">Respiré</div>
+<div class="chip" data-key="pendientes">Pendientes</div>
+<div class="chip" data-key="esperar">Esperé</div>
+<div class="chip" data-key="agua">Agua</div>
 </div>
 
+<label>Nota</label>
+<textarea id="note"></textarea>
+
+<div class="row">
+<button class="btn main" id="save">Guardar</button>
+<button class="btn warn" id="callBtn">Él me llamó</button>
+</div>
+
+<div class="small" id="saveMsg"></div>
+</div>
+
+<div class="card">
+<h2>Hoy</h2>
+<table>
+<thead><tr><th>Hora</th><th>Ans</th><th>Evento</th></tr></thead>
+<tbody id="log"></tbody>
+</table>
+</div>
+</div>
+
+<div>
+<div class="card">
+<h2>Frase</h2>
+<div id="quote"></div>
+<button class="btn sec" id="newQuote">Otra frase</button>
+</div>
+
+<div class="card">
+<h2>Resumen semanal</h2>
+<div id="weekTable"></div>
+</div>
+</div>
+
+</div>
 </main>
 
-<!-- Modal: Él me llamó -->
-<div class="modal" id="callModal" aria-modal="true" role="dialog">
-  <div class="panel">
-    <div class="row">
-      <div>
-        <h3>Registro: “Él me llamó”</h3>
-        <p>Esto integra la llamada sin que te arrastre: registras cómo te sentiste <b>durante</b> y <b>después</b>.</p>
-      </div>
-      <div class="right">
-        <span class="tag">Cerrar: <span class="kbd">Esc</span></span>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <label>Hora</label>
-        <input type="time" id="callTime">
-      </div>
-      <div class="col">
-        <label>¿Cuánto alivio sentiste DURANTE la llamada? (0–10)</label>
-        <input type="number" id="callRelief" min="0" max="10" value="6">
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <label>¿Cómo quedó tu ansiedad DESPUÉS? (0–10)</label>
-        <input type="number" id="callAfterAnx" min="0" max="10" value="6">
-      </div>
-      <div class="col">
-        <label>¿Qué emoción predominó DESPUÉS? (elige 1)</label>
-        <select id="callEmotion">
-          <option value="tranquilidad">Tranquilidad</option>
-          <option value="alegria">Alegría</option>
-          <option value="angustia">Angustia</option>
-          <option value="miedo">Miedo</option>
-          <option value="tristeza">Tristeza</option>
-          <option value="confusion">Confusión</option>
-          <option value="esperanza">Esperanza</option>
-        </select>
-      </div>
-    </div>
-
-    <label>¿Qué pasó en tu cuerpo? (opcional)</label>
-    <select id="callBody">
-      <option value="normal">Normal / neutro</option>
-      <option value="pecho">Pecho apretado</option>
-      <option value="nudo">Nudo en el estómago</option>
-      <option value="temblor">Temblor / inquietud</option>
-      <option value="cansancio">Cansancio / cuerpo pesado</option>
-      <option value="llanto">Ganas de llorar</option>
-    </select>
-
-    <label>Nota corta (opcional)</label>
-    <textarea id="callNote" placeholder="Ej. Durante sentí calma; después volvió el miedo."></textarea>
-
-    <div class="row" style="margin-top:10px">
-      <button class="btn main" id="saveCall">Guardar llamada</button>
-      <button class="btn sec" id="closeCall">Cerrar</button>
-    </div>
-
-    <div class="small" style="margin-top:10px">
-      Tip clínico: después de una llamada, intenta 10–20 minutos de autocuidado (pendientes, agua, respirar) antes de “comprobar” o “buscar certeza”.
-    </div>
-  </div>
+<div class="modal" id="callModal">
+<div class="panel">
+<h3>Él me llamó</h3>
+<input type="time" id="callTime">
+<input type="number" id="callAfterAnx" min="0" max="10">
+<button class="btn main" id="saveCall">Guardar llamada</button>
+<button class="btn sec" id="closeCall">Cerrar</button>
+</div>
 </div>
 
 <script>
-(() => {
-  const KEY = "registro_ansiedad_integrado_v1";
+const KEY="registro_base_v1";
 
-  const quotes = [
-    "No llamar ahora es cuidarme.",
-    "Puedo sentir esto sin actuar; va a pasar.",
-    "Respirar primero, decidir después.",
-    "No tengo que resolverlo hoy.",
-    "Mi valor no depende de una respuesta.",
-    "La urgencia baja si no la alimento.",
-    "Puedo recibir cariño sin perseguirlo.",
-    "Un impulso es una ola: sube y baja.",
-    "Hoy elijo paz, aunque duela un poco.",
-    "Estoy haciendo lo mejor que puedo."
-  ];
+function load(){return JSON.parse(localStorage.getItem(KEY)||"[]")}
+function saveAll(d){localStorage.setItem(KEY,JSON.stringify(d))}
 
-  const $ = (id) => document.getElementById(id);
+const quotes=["Respira.","No llamar es cuidarte.","Esto también pasa.","Eres fuerte."];
 
-  const ui = {
-    todayPill: $("todayPill"),
-    weekPill: $("weekPill"),
-    time: $("time"),
-    anxiety: $("anxiety"),
-    urge: $("urge"),
-    acted: $("acted"),
-    note: $("note"),
-    careChips: [...document.querySelectorAll("#careChips .chip")],
-    saveMsg: $("saveMsg"),
+document.getElementById("quote").textContent=quotes[Math.floor(Math.random()*quotes.length)];
 
-    log: $("log"),
+document.getElementById("newQuote").onclick=()=>{
+document.getElementById("quote").textContent=quotes[Math.floor(Math.random()*quotes.length)];
+};
 
-    quote: $("quote"),
-    newQuote: $("newQuote"),
+document.getElementById("save").onclick=()=>{
+const d=load();
+d.push({date:new Date().toLocaleDateString(),time:time.value,anx:anxiety.value});
+saveAll(d);
+alert("Guardado");
+};
 
-    weekTable: $("weekTable"),
-    wkEntries: $("wkEntries"),
-    wkAvg: $("wkAvg"),
-    wkCalls: $("wkCalls"),
+document.getElementById("callBtn").onclick=()=>callModal.style.display="flex";
+document.getElementById("closeCall").onclick=()=>callModal.style.display="none";
+document.getElementById("saveCall").onclick=()=>{
+const d=load();
+d.push({call:true,time:callTime.value,anx:callAfterAnx.value});
+saveAll(d);
+callModal.style.display="none";
+alert("Llamada guardada");
+};
+</script>
 
-    save: $("save"),
-    quick: $("quick"),
-    callBtn: $("callBtn"),
-
-    callModal: $("callModal"),
-    callTime: $("callTime"),
-    callRelief: $("callRelief"),
-    callAfterAnx: $("callAfterAnx"),
-    callEmotion: $("callEmotion"),
-    callBody: $("callBody"),
-    callNote: $("callNote"),
-    saveCall: $("saveCall"),
-    closeCall: $("closeCall"),
-  };
-
-  function todayISO(d = new Date()){
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const day = String(d.getDate()).padStart(2,"0");
-    return `${y}-${m}-${day}`;
-  }
-
-  function nowTime(){
-    const d = new Date();
-    const hh = String(d.getHours()).padStart(2,"0");
-    const mm = String(d.getMinutes()).padStart(2,"0");
-    return `${hh}:${mm}`;
-  }
-
-  function load(){
-    try {
-      return JSON.parse(localStorage.getItem(KEY) || "[]");
-    } catch {
-      return [];
-    }
-  }
-
-  function saveAll(data){
-    localStorage.setItem(KEY, JSON.stringify(data));
-  }
-
-  function showMsg(t){
-    ui.saveMsg.textContent = t;
-    setTimeout(()=> ui.saveMsg.textContent="", 1400);
-  }
-
-  function selectedCare(){
-    return ui.careChips
-      .filter(c => c.dataset.on === "1")
-      .map(c => c.dataset.key);
-  }
-
-  function resetCare(){
-    ui.careChips.forEach(c => c.dataset.on = "0");
-  }
-
-  function avg(nums){
-    if (!nums.length) return null;
-    return nums.reduce((a,b)=>a+b,0)/nums.length;
-  }
-
-  function clamp010(n){
-    n = Number(n);
-    if (!Number.isFinite(n)) return 0;
-    return Math.max(0, Math.min(10, n));
-  }
-
-  function friendlyUrge(v){
-    return ({
-      llamar: "Llamar",
-      revisar: "Revisar apps",
-      escribir: "Escribir / buscar contacto",
-      rumiar: "Pensamientos repetitivos o intrusivos"
-    })[v] || v;
-  }
-
-  function friendlyEventType(v){
-    return ({
-      regular: "Registro",
-      quick: "Rápido",
-      call: "Él me llamó"
-    })[v] || v;
-  }
-
-  function lastNDaysISO(n){
-    const out = [];
-    const base = new Date();
-    for (let i=0;i<n;i++){
-      const d = new Date(base);
-      d.setDate(base.getDate()-i);
-      out.push(todayISO(d));
-    }
-    return out.reverse();
-  }
-
-  function renderToday(){
-    const t = todayISO();
-    ui.todayPill.textContent = `Hoy: ${t}`;
-
-    const data = load().filter(e => e.date === t).sort((a,b)=>(a.time||"").localeCompare(b.time||""));
-    ui.log.innerHTML = "";
-
-    if (!data.length){
-      ui.log.innerHTML = `<tr><td colspan="5" class="small">Aún no hay registros.</td></tr>`;
-      return;
-    }
-
-    // últimos 12
-    const recent = data.slice(-12).reverse();
-    recent.forEach(e => {
-      const careTxt = (e.care && e.care.length) ? e.care.join(", ") : "—";
-      const urgeTxt = e.eventType === "call" ? "—" : friendlyUrge(e.urge);
-      const actionTxt = e.eventType === "call"
-        ? `Alivio ${e.callRelief}/10 · Después ${e.callAfterAnx}/10 · ${e.callEmotion}`
-        : (e.acted === "resisti" ? "Resistí" : "Actué");
-
-      ui.log.innerHTML += `
-        <tr>
-          <td>${e.time || ""}</td>
-          <td>${(e.eventType === "call") ? e.callAfterAnx : (e.anxiety ?? "")}</td>
-          <td>${friendlyEventType(e.eventType)}</td>
-          <td>${urgeTxt}</td>
-          <td><span class="small">${actionTxt}${e.eventType !== "call" ? (" · " + careTxt) : ""}</span></td>
-        </tr>
-      `;
-    });
-  }
-
-  function renderWeek(){
-    const days = lastNDaysISO(7);
-    const all = load();
-
-    let weekEntries = 0;
-    let anxList = [];
-    let callCount = 0;
-
-    ui.weekTable.innerHTML = "";
-    let any = false;
-
-    days.forEach(date => {
-      const entries = all.filter(e => e.date === date);
-      if (!entries.length) return;
-
-      any = true;
-      const regular = entries.filter(e => e.eventType !== "call");
-      const calls = entries.filter(e => e.eventType === "call");
-      const resisted = regular.filter(e => e.acted === "resisti").length;
-      const acted = regular.filter(e => e.acted === "actue").length;
-      const withCare = regular.filter(e => (e.care||[]).length > 0).length;
-
-      // ansiedad diaria: promedio de registros normales (anxiety) + llamadas (callAfterAnx)
-      const anxNums = [
-        ...regular.map(e => Number(e.anxiety)).filter(n => Number.isFinite(n)),
-        ...calls.map(e => Number(e.callAfterAnx)).filter(n => Number.isFinite(n))
-      ];
-      const a = avg(anxNums);
-
-      const pctCare = regular.length ? Math.round((withCare/regular.length)*100) : 0;
-
-      ui.weekTable.innerHTML += `
-        <tr>
-          <td>${date}</td>
-          <td>${entries.length}</td>
-          <td>${a == null ? "—" : a.toFixed(1)}</td>
-          <td>${resisted}</td>
-          <td>${acted}</td>
-          <td>${pctCare}%</td>
-          <td>${calls.length}</td>
-        </tr>
-      `;
-
-      weekEntries += entries.length;
-      if (a != null) anxList.push(a);
-      callCount += calls.length;
-    });
-
-    if (!any){
-      ui.weekTable.innerHTML = `<tr><td colspan="7" class="small">Aún no hay datos.</td></tr>`;
-    }
-
-    const wkAvg = avg(anxList);
-
-    ui.weekPill.textContent = `Semana: ${days[0]} → ${days[days.length-1]}`;
-    ui.wkEntries.textContent = `Registros: ${weekEntries || 0}`;
-    ui.wkAvg.textContent = `Ansiedad prom.: ${wkAvg == null ? "—" : wkAvg.toFixed(1)}`;
-    ui.wkCalls.textContent = `Llamadas: ${callCount || 0}`;
-  }
-
-  function addEntry(entry){
-    const data = load();
-    data.push(entry);
-    saveAll(data);
-    renderToday();
-    renderWeek();
-  }
-
-  function init(){
-    ui.time.value = nowTime();
-    ui.careChips.forEach(ch => {
-      ch.dataset.on = "0";
-      ch.addEventListener("click", ()=> {
-        ch.dataset.on = (ch.dataset.on === "1") ? "0" : "1";
-      });
-    });
-
-    // Quote init
-    ui.quote.textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
-
-    renderToday();
-    renderWeek();
-  }
-
-  // Buttons
-  ui.save.addEventListener("click", ()=> {
-    const entry = {
-      eventType: "regular",
-      date: todayISO(),
-      time: ui.time.value || nowTime(),
-      anxiety: clamp010(ui.anxiety.value),
-      urge: ui.urge.value,
-      acted: ui.acted.value,
-      care: selectedCare(),
-      note: (ui.note.value || "").trim()
-    };
-    addEntry(entry);
-    resetCare();
-    ui.note.value = "";
-    ui.time.value = nowTime();
-    showMsg("Guardado ✓");
-  });
-
-  ui.quick.addEventListener("click", ()=> {
-    const entry = {
-      eventType: "quick",
-      date: todayISO(),
-      time: nowTime(),
-      anxiety: clamp010(ui.anxiety.value),
-      urge: "rumiar",
-      acted: "resisti",
-      care: ["pendientes","respirar","noaccion"],
-      note: ""
-    };
-    addEntry(entry);
-    resetCare();
-    ui.note.value = "";
-    ui.time.value = nowTime();
-    showMsg("Rápido ✓");
-  });
-
-  ui.newQuote.addEventListener("click", ()=> {
-    ui.quote.textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
-  });
-
-  // Call modal
-  function openCall(){
-    ui.callModal.style.display = "flex";
-    ui.callTime.value = nowTime();
-    ui.callRelief.value = 6;
-    ui.callAfterAnx.value = clamp010(ui.anxiety.value || 6);
-    ui.callEmotion.value = "tranquilidad";
-    ui.callBody.value = "normal";
-    ui.callNote.value = "";
-  }
-  function closeCall(){
-    ui.callModal.style.display = "none";
-  }
-
-  ui.callBtn.addEventListener("click", openCall);
-  ui.closeCall.addEventListener("click", closeCall);
-  ui.callModal.addEventListener("click", (e)=>{ if (e.target === ui.callModal) closeCall(); });
-  document.addEventListener("keydown", (e)=>{ if (e.key === "Escape") closeCall(); });
-
-  ui.saveCall.addEventListener("click", ()=> {
-    const entry = {
-      eventType: "call",
-      date: todayISO(),
-      time: ui.callTime.value || nowTime(),
-      callRelief: clamp010(ui.callRelief.value),
-      callAfterAnx: clamp010(ui.callAfterAnx.value),
-      callEmotion: ui.callEmotion.value,
-      callBody: ui.callBody.value,
-      note: (ui.callNote.value || "").trim()
-    };
-    addEntry(entry);
-    closeCall();
-    showMsg("Llamada registrada ✓");
-  });
-
-  init();
-})();
+<!-- SERVICE WORKER -->
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js?v=2");
+}
 </script>
 
 </body>
