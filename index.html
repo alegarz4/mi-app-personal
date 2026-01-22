@@ -14,7 +14,6 @@
     :root{
       --bg:#0b1020;
       --panel: rgba(255,255,255,0.07);
-      --panel2: rgba(255,255,255,0.10);
       --border: rgba(255,255,255,0.14);
       --text: rgba(255,255,255,0.92);
       --muted: rgba(255,255,255,0.70);
@@ -52,7 +51,7 @@
     .status{
       display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px; border-radius:999px;
-      background:var(--panel); border:1px solid var(--border);
+      background:rgba(255,255,255,0.07); border:1px solid var(--border);
       font-size:13px; color:var(--muted);
     }
     .dot{ width:10px; height:10px; border-radius:999px; background:var(--ok);
@@ -66,7 +65,7 @@
     }
     .card{
       grid-column: span 6;
-      background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.04));
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
       border:1px solid var(--border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
@@ -92,7 +91,10 @@
       border-color: rgba(124,58,237,0.65);
       background: rgba(124,58,237,0.22);
     }
-    .row{ display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:12px; flex-wrap:wrap; }
+    .row{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      margin-top:12px; flex-wrap:wrap;
+    }
     .badge{
       padding:8px 12px; border-radius:999px;
       border:1px dashed rgba(255,255,255,0.28);
@@ -140,6 +142,7 @@
       background: rgba(255,255,255,0.05);
       border-radius:12px;
       color:var(--text);
+      line-height: 1.35;
     }
     details{ margin-top:12px; border:1px solid rgba(255,255,255,0.10); border-radius:14px; padding:10px 12px; background: rgba(255,255,255,0.03); }
     summary{ cursor:pointer; color:var(--muted); font-size:13px; }
@@ -161,16 +164,17 @@
   </header>
 
   <main class="wrap">
+    <!-- MOOD -->
     <section class="card">
-      <h2>¿Cómo me siento?</h2>
+      <h2>¿Cómo me siento hoy?</h2>
       <p class="muted">Elige una opción. Puedes cambiarla cuando quieras.</p>
 
       <div class="chips" role="group" aria-label="Selección de estado emocional">
         <button class="chip" data-mood="Tranquila" type="button">Tranquila</button>
-        <button class="chip" data-mood="Molesta" type="button">Molesta</button>
         <button class="chip" data-mood="Ansiosa" type="button">Ansiosa</button>
         <button class="chip" data-mood="Triste" type="button">Triste</button>
         <button class="chip" data-mood="Indiferente" type="button">Indiferente</button>
+        <button class="chip" data-mood="Molesta" type="button">Molesta</button>
       </div>
 
       <div class="row">
@@ -179,6 +183,7 @@
       </div>
     </section>
 
+    <!-- THOUGHT -->
     <section class="card">
       <h2>¿Qué pensamiento domina?</h2>
       <p class="muted">Escríbelo tal cual, sin juzgarlo. Aquí solo se registra.</p>
@@ -193,6 +198,7 @@
       <p class="tiny" id="thoughtSavedAt">—</p>
     </section>
 
+    <!-- CALL -->
     <section class="card">
       <h2>Última llamada</h2>
       <p class="muted">Registra una llamada importante (o la ausencia de ella).</p>
@@ -218,25 +224,30 @@
       </div>
     </section>
 
+    <!-- QUOTE (AUTO) -->
     <section class="card">
       <h2>Frase para ti</h2>
-      <p class="muted">Una frase que te acompañe (tuya o de alguien que te hizo bien).</p>
-
-      <textarea id="quote" class="textarea" rows="4" placeholder="Ej. “Hoy solo necesito un paso.”"></textarea>
-
-      <div class="row">
-        <button class="btn" id="saveQuote" type="button">Guardar</button>
-        <button class="btn ghost" id="saveQuoteToday" type="button">Guardar como ‘frase de hoy’</button>
-      </div>
+      <p class="muted">Te doy una frase automática. Si no te gusta, cámbiala.</p>
 
       <div class="divider"></div>
       <blockquote class="quote" id="quoteView">—</blockquote>
+      <p class="tiny" id="quoteMeta">—</p>
+
+      <div class="row">
+        <button class="btn" id="newQuoteBtn" type="button">Cambiar frase</button>
+        <button class="btn ghost" id="saveQuoteBtn" type="button">Guardar esta frase</button>
+      </div>
+
+      <div class="divider"></div>
+      <p class="tiny muted">Tu frase guardada</p>
+      <blockquote class="quote" id="quoteSavedView">—</blockquote>
       <p class="tiny" id="quoteSavedAt">—</p>
     </section>
 
+    <!-- BACKUP -->
     <section class="card wide">
       <h2>Respaldo</h2>
-      <p class="muted">Exporta tus datos (JSON) o impórtalos para recuperarlos.</p>
+      <p class="muted">Exporta tus datos (archivo) o impórtalos para recuperarlos.</p>
 
       <div class="row">
         <button class="btn" id="exportBtn" type="button">Exportar</button>
@@ -259,7 +270,44 @@
   </footer>
 
   <script>
-    const STORAGE_KEY = "mi_app_personal_v1";
+    // -----------------------------
+    // FRASES (muchas) - mezcla de famosas y anónimas
+    // Nota: Evité letras largas con copyright; son frases cortas tipo motivación.
+    // -----------------------------
+    const QUOTES = [
+      { t: "Un día a la vez. Un paso a la vez.", a: "Anónima" },
+      { t: "No tienes que hacerlo perfecto; solo tienes que hacerlo.", a: "Anónima" },
+      { t: "Respira. Estás aquí. Eso ya cuenta.", a: "Anónima" },
+      { t: "Tu paz es prioridad.", a: "Anónima" },
+      { t: "Eres más fuerte de lo que piensas.", a: "Anónima" },
+      { t: "Lo que sientes es válido.", a: "Anónima" },
+      { t: "No te sueltes a ti misma.", a: "Anónima" },
+      { t: "Nada cambia si nada cambia.", a: "Anónima" },
+      { t: "Sé amable contigo: estás aprendiendo.", a: "Anónima" },
+      { t: "No estás atrasada. Estás en proceso.", a: "Anónima" },
+      { t: "Cuidarte no es egoísmo; es necesidad.", a: "Anónima" },
+      { t: "Tu historia no termina en este capítulo.", a: "Anónima" },
+      { t: "Hazlo con miedo, pero hazlo.", a: "Anónima" },
+      { t: "Hoy también cuenta, aunque sea lento.", a: "Anónima" },
+      { t: "No todo pensamiento es una verdad.", a: "Anónima" },
+
+      { t: "La vida se encoge o se expande en proporción al coraje.", a: "Anaïs Nin" },
+      { t: "No es lo que miras, es lo que ves.", a: "Henry D. Thoreau" },
+      { t: "Haz lo que puedas, con lo que tengas, donde estés.", a: "Theodore Roosevelt" },
+      { t: "La esperanza es esa cosa con plumas que se posa en el alma.", a: "Emily Dickinson" },
+      { t: "El secreto de salir adelante es comenzar.", a: "Mark Twain (atribuida)" },
+      { t: "No puedes detener las olas, pero puedes aprender a surfear.", a: "Jon Kabat-Zinn (atribuida)" },
+      { t: "Sé tú misma; todos los demás ya están ocupados.", a: "Oscar Wilde" },
+      { t: "Aun la noche más oscura terminará y el sol saldrá.", a: "Victor Hugo" },
+      { t: "Lo que haces marca diferencia; decide qué diferencia quieres hacer.", a: "Jane Goodall" },
+      { t: "La valentía no siempre ruge; a veces es la voz tranquila al final del día.", a: "Mary Anne Radmacher" }
+    ];
+
+    // -----------------------------
+    // ESTADO + STORAGE
+    // -----------------------------
+    const STORAGE_KEY = "mi_app_personal_v2";
+
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => document.querySelectorAll(s);
 
@@ -268,17 +316,34 @@
       thought: "",
       thoughtSavedAt: null,
       call: { with:"", at:"", notes:"", savedAt:null },
-      quote: "",
+      // frase automática actual (no necesariamente guardada)
+      quoteCurrent: null,         // {t,a, i}
+      // frase guardada por ti
+      quoteSaved: "",
       quoteSavedAt: null,
     };
 
     function nowISO(){ return new Date().toISOString(); }
     function safeParse(j,f){ try{return JSON.parse(j);}catch{return f;} }
+
     function formatDate(iso){
       if(!iso) return "—";
       const d = new Date(iso);
       if(Number.isNaN(d.getTime())) return "—";
       return d.toLocaleString("es-MX",{dateStyle:"medium",timeStyle:"short"});
+    }
+
+    function setStatus(t){
+      const el=$("#statusText");
+      if(el) el.textContent=t;
+      clearTimeout(window.__st);
+      window.__st=setTimeout(()=>{ if(el) el.textContent="Listo"; },1200);
+    }
+
+    function save(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state, null, 2));
+      setStatus("Guardado");
+      renderPreview();
     }
 
     function load(){
@@ -298,23 +363,21 @@
         state.call.savedAt = loaded.call.savedAt ?? state.call.savedAt;
       }
 
-      state.quote = loaded.quote ?? state.quote;
+      state.quoteCurrent = loaded.quoteCurrent ?? state.quoteCurrent;
+      state.quoteSaved = loaded.quoteSaved ?? state.quoteSaved;
       state.quoteSavedAt = loaded.quoteSavedAt ?? state.quoteSavedAt;
     }
 
-    function setStatus(t){
-      const el=$("#statusText");
-      if(el) el.textContent=t;
-      clearTimeout(window.__st);
-      window.__st=setTimeout(()=>{ if(el) el.textContent="Listo"; },1200);
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;").replaceAll("<","&lt;")
+        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
 
-    function save(){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state, null, 2));
-      setStatus("Guardado");
-      renderPreview();
-    }
-
+    // -----------------------------
+    // MOOD
+    // -----------------------------
     function renderMood(){
       $("#moodBadge").textContent = state.mood ? `Hoy: ${state.mood}` : "—";
       $$(".chip").forEach(btn=>{
@@ -323,11 +386,19 @@
       });
     }
 
+    // -----------------------------
+    // THOUGHT
+    // -----------------------------
     function renderThought(){
       $("#thought").value = state.thought || "";
-      $("#thoughtSavedAt").textContent = state.thoughtSavedAt ? `Guardado: ${formatDate(state.thoughtSavedAt)}` : "—";
+      $("#thoughtSavedAt").textContent = state.thoughtSavedAt
+        ? `Guardado: ${formatDate(state.thoughtSavedAt)}`
+        : "—";
     }
 
+    // -----------------------------
+    // CALL
+    // -----------------------------
     function renderCall(){
       $("#callWith").value = state.call.with || "";
       $("#callAt").value = state.call.at || "";
@@ -350,25 +421,56 @@
       `;
     }
 
-    function renderQuote(){
-      $("#quote").value = state.quote || "";
-      $("#quoteView").textContent = state.quote?.trim() ? `“${state.quote.trim()}”` : "—";
-      $("#quoteSavedAt").textContent = state.quoteSavedAt ? `Guardado: ${formatDate(state.quoteSavedAt)}` : "—";
+    // -----------------------------
+    // QUOTES AUTOMÁTICAS
+    // -----------------------------
+    function pickRandomQuote(excludeIndex=null){
+      if(QUOTES.length===0) return null;
+      if(QUOTES.length===1) return { ...QUOTES[0], i:0 };
+
+      let i = Math.floor(Math.random()*QUOTES.length);
+      if(excludeIndex!==null && QUOTES.length>1){
+        while(i===excludeIndex) i = Math.floor(Math.random()*QUOTES.length);
+      }
+      return { ...QUOTES[i], i };
     }
 
+    function ensureCurrentQuote(){
+      // Si no hay frase actual, crea una
+      if(!state.quoteCurrent || typeof state.quoteCurrent !== "object"){
+        state.quoteCurrent = pickRandomQuote(null);
+        save();
+      }
+    }
+
+    function renderQuote(){
+      ensureCurrentQuote();
+
+      const q = state.quoteCurrent;
+      $("#quoteView").textContent = q ? `“${q.t}”` : "—";
+      $("#quoteMeta").textContent = q ? `— ${q.a}` : "—";
+
+      $("#quoteSavedView").textContent = state.quoteSaved?.trim()
+        ? `“${state.quoteSaved.trim()}”`
+        : "—";
+
+      $("#quoteSavedAt").textContent = state.quoteSavedAt
+        ? `Guardada: ${formatDate(state.quoteSavedAt)}`
+        : "—";
+    }
+
+    // -----------------------------
+    // PREVIEW
+    // -----------------------------
     function renderPreview(){
       $("#dataPreview").textContent = JSON.stringify(state, null, 2);
     }
 
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;").replaceAll("<","&lt;")
-        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
+    // -----------------------------
+    // WIRE EVENTS
+    // -----------------------------
     function wire(){
-      // Mood
+      // mood
       $$(".chip").forEach(btn=>{
         btn.addEventListener("click", ()=>{
           state.mood = btn.getAttribute("data-mood");
@@ -379,7 +481,7 @@
         state.mood=null; save(); renderMood();
       });
 
-      // Thought
+      // thought
       $("#saveThought").addEventListener("click", ()=>{
         state.thought = $("#thought").value || "";
         state.thoughtSavedAt = nowISO();
@@ -390,7 +492,7 @@
         save(); renderThought();
       });
 
-      // Call
+      // call
       $("#saveCall").addEventListener("click", ()=>{
         state.call.with = $("#callWith").value || "";
         state.call.at = $("#callAt").value || "";
@@ -403,28 +505,42 @@
         save(); renderCall();
       });
 
-      // Quote
-      $("#saveQuote").addEventListener("click", ()=>{
-        state.quote = $("#quote").value || "";
-        state.quoteSavedAt = nowISO();
-        save(); renderQuote();
-      });
-      $("#saveQuoteToday").addEventListener("click", ()=>{
-        state.quote = $("#quote").value || "";
-        state.quoteSavedAt = nowISO();
-        save(); renderQuote();
-        setStatus("Frase de hoy guardada");
+      // quote: cambiar
+      $("#newQuoteBtn").addEventListener("click", ()=>{
+        const prev = state.quoteCurrent?.i ?? null;
+        state.quoteCurrent = pickRandomQuote(prev);
+        save();
+        renderQuote();
+        setStatus("Nueva frase");
       });
 
-      // Export / Import / Wipe
+      // quote: guardar la actual
+      $("#saveQuoteBtn").addEventListener("click", ()=>{
+        ensureCurrentQuote();
+        state.quoteSaved = state.quoteCurrent?.t || "";
+        state.quoteSavedAt = nowISO();
+        save();
+        renderQuote();
+        setStatus("Frase guardada");
+      });
+
+      // export/import/wipe
       $("#exportBtn").addEventListener("click", ()=>{
-        const payload = { exportedAt: nowISO(), app:"Mi App Personal", version:1, data: state };
+        const payload = {
+          exportedAt: nowISO(),
+          app: "Mi App Personal",
+          version: 2,
+          data: state
+        };
         const stamp = new Date().toISOString().slice(0,10);
         const blob = new Blob([JSON.stringify(payload,null,2)],{type:"application/json;charset=utf-8"});
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
-        a.href = url; a.download = `mi-app-personal_${stamp}.json`;
-        document.body.appendChild(a); a.click(); a.remove();
+        a.href = url;
+        a.download = `mi-app-personal_${stamp}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
         URL.revokeObjectURL(url);
         setStatus("Exportado");
       });
@@ -432,13 +548,18 @@
       $("#importFile").addEventListener("change", async (e)=>{
         const file = e.target.files?.[0];
         if(!file) return;
+
         const text = await file.text();
         const payload = safeParse(text,null);
         const incoming = payload?.data ?? payload;
+
         if(!incoming || typeof incoming!=="object"){
           alert("Archivo inválido.");
-          e.target.value=""; return;
+          e.target.value="";
+          return;
         }
+
+        // mezcla segura
         state.mood = incoming.mood ?? state.mood;
         state.thought = incoming.thought ?? state.thought;
         state.thoughtSavedAt = incoming.thoughtSavedAt ?? state.thoughtSavedAt;
@@ -449,7 +570,9 @@
           state.call.notes = incoming.call.notes ?? state.call.notes;
           state.call.savedAt = incoming.call.savedAt ?? state.call.savedAt;
         }
-        state.quote = incoming.quote ?? state.quote;
+
+        state.quoteCurrent = incoming.quoteCurrent ?? state.quoteCurrent;
+        state.quoteSaved = incoming.quoteSaved ?? state.quoteSaved;
         state.quoteSavedAt = incoming.quoteSavedAt ?? state.quoteSavedAt;
 
         save();
@@ -461,18 +584,30 @@
       $("#wipeBtn").addEventListener("click", ()=>{
         if(!confirm("¿Seguro que quieres borrar todo?")) return;
         localStorage.removeItem(STORAGE_KEY);
-        state.mood=null; state.thought=""; state.thoughtSavedAt=null;
+
+        state.mood=null;
+        state.thought="";
+        state.thoughtSavedAt=null;
         state.call={with:"",at:"",notes:"",savedAt:null};
-        state.quote=""; state.quoteSavedAt=null;
-        save(); renderAll(); setStatus("Borrado");
+        state.quoteCurrent=null;
+        state.quoteSaved="";
+        state.quoteSavedAt=null;
+
+        save();
+        renderAll();
+        setStatus("Borrado");
       });
 
-      // SW (si existe)
+      // Service worker (offline) si existe sw.js en tu repo
       if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
     }
 
     function renderAll(){
-      renderMood(); renderThought(); renderCall(); renderQuote(); renderPreview();
+      renderMood();
+      renderThought();
+      renderCall();
+      renderQuote();
+      renderPreview();
     }
 
     load();
