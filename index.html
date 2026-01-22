@@ -1,224 +1,133 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Registro discreto de regulación emocional</title>
-
-<style>
-:root{
-  --bg:#0b1220; --card:#111a2e; --muted:#9fb0d0; --text:#e9efff;
-  --good:#5be38f; --warn:#ffd166; --bad:#ff6b6b; --line:#1f2b48;
-  --chip:#0c1428; --chipOn:#12244a;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto;
-  background:linear-gradient(160deg,#070b14,var(--bg));
-  color:var(--text);
-}
-header{
-  padding:14px 16px;
-  background:rgba(11,18,32,.95);
-  border-bottom:1px solid var(--line);
-  position:sticky; top:0; z-index:10;
-}
-h1{margin:0;font-size:16px}
-.sub{font-size:12px;color:var(--muted);margin-top:4px}
-main{padding:16px;max-width:1100px;margin:auto}
-.card{
-  background:rgba(17,26,46,.95);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-}
-h2{font-size:14px;margin:0 0 10px}
-label{font-size:12px;color:var(--muted);display:block;margin:10px 0 6px}
-input,select,textarea{
-  width:100%;padding:10px;border-radius:10px;
-  border:1px solid var(--line);
-  background:#0c1428;color:var(--text);
-  outline:none;
-}
-textarea{resize:vertical;min-height:60px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.col{flex:1;min-width:220px}
-.btn{
-  padding:10px 14px;border-radius:10px;border:none;
-  cursor:pointer;font-weight:800;
-}
-.btn.main{background:var(--good);color:#06210f}
-.btn.sec{background:transparent;color:var(--text);border:1px solid var(--line)}
-.btn.warn{background:var(--warn);color:#2b2000}
-.small{font-size:11px;color:var(--muted)}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{
-  padding:8px 10px;border-radius:999px;
-  border:1px solid var(--line);
-  background:var(--chip);font-size:12px;
-  cursor:pointer;
-}
-.chip[data-on="1"]{background:var(--chipOn)}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{padding:8px 6px;border-bottom:1px solid var(--line)}
-th{color:var(--muted);text-align:left}
-.tag{padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#0c1428;font-size:11px}
-.pill{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:#0c1428;font-size:12px}
-.right{margin-left:auto}
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}
-@media(max-width:980px){.grid{grid-template-columns:1fr}}
-
-.modal{
-  display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,.55);
-  align-items:center; justify-content:center;
-}
-.panel{
-  background:#0b1220;
-  border-radius:16px;
-  padding:14px;
-  width:min(760px,100%);
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mi App Personal</title>
+  <meta name="description" content="Registro emocional simple: cómo me siento, pensamiento, última llamada, frase y respaldo." />
+  <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <div>
+        <h1>Mi App Personal</h1>
+        <p class="sub">Un espacio pequeño para ti. Limpio. Visual. Seguro (en tu navegador).</p>
+      </div>
+      <div class="status" id="status">
+        <span class="dot" aria-hidden="true"></span>
+        <span id="statusText">Listo</span>
+      </div>
+    </div>
+  </header>
 
-<header>
-<div class="row">
-<div>
-<h1>Registro discreto de regulación emocional</h1>
-<div class="sub">Uso personal · privado · guardado solo en este equipo</div>
-</div>
-<div class="right row">
-<span class="pill" id="todayPill">Hoy: —</span>
-<span class="pill" id="weekPill">Semana: —</span>
-</div>
-</div>
-</header>
+  <main class="wrap grid">
+    <!-- ¿Cómo me siento? -->
+    <section class="card">
+      <h2>¿Cómo me siento?</h2>
+      <p class="muted">Elige una opción. Puedes cambiarla cuando quieras.</p>
 
-<main>
-<div class="grid">
+      <div class="chips" role="group" aria-label="Selección de estado emocional">
+        <button class="chip" data-mood="Tranquila" type="button">Tranquila</button>
+        <button class="chip" data-mood="Ansiosa" type="button">Ansiosa</button>
+        <button class="chip" data-mood="Triste" type="button">Triste</button>
+        <button class="chip" data-mood="Indiferente" type="button">Indiferente</button>
+      </div>
 
-<div>
-<div class="card">
-<h2>Registro rápido</h2>
+      <div class="row">
+        <div class="badge" id="moodBadge">—</div>
+        <button class="btn btn-ghost" id="clearMood" type="button">Limpiar</button>
+      </div>
+    </section>
 
-<label>Hora</label>
-<input type="time" id="time">
+    <!-- ¿Qué pensamiento domina? -->
+    <section class="card">
+      <h2>¿Qué pensamiento domina?</h2>
+      <p class="muted">Escríbelo tal cual, sin juzgarlo. Aquí solo se registra.</p>
 
-<label>Nivel ansiedad</label>
-<input type="number" id="anxiety" min="0" max="10" value="5">
+      <textarea id="thought" class="textarea" rows="5" placeholder="Ej. “Me siento en alerta…” o “Necesito descansar…”"></textarea>
 
-<label>Impulso</label>
-<select id="urge">
-<option value="llamar">Llamar</option>
-<option value="revisar">Revisar apps</option>
-<option value="escribir">Escribir</option>
-<option value="rumiar">Pensamientos repetitivos</option>
-</select>
+      <div class="row">
+        <button class="btn" id="saveThought" type="button">Guardar</button>
+        <button class="btn btn-ghost" id="clearThought" type="button">Limpiar</button>
+      </div>
 
-<label>¿Actué?</label>
-<select id="acted">
-<option value="resisti">Resistí</option>
-<option value="actue">Actué</option>
-</select>
+      <p class="tiny muted" id="thoughtSavedAt">—</p>
+    </section>
 
-<label>Acción de cuidado</label>
-<div class="chips" id="careChips">
-<div class="chip" data-key="respirar">Respiré</div>
-<div class="chip" data-key="pendientes">Pendientes</div>
-<div class="chip" data-key="esperar">Esperé</div>
-<div class="chip" data-key="agua">Agua</div>
-</div>
+    <!-- Última llamada -->
+    <section class="card">
+      <h2>Última llamada</h2>
+      <p class="muted">Registra una llamada importante (o la ausencia de ella).</p>
 
-<label>Nota</label>
-<textarea id="note"></textarea>
+      <div class="form">
+        <label class="label">Con quién</label>
+        <input id="callWith" class="input" type="text" placeholder="Ej. Hugo / Mamá / Yo misma" />
 
-<div class="row">
-<button class="btn main" id="save">Guardar</button>
-<button class="btn warn" id="callBtn">Él me llamó</button>
-</div>
+        <label class="label">Fecha y hora</label>
+        <input id="callAt" class="input" type="datetime-local" />
 
-<div class="small" id="saveMsg"></div>
-</div>
+        <label class="label">Notas (opcional)</label>
+        <textarea id="callNotes" class="textarea" rows="4" placeholder="Ej. “Me calmó”, “Me quedé con dudas”, “No contestó…”"></textarea>
+      </div>
 
-<div class="card">
-<h2>Hoy</h2>
-<table>
-<thead><tr><th>Hora</th><th>Ans</th><th>Evento</th></tr></thead>
-<tbody id="log"></tbody>
-</table>
-</div>
-</div>
+      <div class="row">
+        <button class="btn" id="saveCall" type="button">Guardar</button>
+        <button class="btn btn-ghost" id="clearCall" type="button">Limpiar</button>
+      </div>
 
-<div>
-<div class="card">
-<h2>Frase</h2>
-<div id="quote"></div>
-<button class="btn sec" id="newQuote">Otra frase</button>
-</div>
+      <div class="divider"></div>
+      <h3 class="h3">Último registro</h3>
+      <div class="summary" id="callSummary">
+        <p class="muted">—</p>
+      </div>
+    </section>
 
-<div class="card">
-<h2>Resumen semanal</h2>
-<div id="weekTable"></div>
-</div>
-</div>
+    <!-- Frase para ti -->
+    <section class="card">
+      <h2>Frase para ti</h2>
+      <p class="muted">Una frase que te acompañe (tuya o de alguien que te hizo bien).</p>
 
-</div>
-</main>
+      <textarea id="quote" class="textarea" rows="4" placeholder="Ej. “Hoy solo necesito un paso.”"></textarea>
 
-<div class="modal" id="callModal">
-<div class="panel">
-<h3>Él me llamó</h3>
-<input type="time" id="callTime">
-<input type="number" id="callAfterAnx" min="0" max="10">
-<button class="btn main" id="saveCall">Guardar llamada</button>
-<button class="btn sec" id="closeCall">Cerrar</button>
-</div>
-</div>
+      <div class="row">
+        <button class="btn" id="saveQuote" type="button">Guardar</button>
+        <button class="btn btn-ghost" id="saveQuoteToday" type="button">Guardar como ‘frase de hoy’</button>
+      </div>
 
-<script>
-const KEY="registro_base_v1";
+      <div class="divider"></div>
+      <h3 class="h3">Frase guardada</h3>
+      <blockquote class="quote" id="quoteView">—</blockquote>
+      <p class="tiny muted" id="quoteSavedAt">—</p>
+    </section>
 
-function load(){return JSON.parse(localStorage.getItem(KEY)||"[]")}
-function saveAll(d){localStorage.setItem(KEY,JSON.stringify(d))}
+    <!-- Respaldo -->
+    <section class="card card-wide">
+      <h2>Respaldo</h2>
+      <p class="muted">Exporta tus datos (JSON) o impórtalos para recuperar tu app en otro equipo.</p>
 
-const quotes=["Respira.","No llamar es cuidarte.","Esto también pasa.","Eres fuerte."];
+      <div class="row wrap-row">
+        <button class="btn" id="exportBtn" type="button">Exportar</button>
+        <label class="btn btn-ghost" for="importFile" role="button">Importar</label>
+        <input id="importFile" type="file" accept="application/json" hidden />
+        <button class="btn btn-danger" id="wipeBtn" type="button">Borrar todo</button>
+      </div>
 
-document.getElementById("quote").textContent=quotes[Math.floor(Math.random()*quotes.length)];
+      <p class="tiny muted">
+        Nota: todo se guarda en tu navegador (localStorage). Si borras datos del navegador, se pierde.
+      </p>
 
-document.getElementById("newQuote").onclick=()=>{
-document.getElementById("quote").textContent=quotes[Math.floor(Math.random()*quotes.length)];
-};
+      <details class="details">
+        <summary>Ver datos (solo lectura)</summary>
+        <pre class="pre" id="dataPreview">{}</pre>
+      </details>
+    </section>
+  </main>
 
-document.getElementById("save").onclick=()=>{
-const d=load();
-d.push({date:new Date().toLocaleDateString(),time:time.value,anx:anxiety.value});
-saveAll(d);
-alert("Guardado");
-};
+  <footer class="footer wrap">
+    <p class="tiny muted">Hecho para ti ✨ — versión local, sin cuentas, sin internet.</p>
+  </footer>
 
-document.getElementById("callBtn").onclick=()=>callModal.style.display="flex";
-document.getElementById("closeCall").onclick=()=>callModal.style.display="none";
-document.getElementById("saveCall").onclick=()=>{
-const d=load();
-d.push({call:true,time:callTime.value,anx:callAfterAnx.value});
-saveAll(d);
-callModal.style.display="none";
-alert("Llamada guardada");
-};
-</script>
-
-<!-- SERVICE WORKER -->
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js?v=2");
-}
-</script>
-
+  <script src="app.js"></script>
 </body>
 </html>
