@@ -109,11 +109,12 @@
       font-size:13px;
     }
 
+    /* ✅ Contraste mejorado */
     .input,.textarea,.select{
       width:100%; margin-top:6px;
       border-radius:14px;
       border:1px solid var(--border);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.08);
       color:var(--text);
       padding:12px;
       outline:none;
@@ -123,6 +124,9 @@
     .input:focus,.textarea:focus,.select:focus{
       border-color: rgba(124,58,237,0.65);
       box-shadow: 0 0 0 4px rgba(124,58,237,0.16);
+    }
+    .textarea::placeholder, .input::placeholder{
+      color: rgba(255,255,255,0.45);
     }
 
     .btn{
@@ -196,7 +200,7 @@
     .stat strong{ font-size:18px; display:block; }
     .stat span{ font-size:12px; color:var(--muted); }
 
-    /* Modal (Pausa + PIN) */
+    /* Modal */
     .overlay{
       position:fixed; inset:0; z-index:80;
       background: rgba(0,0,0,0.55);
@@ -215,7 +219,7 @@
     .modal h3{ margin:0 0 10px; }
     .modalActions{ display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; margin-top:12px; }
 
-    /* Lock screen */
+    /* Lock */
     .lockWrap{
       min-height: calc(100vh - 80px);
       display:none;
@@ -254,7 +258,7 @@
     </div>
   </header>
 
-  <!-- LOCK SCREEN (PIN opcional) -->
+  <!-- LOCK SCREEN -->
   <div class="lockWrap" id="lockWrap">
     <div class="lockCard">
       <h2>🔒 App bloqueada</h2>
@@ -263,20 +267,21 @@
       <div class="row">
         <button class="btn" id="unlockBtn" type="button">Desbloquear</button>
         <button class="btn ghost" id="lockHelpBtn" type="button">¿Olvidé mi PIN?</button>
+        <!-- ✅ Emergencia: quita PIN sin borrar historial -->
+        <button class="btn danger" id="lockRemovePinBtn" type="button">Quitar PIN (sin borrar historial)</button>
       </div>
       <p class="tiny" id="lockMsg">—</p>
       <details>
         <summary>Consejo rápido</summary>
         <p class="tiny muted">
-          Si olvidas el PIN, la app no puede “adivinarlo”. Para recuperar acceso, necesitas borrar los datos del navegador
-          (esto también borra tu historial). Más abajo te lo explico.
+          El PIN es un bloqueo simple. Si lo olvidas, este botón de emergencia lo quita sin borrar historial.
         </p>
       </details>
     </div>
   </div>
 
   <main class="wrap" id="appMain" style="display:none;">
-    <!-- MOOD + PAUSA -->
+    <!-- MOOD -->
     <section class="card">
       <h2>¿Cómo me siento hoy?</h2>
       <p class="muted">Elige una opción (o cambia cuando lo necesites).</p>
@@ -290,7 +295,8 @@
       </div>
 
       <div class="row">
-        <div class="badge" id="moodBadge">—</div>
+        <!-- ✅ FIX: ya no se ve raro -->
+        <div class="badge" id="moodBadge" style="min-width:220px; text-align:center;">Hoy: —</div>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn warn" id="pauseBtn" type="button">Pausa 30s</button>
           <button class="btn ghost" id="clearMood" type="button">Limpiar</button>
@@ -318,33 +324,33 @@
       <p class="tiny" id="thoughtSavedAt">—</p>
     </section>
 
-    <!-- CALL -->
+    <!-- EVENT -->
     <section class="card">
       <h2>Registro importante</h2>
-      <p class="muted">Aquí puedes registrar una llamada, un evento, o algo que movió tu día.</p>
+      <p class="muted">Registra una llamada, evento o algo que movió tu día.</p>
 
       <label class="tiny">¿Qué fue? (persona / evento)</label>
-      <input id="callWith" class="input" type="text" placeholder="Ej. reunión, mamá, escuela, trámite, amiga, etc." />
+      <input id="evtWith" class="input" type="text" placeholder="Ej. reunión, escuela, familia, trámite, etc." />
 
       <label class="tiny">Fecha y hora</label>
-      <input id="callAt" class="input" type="datetime-local" />
+      <input id="evtAt" class="input" type="datetime-local" />
 
       <label class="tiny">Notas (opcional)</label>
-      <textarea id="callNotes" class="textarea" rows="4" placeholder="Ej. “Me calmó…”, “Me dolió…”, “Me dio claridad…”, “Me saturé…”"></textarea>
+      <textarea id="evtNotes" class="textarea" rows="4" placeholder="Ej. “Me saturé…”, “Me dio claridad…”, etc."></textarea>
 
       <div class="row">
-        <button class="btn" id="saveCall" type="button">Guardar</button>
-        <button class="btn ghost" id="clearCall" type="button">Limpiar</button>
+        <button class="btn" id="saveEvt" type="button">Guardar</button>
+        <button class="btn ghost" id="clearEvt" type="button">Limpiar</button>
       </div>
 
       <div class="divider"></div>
       <p class="tiny muted">Último registro</p>
-      <div id="callSummary" class="badge" style="width:100%; border-style:solid; border-color:rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); padding:12px; border-radius:14px;">
+      <div id="evtSummary" class="badge" style="width:100%; border-style:solid; border-color:rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); padding:12px; border-radius:14px;">
         —
       </div>
     </section>
 
-    <!-- QUOTES (AUTO + THEMES + FAVORITES) -->
+    <!-- QUOTES -->
     <section class="card">
       <h2>Frase para ti</h2>
       <p class="muted">Elige lo que necesitas hoy. Si no te gusta la frase, cámbiala.</p>
@@ -373,7 +379,6 @@
       </div>
 
       <div class="divider"></div>
-
       <div class="row" style="margin-top:0;">
         <p class="tiny muted" style="margin:0;">Favoritas</p>
         <button class="btn ghost" id="clearFavBtn" type="button">Limpiar favoritas</button>
@@ -381,16 +386,16 @@
       <div class="list" id="favList"></div>
     </section>
 
-    <!-- DAILY SAVE + HISTORY + SEARCH -->
+    <!-- HISTORY -->
     <section class="card wide">
       <h2>Historial por día</h2>
-      <p class="muted">Guarda una entrada diaria. Puedes buscar y volver a abrir un día.</p>
+      <p class="muted">Se guarda automáticamente cuando registras algo. También puedes guardarlo manualmente.</p>
 
       <div class="row" style="align-items:flex-end;">
         <div style="flex:1; min-width:220px;">
           <label class="tiny">Fecha de la entrada</label>
           <input id="entryDate" class="input" type="date" />
-          <p class="tiny muted" style="margin:6px 0 0;">Tip: por defecto es hoy. Puedes guardar días pasados.</p>
+          <p class="tiny muted" style="margin:6px 0 0;">Por defecto es hoy.</p>
         </div>
 
         <div style="flex:1; min-width:220px;">
@@ -400,7 +405,7 @@
 
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn ok" id="saveDayBtn" type="button">Guardar día</button>
-          <button class="btn ghost" id="loadDayBtn" type="button">Abrir ese día</button>
+          <button class="btn ghost" id="openDayBtn" type="button">Abrir ese día</button>
         </div>
       </div>
 
@@ -408,45 +413,29 @@
 
       <div class="row" style="margin-top:0;">
         <div class="pill">📌 Entradas: <span id="entryCount">0</span></div>
-        <div class="pill">🗓️ Vista: últimos primero</div>
+        <div class="pill">🗓️ Últimos primero</div>
       </div>
 
       <div class="list" id="historyList"></div>
-
-      <details>
-        <summary>Qué guarda exactamente una entrada diaria</summary>
-        <p class="tiny muted">
-          Mood + pensamiento + registro importante + frase actual + frase guardada (si tienes) y una marca de tiempo.
-          Todo queda solo en tu navegador.
-        </p>
-      </details>
     </section>
 
     <!-- STATS -->
     <section class="card wide">
       <h2>Estadísticas suaves (últimos 30 días)</h2>
-      <p class="muted">Solo un espejo, no una calificación. Te ayuda a ver tendencias.</p>
-
+      <p class="muted">Un espejo, no una calificación.</p>
       <div class="grid2" id="statsGrid"></div>
-
-      <details>
-        <summary>Cómo se calculan</summary>
-        <p class="tiny muted">
-          Se basan en el historial guardado por día. Si no guardas días, no hay stats.
-        </p>
-      </details>
     </section>
 
-    <!-- SETTINGS: PIN + BACKUP -->
+    <!-- SETTINGS + BACKUP -->
     <section class="card wide">
       <h2>Ajustes y Respaldo</h2>
-      <p class="muted">Tu información es privada y local. Aquí configuras PIN y respaldos.</p>
+      <p class="muted">Privado y local. PIN opcional. Respaldo JSON/TXT.</p>
 
       <div class="divider"></div>
 
       <h3 style="margin:0 0 8px;">🔐 PIN (opcional)</h3>
       <p class="tiny muted" style="margin-top:0;">
-        El PIN es un bloqueo simple (no es cifrado avanzado). Sirve para privacidad básica.
+        Bloqueo simple (no cifrado avanzado). Para privacidad básica.
       </p>
 
       <div class="row">
@@ -470,10 +459,6 @@
       <div class="divider"></div>
 
       <h3 style="margin:0 0 8px;">💾 Respaldo</h3>
-      <p class="tiny muted" style="margin-top:0;">
-        Exporta tu información para guardarla en un archivo y poder recuperarla después.
-      </p>
-
       <div class="row">
         <button class="btn" id="exportJsonBtn" type="button">Exportar JSON</button>
         <button class="btn ghost" id="exportTxtBtn" type="button">Exportar TXT (legible)</button>
@@ -486,7 +471,7 @@
         <summary>¿Qué es un JSON?</summary>
         <p class="tiny muted">
           Un JSON es un archivo de texto que guarda datos “en orden” (como una cajita).
-          Cuando exportas, descargas un archivo con todo tu historial. Cuando importas, lo regresas a la app.
+          Exportar = descargar tu respaldo. Importar = recuperarlo.
         </p>
       </details>
 
@@ -501,7 +486,7 @@
     <p class="tiny muted">Hecho para ti ✨ — privado, offline, sin cuentas.</p>
   </footer>
 
-  <!-- MODAL: PAUSA -->
+  <!-- PAUSE MODAL -->
   <div class="overlay" id="pauseOverlay" aria-hidden="true">
     <div class="modal">
       <h3>🧘 Pausa de 30 segundos</h3>
@@ -512,27 +497,17 @@
         <button class="btn" id="pauseStartBtn" type="button">Iniciar</button>
         <button class="btn danger" id="pauseCloseBtn" type="button">Cerrar</button>
       </div>
-      <details>
-        <summary>Por qué esto ayuda</summary>
-        <p class="tiny muted">
-          La pausa baja el “volumen” del sistema nervioso. Primero regulas el cuerpo, luego escribes con más claridad.
-        </p>
-      </details>
     </div>
   </div>
 
   <script>
-    // =========================
-    // DATA MODELS (localStorage)
-    // =========================
-    const APP_KEY = "mi_app_personal_v3";
-    const PIN_KEY = "mi_app_personal_pin_v1"; // {enabled:boolean, pinHash:string}
+    // ========= KEYS =========
+    const APP_KEY = "mi_app_personal_v4";
+    const PIN_KEY = "mi_app_personal_pin_v1";
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => document.querySelectorAll(s);
 
-    // =========================
-    // QUOTES (cortas, motivación; sin textos largos con copyright)
-    // =========================
+    // ========= QUOTES =========
     const QUOTES = {
       calma: [
         {t:"Respira. Aquí y ahora es suficiente.", a:"Anónima"},
@@ -586,21 +561,17 @@
       ]
     };
 
-    // =========================
-    // STATE
-    // =========================
+    // ========= STATE =========
     const state = {
-      version: 3,
+      version: 4,
       mood: null,
       thought: "",
       thoughtSavedAt: null,
       event: { with:"", at:"", notes:"", savedAt:null },
       need: "calma",
-      quoteCurrent: null,  // {t,a, i, need}
-      quoteSaved: "",
-      quoteSavedAt: null,
-      favorites: [],       // [{t,a, need, addedAt}]
-      history: {},         // {"YYYY-MM-DD": entry}
+      quoteCurrent: null,
+      favorites: [],
+      history: {},
       lastOpenedDate: null
     };
 
@@ -624,16 +595,18 @@
       clearTimeout(window.__st);
       window.__st=setTimeout(()=>{ if(el) el.textContent="Listo"; },1200);
     }
-
-    // =========================
-    // SAVE / LOAD
-    // =========================
-    function save(){
-      localStorage.setItem(APP_KEY, JSON.stringify(state, null, 2));
-      setStatus("Guardado");
-      renderPreview();
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;").replaceAll("<","&lt;")
+        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
 
+    // ========= SAVE / LOAD =========
+    function save(){
+      localStorage.setItem(APP_KEY, JSON.stringify(state, null, 2));
+      renderPreview();
+    }
     function load(){
       const raw = localStorage.getItem(APP_KEY);
       if(!raw) return;
@@ -654,24 +627,19 @@
 
       state.need = loaded.need ?? state.need;
       state.quoteCurrent = loaded.quoteCurrent ?? state.quoteCurrent;
-      state.quoteSaved = loaded.quoteSaved ?? state.quoteSaved;
-      state.quoteSavedAt = loaded.quoteSavedAt ?? state.quoteSavedAt;
-
       state.favorites = Array.isArray(loaded.favorites) ? loaded.favorites : state.favorites;
       state.history = (loaded.history && typeof loaded.history==="object") ? loaded.history : state.history;
       state.lastOpenedDate = loaded.lastOpenedDate ?? state.lastOpenedDate;
     }
 
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;").replaceAll("<","&lt;")
-        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+    // ========= QUOTES =========
+    function labelNeed(need){
+      const map = {
+        calma:"Calma", fuerza:"Fuerza", amorpropio:"Amor propio",
+        soltar:"Soltar", ansiedad:"Ansiedad", motivacion:"Motivación", apoyo:"Apoyo"
+      };
+      return map[need] || "Calma";
     }
-
-    // =========================
-    // QUOTES
-    // =========================
     function getPool(need){
       return QUOTES[need] || QUOTES.calma;
     }
@@ -694,34 +662,97 @@
       const need = state.need || "calma";
       if(!state.quoteCurrent || typeof state.quoteCurrent!=="object" || state.quoteCurrent.need !== need){
         state.quoteCurrent = pickRandomQuote(need, null);
-        save();
       }
     }
 
-    // =========================
-    // RENDER
-    // =========================
+    // ========= DAILY ENTRY =========
+    function getEntryDate(){
+      return $("#entryDate").value || toDateKey(new Date());
+    }
+
+    function buildEntry(dateKey){
+      return {
+        date: dateKey,
+        savedAt: nowISO(),
+        mood: state.mood,
+        thought: state.thought,
+        thoughtSavedAt: state.thoughtSavedAt,
+        event: {...state.event},
+        need: state.need,
+        quoteCurrent: state.quoteCurrent ? {...state.quoteCurrent} : null
+      };
+    }
+
+    // ✅ AUTO-GUARDAR EL DÍA (cuando guardas algo)
+    function autoSaveDay(){
+      const key = getEntryDate();
+      state.history[key] = buildEntry(key);
+      state.lastOpenedDate = key;
+      save();
+      renderHistory();
+      renderStats();
+      setStatus("Guardado (auto)");
+    }
+
+    function saveDayManual(){
+      const key = getEntryDate();
+      state.history[key] = buildEntry(key);
+      state.lastOpenedDate = key;
+      save();
+      renderHistory();
+      renderStats();
+      setStatus("Día guardado");
+    }
+
+    function openDay(dateKey){
+      const e = state.history[dateKey];
+      if(!e){ alert("No existe esa entrada."); return; }
+
+      state.mood = e.mood ?? null;
+      state.thought = e.thought ?? "";
+      state.thoughtSavedAt = e.thoughtSavedAt ?? null;
+
+      if(e.event && typeof e.event==="object"){
+        state.event.with = e.event.with ?? "";
+        state.event.at = e.event.at ?? "";
+        state.event.notes = e.event.notes ?? "";
+        state.event.savedAt = e.event.savedAt ?? null;
+      }else{
+        state.event = { with:"", at:"", notes:"", savedAt:null };
+      }
+
+      state.need = e.need ?? "calma";
+      state.quoteCurrent = e.quoteCurrent ?? null;
+
+      state.lastOpenedDate = dateKey;
+      $("#entryDate").value = dateKey;
+
+      save();
+      renderAll();
+      setStatus("Día abierto");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // ========= RENDER =========
     function renderMood(){
-      $("#moodBadge").textContent = state.mood ? `Hoy: ${state.mood}` : "—";
+      $("#moodBadge").textContent = state.mood ? `Hoy: ${state.mood}` : "Hoy: —";
       $$(".chip").forEach(btn=>{
         const m = btn.getAttribute("data-mood");
         btn.classList.toggle("active", m===state.mood);
       });
     }
-
     function renderThought(){
       $("#thought").value = state.thought || "";
       $("#thoughtSavedAt").textContent = state.thoughtSavedAt
         ? `Guardado: ${formatDate(state.thoughtSavedAt)}`
         : "—";
     }
-
     function renderEvent(){
-      $("#callWith").value = state.event.with || "";
-      $("#callAt").value = state.event.at || "";
-      $("#callNotes").value = state.event.notes || "";
+      $("#evtWith").value = state.event.with || "";
+      $("#evtAt").value = state.event.at || "";
+      $("#evtNotes").value = state.event.notes || "";
 
-      const sum=$("#callSummary");
+      const sum=$("#evtSummary");
       const who = (state.event.with||"").trim() || "—";
       const when = state.event.at ? new Date(state.event.at) : null;
       const whenText = (when && !Number.isNaN(when.getTime()))
@@ -741,20 +772,9 @@
     function renderQuote(){
       $("#needSelect").value = state.need || "calma";
       ensureCurrentQuote();
-
       const q = state.quoteCurrent;
       $("#quoteView").textContent = q ? `“${q.t}”` : "—";
       $("#quoteMeta").textContent = q ? `— ${q.a} · Tema: ${labelNeed(q.need)}` : "—";
-
-      renderFavorites();
-    }
-
-    function labelNeed(need){
-      const map = {
-        calma:"Calma", fuerza:"Fuerza", amorpropio:"Amor propio",
-        soltar:"Soltar", ansiedad:"Ansiedad", motivacion:"Motivación", apoyo:"Apoyo"
-      };
-      return map[need] || "Calma";
     }
 
     function renderFavorites(){
@@ -787,13 +807,11 @@
         });
 
       box.querySelectorAll("button[data-act]").forEach(btn=>{
-        btn.addEventListener("click", (e)=>{
+        btn.addEventListener("click", ()=>{
           const act = btn.getAttribute("data-act");
           const idx = Number(btn.getAttribute("data-idx"));
-          const fav = state.favorites
-            .slice()
-            .sort((a,b)=> (b.addedAt||"").localeCompare(a.addedAt||""))[idx];
-
+          const sorted = state.favorites.slice().sort((a,b)=> (b.addedAt||"").localeCompare(a.addedAt||""));
+          const fav = sorted[idx];
           if(!fav) return;
 
           if(act==="use"){
@@ -802,10 +820,9 @@
             save();
             renderQuote();
             setStatus("Frase aplicada");
+            autoSaveDay();
           }
-
           if(act==="del"){
-            // eliminar por match exacto (t + addedAt)
             state.favorites = state.favorites.filter(x => !(x.t===fav.t && x.addedAt===fav.addedAt));
             save();
             renderFavorites();
@@ -823,7 +840,6 @@
       $("#entryCount").textContent = String(keys.length);
 
       const q = ($("#searchInput").value || "").trim().toLowerCase();
-
       const filtered = keys.filter(k=>{
         if(!q) return true;
         const e = state.history[k];
@@ -833,8 +849,7 @@
           e?.thought||"",
           e?.event?.with||"",
           e?.event?.notes||"",
-          e?.quoteCurrent?.t||"",
-          e?.quoteSaved||""
+          e?.quoteCurrent?.t||""
         ].join(" ").toLowerCase();
         return hay.includes(q);
       });
@@ -894,8 +909,13 @@
 
       const keys = Object.keys(state.history || {}).sort((a,b)=> b.localeCompare(a));
       const last30 = keys.slice(0, 30).map(k=> state.history[k]);
-
       const total = last30.length;
+
+      if(!total){
+        grid.innerHTML = `<div class="badge" style="width:100%; border-style:solid;">Aún no hay entradas diarias. Se guardan en automático cuando registras algo.</div>`;
+        return;
+      }
+
       const moods = {};
       last30.forEach(e=>{
         const m = e?.mood || "Sin registro";
@@ -922,10 +942,6 @@
         div.innerHTML = `<strong>${escapeHtml(String(s.big))}</strong><span>${escapeHtml(s.small)}</span>`;
         grid.appendChild(div);
       });
-
-      if(!total){
-        grid.innerHTML = `<div class="badge" style="width:100%; border-style:solid;">Aún no hay entradas diarias. Usa “Guardar día”.</div>`;
-      }
     }
 
     function renderPreview(){
@@ -937,191 +953,90 @@
       renderThought();
       renderEvent();
       renderQuote();
+      renderFavorites();
       renderHistory();
       renderStats();
       renderPinStatus();
       renderPreview();
     }
 
-    // =========================
-    // DAILY HISTORY (save/open)
-    // =========================
-    function getEntryDate(){
-      return $("#entryDate").value || toDateKey(new Date());
-    }
-
-    function saveDay(dateKey){
-      const key = dateKey || getEntryDate();
-      const entry = {
-        date: key,
-        savedAt: nowISO(),
-        mood: state.mood,
-        thought: state.thought,
-        thoughtSavedAt: state.thoughtSavedAt,
-        event: {...state.event},
-        need: state.need,
-        quoteCurrent: state.quoteCurrent ? {...state.quoteCurrent} : null,
-        quoteSaved: state.quoteSaved || "",
-        quoteSavedAt: state.quoteSavedAt
-      };
-      state.history[key] = entry;
-      state.lastOpenedDate = key;
-      save();
-      renderHistory();
-      renderStats();
-      setStatus("Día guardado");
-    }
-
-    function openDay(dateKey){
-      const e = state.history[dateKey];
-      if(!e){ alert("No existe esa entrada."); return; }
-
-      state.mood = e.mood ?? null;
-      state.thought = e.thought ?? "";
-      state.thoughtSavedAt = e.thoughtSavedAt ?? null;
-
-      if(e.event && typeof e.event==="object"){
-        state.event.with = e.event.with ?? "";
-        state.event.at = e.event.at ?? "";
-        state.event.notes = e.event.notes ?? "";
-        state.event.savedAt = e.event.savedAt ?? null;
-      }else{
-        state.event = { with:"", at:"", notes:"", savedAt:null };
-      }
-
-      state.need = e.need ?? "calma";
-      state.quoteCurrent = e.quoteCurrent ?? null;
-      state.quoteSaved = e.quoteSaved ?? "";
-      state.quoteSavedAt = e.quoteSavedAt ?? null;
-
-      state.lastOpenedDate = dateKey;
-      $("#entryDate").value = dateKey;
-
-      save();
-      renderAll();
-      setStatus("Día abierto");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    // =========================
-    // PAUSE MODAL (30s)
-    // =========================
+    // ========= PAUSE =========
     const PAUSE_EX = [
-      {
-        title:"Respiración 4–4–6",
-        steps:[
-          "Inhala 4 segundos.",
-          "Sostén 4 segundos.",
-          "Exhala 6 segundos.",
-          "Repite suave. Solo vuelve al aire."
-        ]
-      },
-      {
-        title:"Grounding 5–4–3–2–1",
-        steps:[
-          "Nombra 5 cosas que ves.",
-          "4 cosas que sientes (tacto).",
-          "3 cosas que escuchas.",
-          "2 cosas que hueles.",
-          "1 cosa que agradeces hoy."
-        ]
-      },
-      {
-        title:"Mano al pecho",
-        steps:[
-          "Pon una mano en el pecho.",
-          "Di: “Estoy a salvo ahora”.",
-          "Respira lento 3 veces.",
-          "Elige un paso pequeño."
-        ]
-      }
+      { title:"Respiración 4–4–6", steps:["Inhala 4s.","Sostén 4s.","Exhala 6s.","Repite suave."] },
+      { title:"Grounding 5–4–3–2–1", steps:["5 cosas que ves.","4 cosas que sientes.","3 que escuchas.","2 que hueles.","1 que agradeces."] },
+      { title:"Mano al pecho", steps:["Mano al pecho.","Di: “Estoy a salvo ahora”.","Respira 3 veces.","Elige un paso pequeño."] }
     ];
-    let pauseIdx = 0;
-    let pauseT = 30;
-    let pauseTimer = null;
+    let pauseIdx = 0, pauseT = 30, pauseTimer = null;
 
+    function updatePauseText(){
+      const ex = PAUSE_EX[pauseIdx % PAUSE_EX.length];
+      $("#pauseText").innerHTML = `<strong>${escapeHtml(ex.title)}</strong><br><br>${ex.steps.map(s=>`• ${escapeHtml(s)}`).join("<br>")}`;
+    }
     function openPause(){
       $("#pauseOverlay").style.display = "flex";
       $("#pauseOverlay").setAttribute("aria-hidden","false");
-      pauseT = 30;
-      updatePauseText();
-      $("#pauseTimer").textContent = "30s";
+      pauseT=30; updatePauseText();
+      $("#pauseTimer").textContent="30s";
     }
-    function closePause(){
-      $("#pauseOverlay").style.display = "none";
-      $("#pauseOverlay").setAttribute("aria-hidden","true");
-      stopPause();
-    }
-    function updatePauseText(){
-      const ex = PAUSE_EX[pauseIdx % PAUSE_EX.length];
-      $("#pauseText").innerHTML = `
-        <strong>${escapeHtml(ex.title)}</strong><br><br>
-        ${ex.steps.map(s=>`• ${escapeHtml(s)}`).join("<br>")}
-      `;
+    function stopPause(){
+      if(pauseTimer){ clearInterval(pauseTimer); pauseTimer=null; }
     }
     function startPause(){
       stopPause();
-      pauseT = 30;
-      $("#pauseTimer").textContent = "30s";
-      pauseTimer = setInterval(()=>{
+      pauseT=30;
+      $("#pauseTimer").textContent="30s";
+      pauseTimer=setInterval(()=>{
         pauseT--;
         $("#pauseTimer").textContent = `${pauseT}s`;
         if(pauseT<=0){
           stopPause();
+          $("#pauseTimer").textContent="Listo";
           setStatus("Pausa completa");
-          $("#pauseTimer").textContent = "Listo";
         }
-      }, 1000);
+      },1000);
     }
-    function stopPause(){
-      if(pauseTimer){ clearInterval(pauseTimer); pauseTimer = null; }
+    function closePause(){
+      $("#pauseOverlay").style.display="none";
+      $("#pauseOverlay").setAttribute("aria-hidden","true");
+      stopPause();
     }
 
-    // =========================
-    // PIN (simple)
-    // =========================
+    // ========= PIN =========
     function simpleHash(str){
-      // hash simple (no criptografía seria). Evita guardar el PIN en texto plano.
       let h = 2166136261;
-      for (let i=0;i<str.length;i++){
+      for(let i=0;i<str.length;i++){
         h ^= str.charCodeAt(i);
         h = Math.imul(h, 16777619);
       }
       return (h>>>0).toString(16);
     }
-
     function getPinConfig(){
       const raw = localStorage.getItem(PIN_KEY);
       const cfg = safeParse(raw, null);
       if(!cfg || typeof cfg!=="object") return { enabled:false, pinHash:null };
       return { enabled: !!cfg.enabled, pinHash: cfg.pinHash || null };
     }
-
     function setPinConfig(cfg){
       localStorage.setItem(PIN_KEY, JSON.stringify(cfg));
     }
-
     function renderPinStatus(){
       const cfg = getPinConfig();
       $("#pinStatus").textContent = cfg.enabled
         ? "PIN: ACTIVADO ✅"
         : (cfg.pinHash ? "PIN guardado pero DESACTIVADO" : "PIN: no configurado");
     }
-
     function showLock(){
-      $("#lockWrap").style.display = "flex";
-      $("#appMain").style.display = "none";
-      $("#footer").style.display = "none";
-      $("#lockMsg").textContent = "—";
-      $("#pinInput").value = "";
+      $("#lockWrap").style.display="flex";
+      $("#appMain").style.display="none";
+      $("#footer").style.display="none";
+      $("#lockMsg").textContent="—";
+      $("#pinInput").value="";
     }
-
     function showApp(){
-      $("#lockWrap").style.display = "none";
-      $("#appMain").style.display = "grid";
-      $("#footer").style.display = "block";
+      $("#lockWrap").style.display="none";
+      $("#appMain").style.display="grid";
+      $("#footer").style.display="block";
     }
-
     function checkLockOnBoot(){
       const cfg = getPinConfig();
       if(cfg.enabled && cfg.pinHash){
@@ -1131,43 +1046,33 @@
       showApp();
       return false;
     }
-
     function unlockAttempt(){
       const cfg = getPinConfig();
       const pin = ($("#pinInput").value||"").trim();
-      if(!pin){ $("#lockMsg").textContent = "Escribe tu PIN."; return; }
+      if(!pin){ $("#lockMsg").textContent="Escribe tu PIN."; return; }
       if(simpleHash(pin) === cfg.pinHash){
         showApp();
         setStatus("Desbloqueado");
       }else{
-        $("#lockMsg").textContent = "PIN incorrecto.";
+        $("#lockMsg").textContent="PIN incorrecto.";
       }
     }
 
-    // =========================
-    // EXPORT / IMPORT
-    // =========================
+    // ========= EXPORT / IMPORT / WIPE =========
     function download(filename, text, mime="application/json;charset=utf-8"){
       const blob = new Blob([text], { type: mime });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
+      a.href=url; a.download=filename;
       document.body.appendChild(a);
-      a.click();
-      a.remove();
+      a.click(); a.remove();
       URL.revokeObjectURL(url);
     }
 
     function exportJSON(){
-      const payload = {
-        exportedAt: nowISO(),
-        app: "Mi App Personal — Regulación Emocional",
-        version: state.version,
-        data: state
-      };
+      const payload = { exportedAt: nowISO(), app:"Mi App Personal", version: state.version, data: state };
       const stamp = new Date().toISOString().slice(0,10);
-      download(`mi-app-personal_${stamp}.json`, JSON.stringify(payload, null, 2));
+      download(`mi-app-personal_${stamp}.json`, JSON.stringify(payload,null,2));
       setStatus("Exportado JSON");
     }
 
@@ -1181,7 +1086,7 @@
       lines.push("");
 
       if(!keys.length){
-        lines.push("(No hay entradas diarias guardadas)");
+        lines.push("(No hay entradas guardadas)");
       }else{
         keys.forEach(k=>{
           const e = state.history[k];
@@ -1190,7 +1095,7 @@
           lines.push(`Pensamiento: ${e.thought ? e.thought.replace(/\s+/g," ").trim() : "—"}`);
           lines.push(`Registro: ${e.event?.with || "—"}`);
           lines.push(`Notas: ${e.event?.notes ? e.event.notes.replace(/\s+/g," ").trim() : "—"}`);
-          lines.push(`Frase (tema ${labelNeed(e.need||"calma")}): ${e.quoteCurrent?.t || "—"}`);
+          lines.push(`Frase (${labelNeed(e.need||"calma")}): ${e.quoteCurrent?.t || "—"}`);
           lines.push(`Guardado: ${e.savedAt ? formatDate(e.savedAt) : "—"}`);
           lines.push("");
         });
@@ -1202,12 +1107,8 @@
       if(!state.favorites.length){
         lines.push("(No hay favoritas)");
       }else{
-        state.favorites
-          .slice()
-          .sort((a,b)=> (a.addedAt||"").localeCompare(b.addedAt||""))
-          .forEach(f=>{
-            lines.push(`• [${labelNeed(f.need||"calma")}] "${f.t}" — ${f.a||"Anónima"}`);
-          });
+        state.favorites.slice().sort((a,b)=> (a.addedAt||"").localeCompare(b.addedAt||""))
+          .forEach(f=> lines.push(`• [${labelNeed(f.need||"calma")}] "${f.t}" — ${f.a||"Anónima"}`));
       }
 
       const stamp = new Date().toISOString().slice(0,10);
@@ -1224,7 +1125,6 @@
         return;
       }
 
-      // Mezcla segura (mantiene compatibilidad)
       state.version = incoming.version ?? state.version;
       state.mood = incoming.mood ?? state.mood;
       state.thought = incoming.thought ?? state.thought;
@@ -1239,8 +1139,6 @@
 
       state.need = incoming.need ?? state.need;
       state.quoteCurrent = incoming.quoteCurrent ?? state.quoteCurrent;
-      state.quoteSaved = incoming.quoteSaved ?? state.quoteSaved;
-      state.quoteSavedAt = incoming.quoteSavedAt ?? state.quoteSavedAt;
 
       state.favorites = Array.isArray(incoming.favorites) ? incoming.favorites : state.favorites;
       state.history = (incoming.history && typeof incoming.history==="object") ? incoming.history : state.history;
@@ -1252,32 +1150,27 @@
     }
 
     function wipeAll(){
-      if(!confirm("¿Seguro que quieres borrar TODO? Esto borra historial y favoritos.")) return;
+      if(!confirm("¿Seguro que quieres borrar TODO? Esto borra historial y favoritas.")) return;
       localStorage.removeItem(APP_KEY);
 
-      state.version = 3;
-      state.mood = null;
-      state.thought = "";
-      state.thoughtSavedAt = null;
-      state.event = { with:"", at:"", notes:"", savedAt:null };
-      state.need = "calma";
-      state.quoteCurrent = null;
-      state.quoteSaved = "";
-      state.quoteSavedAt = null;
-      state.favorites = [];
-      state.history = {};
-      state.lastOpenedDate = null;
+      state.mood=null;
+      state.thought="";
+      state.thoughtSavedAt=null;
+      state.event={with:"",at:"",notes:"",savedAt:null};
+      state.need="calma";
+      state.quoteCurrent=null;
+      state.favorites=[];
+      state.history={};
+      state.lastOpenedDate=null;
 
+      ensureCurrentQuote();
       save();
       renderAll();
       setStatus("Borrado");
     }
 
-    // =========================
-    // WIRES
-    // =========================
+    // ========= WIRE =========
     function wire(){
-      // Default date = hoy
       const today = toDateKey(new Date());
       $("#entryDate").value = state.lastOpenedDate || today;
 
@@ -1285,12 +1178,15 @@
       $$(".chip").forEach(btn=>{
         btn.addEventListener("click", ()=>{
           state.mood = btn.getAttribute("data-mood");
-          save(); renderMood();
+          save();
+          renderMood();
+          autoSaveDay();
         });
       });
       $("#clearMood").addEventListener("click", ()=>{
-        state.mood = null;
+        state.mood=null;
         save(); renderMood();
+        autoSaveDay();
       });
 
       // Thought
@@ -1298,105 +1194,107 @@
         state.thought = $("#thought").value || "";
         state.thoughtSavedAt = nowISO();
         save(); renderThought();
+        autoSaveDay();
       });
       $("#clearThought").addEventListener("click", ()=>{
         state.thought = "";
         state.thoughtSavedAt = nowISO();
         save(); renderThought();
+        autoSaveDay();
       });
 
       // Event
-      $("#saveCall").addEventListener("click", ()=>{
-        state.event.with = $("#callWith").value || "";
-        state.event.at = $("#callAt").value || "";
-        state.event.notes = $("#callNotes").value || "";
+      $("#saveEvt").addEventListener("click", ()=>{
+        state.event.with = $("#evtWith").value || "";
+        state.event.at = $("#evtAt").value || "";
+        state.event.notes = $("#evtNotes").value || "";
         state.event.savedAt = nowISO();
         save(); renderEvent();
+        autoSaveDay();
       });
-      $("#clearCall").addEventListener("click", ()=>{
+      $("#clearEvt").addEventListener("click", ()=>{
         state.event = { with:"", at:"", notes:"", savedAt: nowISO() };
         save(); renderEvent();
+        autoSaveDay();
       });
 
-      // Need select
+      // Quotes
       $("#needSelect").addEventListener("change", ()=>{
         state.need = $("#needSelect").value || "calma";
-        state.quoteCurrent = null; // fuerza nuevo quote del tema
-        save();
-        renderQuote();
+        state.quoteCurrent = null;
+        ensureCurrentQuote();
+        save(); renderQuote();
+        autoSaveDay();
         setStatus("Tema actualizado");
       });
 
-      // New quote
       $("#newQuoteBtn").addEventListener("click", ()=>{
         ensureCurrentQuote();
         const prev = state.quoteCurrent?.t || null;
         state.quoteCurrent = pickRandomQuote(state.need, prev);
-        save();
-        renderQuote();
+        save(); renderQuote();
+        autoSaveDay();
         setStatus("Nueva frase");
       });
 
-      // Save quote (guardada)
       $("#saveQuoteBtn").addEventListener("click", ()=>{
         ensureCurrentQuote();
-        state.quoteSaved = state.quoteCurrent?.t || "";
-        state.quoteSavedAt = nowISO();
-        save();
-        setStatus("Frase guardada");
+        // Guardar la frase como favorita “rápido” también sirve como guardado:
+        const q = state.quoteCurrent;
+        if(q){
+          const exists = state.favorites.some(f=> f.t===q.t && f.need===q.need);
+          if(!exists){
+            state.favorites.push({ t:q.t, a:q.a, need:q.need, addedAt: nowISO() });
+          }
+        }
+        save(); renderFavorites();
+        autoSaveDay();
+        setStatus("Frase guardada ⭐");
       });
 
-      // Favorite quote
       $("#favQuoteBtn").addEventListener("click", ()=>{
         ensureCurrentQuote();
         const q = state.quoteCurrent;
         if(!q) return;
-
-        const exists = state.favorites.some(f => f.t === q.t && f.need === q.need);
+        const exists = state.favorites.some(f=> f.t===q.t && f.need===q.need);
         if(exists){ setStatus("Ya estaba en favoritas"); return; }
-
         state.favorites.push({ t:q.t, a:q.a, need:q.need, addedAt: nowISO() });
-        save();
-        renderFavorites();
+        save(); renderFavorites();
+        autoSaveDay();
         setStatus("Guardada ⭐");
       });
 
       $("#clearFavBtn").addEventListener("click", ()=>{
         if(!confirm("¿Eliminar TODAS las favoritas?")) return;
-        state.favorites = [];
-        save();
-        renderFavorites();
+        state.favorites=[];
+        save(); renderFavorites();
         setStatus("Favoritas limpias");
       });
 
-      // History save/open
-      $("#saveDayBtn").addEventListener("click", ()=> saveDay(getEntryDate()));
-      $("#loadDayBtn").addEventListener("click", ()=> openDay(getEntryDate()));
+      // History
+      $("#saveDayBtn").addEventListener("click", saveDayManual);
+      $("#openDayBtn").addEventListener("click", ()=> openDay(getEntryDate()));
+      $("#searchInput").addEventListener("input", renderHistory);
 
-      // Search
-      $("#searchInput").addEventListener("input", ()=>{
-        renderHistory();
-      });
-
-      // Pause modal
-      $("#pauseBtn").addEventListener("click", ()=> openPause());
-      $("#pauseCloseBtn").addEventListener("click", ()=> closePause());
-      $("#pauseStartBtn").addEventListener("click", ()=> startPause());
+      // Pause
+      $("#pauseBtn").addEventListener("click", openPause);
+      $("#pauseCloseBtn").addEventListener("click", closePause);
+      $("#pauseStartBtn").addEventListener("click", startPause);
       $("#pauseSwitchBtn").addEventListener("click", ()=>{
         pauseIdx++;
         updatePauseText();
         stopPause();
-        $("#pauseTimer").textContent = "30s";
+        $("#pauseTimer").textContent="30s";
       });
 
-      // Export/Import/Wipe
+      // Export / Import / Wipe
       $("#exportJsonBtn").addEventListener("click", exportJSON);
       $("#exportTxtBtn").addEventListener("click", exportTXT);
       $("#importFile").addEventListener("change", async (e)=>{
         const file = e.target.files?.[0];
         if(!file) return;
         await importJSON(file);
-        e.target.value = "";
+        e.target.value="";
       });
       $("#wipeBtn").addEventListener("click", wipeAll);
 
@@ -1410,71 +1308,105 @@
 
         const cfg = getPinConfig();
         cfg.pinHash = simpleHash(p1);
-        // no obliga a activar, solo guarda
         setPinConfig(cfg);
-        $("#pinSet").value = "";
-        $("#pinSet2").value = "";
+        $("#pinSet").value=""; $("#pinSet2").value="";
         renderPinStatus();
         setStatus("PIN guardado");
       });
 
       $("#togglePinBtn").addEventListener("click", ()=>{
         const cfg = getPinConfig();
-        if(!cfg.pinHash){
-          alert("Primero guarda un PIN.");
-          return;
-        }
+        if(!cfg.pinHash){ alert("Primero guarda un PIN."); return; }
         cfg.enabled = !cfg.enabled;
         setPinConfig(cfg);
         renderPinStatus();
         setStatus(cfg.enabled ? "PIN activado" : "PIN desactivado");
-        if(cfg.enabled){
-          showLock();
-        }
+        if(cfg.enabled) showLock();
       });
 
       $("#removePinBtn").addEventListener("click", ()=>{
-        if(!confirm("¿Quitar PIN? (la app quedará sin bloqueo)")) return;
+        if(!confirm("¿Quitar PIN?")) return;
         setPinConfig({ enabled:false, pinHash:null });
         renderPinStatus();
         setStatus("PIN eliminado");
         showApp();
       });
 
-      // Lock screen actions
+      // Lock screen
       $("#unlockBtn").addEventListener("click", unlockAttempt);
       $("#pinInput").addEventListener("keydown", (e)=>{
-        if(e.key === "Enter") unlockAttempt();
+        if(e.key==="Enter") unlockAttempt();
       });
       $("#lockHelpBtn").addEventListener("click", ()=>{
         alert(
-          "Si olvidaste el PIN, no hay recuperación automática.\n\n" +
-          "Opción 1: desactiva el PIN si aún estás dentro de la app.\n" +
-          "Opción 2: borra datos del sitio (esto borra también tu historial).\n\n" +
-          "En Chrome: Configuración → Privacidad → Datos de sitios → busca el sitio → borrar."
+          "Si olvidaste el PIN:\n\n" +
+          "• Usa el botón: 'Quitar PIN (sin borrar historial)'\n" +
+          "• Luego puedes crear otro PIN desde Ajustes."
         );
       });
 
-      // Service worker (offline) si existe
+      // ✅ Emergencia: quita PIN sin borrar historial
+      $("#lockRemovePinBtn").addEventListener("click", ()=>{
+        if(!confirm("Esto quitará el PIN y podrás entrar. NO borra tu historial. ¿Continuar?")) return;
+        localStorage.removeItem(PIN_KEY);
+        setStatus("PIN eliminado");
+        showApp();
+      });
+
+      // Service Worker
       if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
     }
 
-    // =========================
-    // BOOT
-    // =========================
+    // ========= BOOT =========
     load();
-
-    // Quote inicial
-    if(!state.need) state.need = "calma";
-    if(!state.quoteCurrent) state.quoteCurrent = pickRandomQuote(state.need, null);
+    if(!state.need) state.need="calma";
+    ensureCurrentQuote();
     save();
 
-    // PIN check
-    const locked = checkLockOnBoot();
-    if(!locked) showApp();
+    const locked = (function(){
+      const cfg = getPinConfig();
+      if(cfg.enabled && cfg.pinHash){ showLock(); return true; }
+      showApp(); return false;
+    })();
+
+    function getPinConfig(){
+      const raw = localStorage.getItem(PIN_KEY);
+      const cfg = safeParse(raw, null);
+      if(!cfg || typeof cfg!=="object") return { enabled:false, pinHash:null };
+      return { enabled: !!cfg.enabled, pinHash: cfg.pinHash || null };
+    }
+    function setPinConfig(cfg){ localStorage.setItem(PIN_KEY, JSON.stringify(cfg)); }
+    function renderPinStatus(){
+      const cfg = getPinConfig();
+      $("#pinStatus").textContent = cfg.enabled
+        ? "PIN: ACTIVADO ✅"
+        : (cfg.pinHash ? "PIN guardado pero DESACTIVADO" : "PIN: no configurado");
+    }
+    function showLock(){
+      $("#lockWrap").style.display="flex";
+      $("#appMain").style.display="none";
+      $("#footer").style.display="none";
+      $("#lockMsg").textContent="—";
+      $("#pinInput").value="";
+    }
+    function showApp(){
+      $("#lockWrap").style.display="none";
+      $("#appMain").style.display="grid";
+      $("#footer").style.display="block";
+    }
+    function unlockAttempt(){
+      const cfg = getPinConfig();
+      const pin = ($("#pinInput").value||"").trim();
+      if(!pin){ $("#lockMsg").textContent="Escribe tu PIN."; return; }
+      if(simpleHash(pin) === cfg.pinHash){
+        showApp();
+        setStatus("Desbloqueado");
+      }else{
+        $("#lockMsg").textContent="PIN incorrecto.";
+      }
+    }
 
     document.addEventListener("DOMContentLoaded", ()=>{
-      // si está locked, no renderizamos app visible aún, pero sí preparamos
       renderAll();
       wire();
     });
