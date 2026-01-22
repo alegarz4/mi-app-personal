@@ -1,185 +1,484 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mi App Personal</title>
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#6b5cff">
+  <meta name="theme-color" content="#7c3aed">
   <link rel="icon" href="icon.svg">
 
   <style>
+    :root{
+      --bg:#0b1020;
+      --panel: rgba(255,255,255,0.07);
+      --panel2: rgba(255,255,255,0.10);
+      --border: rgba(255,255,255,0.14);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.70);
+      --accent:#7c3aed;
+      --ok:#22c55e;
+      --danger:#ef4444;
+      --radius:18px;
+      --shadow:0 10px 30px rgba(0,0,0,0.35);
+      --max:1050px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    *{ box-sizing:border-box; }
     body{
       margin:0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(180deg,#0f1023,#1b1c3a);
-      color:#fff;
-      padding:20px;
+      font-family:var(--font);
+      background:
+        radial-gradient(1100px 600px at 15% 0%, rgba(124,58,237,0.25), transparent 60%),
+        radial-gradient(900px 500px at 85% 15%, rgba(34,197,94,0.18), transparent 60%),
+        linear-gradient(180deg, #070a14, #0b1020);
+      color:var(--text);
     }
-    h1,h2{ font-weight:600; }
+    .wrap{ width:min(var(--max), calc(100% - 32px)); margin:0 auto; }
+    header{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(10px);
+      background: rgba(10,14,28,0.65);
+      border-bottom:1px solid var(--border);
+    }
+    .top{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px; padding:18px 0;
+    }
+    h1{ margin:0; font-size:22px; }
+    .sub{ margin:4px 0 0; color:var(--muted); font-size:13px; }
+    .status{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:999px;
+      background:var(--panel); border:1px solid var(--border);
+      font-size:13px; color:var(--muted);
+    }
+    .dot{ width:10px; height:10px; border-radius:999px; background:var(--ok);
+      box-shadow:0 0 0 4px rgba(34,197,94,0.16);
+    }
+    main{
+      padding:22px 0 40px;
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:16px;
+    }
     .card{
-      background:rgba(255,255,255,0.08);
-      border-radius:18px;
+      grid-column: span 6;
+      background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.04));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
       padding:16px;
-      margin-bottom:18px;
     }
-    .moods button{
-      margin:6px;
-      padding:10px 14px;
-      border-radius:20px;
-      border:none;
+    .wide{ grid-column: span 12; }
+    h2{ margin:2px 0 8px; font-size:18px; }
+    .muted{ color:var(--muted); }
+    .tiny{ font-size:12px; color:rgba(255,255,255,0.55); }
+    .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .chip{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:999px;
       cursor:pointer;
-      background:rgba(255,255,255,0.15);
-      color:#fff;
+      font-size:14px;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
     }
-    .moods button.active{
-      background:#6b5cff;
+    .chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.09); }
+    .chip.active{
+      border-color: rgba(124,58,237,0.65);
+      background: rgba(124,58,237,0.22);
     }
-    textarea,input{
-      width:100%;
-      border-radius:12px;
-      border:none;
-      padding:10px;
-      margin-top:8px;
+    .row{ display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:12px; flex-wrap:wrap; }
+    .badge{
+      padding:8px 12px; border-radius:999px;
+      border:1px dashed rgba(255,255,255,0.28);
+      background: rgba(255,255,255,0.05);
+      color:var(--muted); font-size:13px;
+    }
+    .input,.textarea{
+      width:100%; margin-top:6px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color:var(--text);
+      padding:12px;
+      outline:none;
       font-size:14px;
     }
-    button{
-      padding:10px 14px;
+    .input:focus,.textarea:focus{
+      border-color: rgba(124,58,237,0.65);
+      box-shadow: 0 0 0 4px rgba(124,58,237,0.16);
+    }
+    .textarea{ resize:vertical; }
+    .btn{
+      border:0;
+      background: rgba(124,58,237,0.92);
+      color:white;
+      padding:10px 12px;
       border-radius:12px;
-      border:none;
-      background:#6b5cff;
-      color:#fff;
       cursor:pointer;
-      margin-top:10px;
+      font-size:14px;
+      transition: transform .08s ease, filter .2s ease;
     }
-    .secondary{
-      background:rgba(255,255,255,0.15);
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+    .btn:active{ transform: translateY(0); }
+    .ghost{
+      background: rgba(255,255,255,0.06);
+      border:1px solid var(--border);
+      color:var(--text);
     }
-    small{opacity:.7}
+    .danger{ background: rgba(239,68,68,0.92); }
+    .divider{ margin:14px 0; height:1px; background: rgba(255,255,255,0.08); }
+    .quote{
+      margin:0;
+      padding:12px 14px;
+      border-left:3px solid rgba(124,58,237,0.75);
+      background: rgba(255,255,255,0.05);
+      border-radius:12px;
+      color:var(--text);
+    }
+    details{ margin-top:12px; border:1px solid rgba(255,255,255,0.10); border-radius:14px; padding:10px 12px; background: rgba(255,255,255,0.03); }
+    summary{ cursor:pointer; color:var(--muted); font-size:13px; }
+    pre{ overflow:auto; margin:10px 0 0; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.25); color: rgba(255,255,255,0.85); font-size:12px; }
+    footer{ padding:18px 0 28px; }
+    @media (max-width: 920px){ .card{ grid-column: span 12; } .top{ flex-direction:column; align-items:flex-start; } }
   </style>
 </head>
 
 <body>
-  <h1>🌙 Mi App Personal</h1>
-  <small>Un espacio solo para ti</small>
-
-  <!-- ESTADO EMOCIONAL -->
-  <div class="card">
-    <h2>¿Cómo me siento?</h2>
-    <div class="moods">
-      <button onclick="setMood('Tranquila')">Tranquila</button>
-      <button onclick="setMood('Ansiosa')">Ansiosa</button>
-      <button onclick="setMood('Triste')">Triste</button>
-      <button onclick="setMood('Indiferente')">Indiferente</button>
+  <header>
+    <div class="wrap top">
+      <div>
+        <h1>Mi App Personal</h1>
+        <p class="sub">Un espacio pequeño para ti. Limpio. Visual. Seguro (en tu navegador).</p>
+      </div>
+      <div class="status"><span class="dot"></span><span id="statusText">Listo</span></div>
     </div>
-    <p id="moodView">—</p>
-  </div>
+  </header>
 
-  <!-- PENSAMIENTO -->
-  <div class="card">
-    <h2>¿Qué pensamiento domina?</h2>
-    <textarea id="thought" rows="4"></textarea>
-    <button onclick="saveThought()">Guardar</button>
-  </div>
+  <main class="wrap">
+    <section class="card">
+      <h2>¿Cómo me siento?</h2>
+      <p class="muted">Elige una opción. Puedes cambiarla cuando quieras.</p>
 
-  <!-- ÚLTIMA LLAMADA -->
-  <div class="card">
-    <h2>Última llamada</h2>
-    <input id="callWith" placeholder="Con quién">
-    <input id="callWhen" type="datetime-local">
-    <textarea id="callNotes" rows="3" placeholder="Cómo te sentiste"></textarea>
-    <button onclick="saveCall()">Guardar</button>
-  </div>
+      <div class="chips" role="group" aria-label="Selección de estado emocional">
+        <button class="chip" data-mood="Tranquila" type="button">Tranquila</button>
+        <button class="chip" data-mood="Ansiosa" type="button">Ansiosa</button>
+        <button class="chip" data-mood="Triste" type="button">Triste</button>
+        <button class="chip" data-mood="Indiferente" type="button">Indiferente</button>
+      </div>
 
-  <!-- FRASE -->
-  <div class="card">
-    <h2>Frase para ti</h2>
-    <textarea id="quote" rows="3"></textarea>
-    <button onclick="saveQuote()">Guardar frase</button>
-    <p id="quoteView">—</p>
-  </div>
+      <div class="row">
+        <div class="badge" id="moodBadge">—</div>
+        <button class="btn ghost" id="clearMood" type="button">Limpiar</button>
+      </div>
+    </section>
 
-  <!-- RESPALDO -->
-  <div class="card">
-    <h2>Respaldo</h2>
-    <button onclick="exportData()">Exportar</button>
-    <input type="file" id="importFile" onchange="importData(event)">
-    <button class="secondary" onclick="clearAll()">Borrar todo</button>
-  </div>
+    <section class="card">
+      <h2>¿Qué pensamiento domina?</h2>
+      <p class="muted">Escríbelo tal cual, sin juzgarlo. Aquí solo se registra.</p>
 
-<script>
-const KEY="mi_app_personal";
+      <textarea id="thought" class="textarea" rows="5" placeholder="Ej. “Me siento en alerta…” o “Necesito descansar…”"></textarea>
 
-let data=JSON.parse(localStorage.getItem(KEY))||{
-  mood:null, thought:"",
-  call:{}, quote:""
-};
+      <div class="row">
+        <button class="btn" id="saveThought" type="button">Guardar</button>
+        <button class="btn ghost" id="clearThought" type="button">Limpiar</button>
+      </div>
 
-function save(){
-  localStorage.setItem(KEY,JSON.stringify(data));
-}
+      <p class="tiny" id="thoughtSavedAt">—</p>
+    </section>
 
-function setMood(m){
-  data.mood=m; save();
-  document.querySelectorAll('.moods button')
-    .forEach(b=>b.classList.toggle('active',b.textContent===m));
-  document.getElementById('moodView').textContent="Hoy: "+m;
-}
+    <section class="card">
+      <h2>Última llamada</h2>
+      <p class="muted">Registra una llamada importante (o la ausencia de ella).</p>
 
-function saveThought(){
-  data.thought=document.getElementById('thought').value;
-  save();
-}
+      <label class="tiny">Con quién</label>
+      <input id="callWith" class="input" type="text" placeholder="Ej. Hugo / Mamá / Yo misma" />
 
-function saveCall(){
-  data.call={
-    with:callWith.value,
-    when:callWhen.value,
-    notes:callNotes.value
-  };
-  save();
-}
+      <label class="tiny">Fecha y hora</label>
+      <input id="callAt" class="input" type="datetime-local" />
 
-function saveQuote(){
-  data.quote=quote.value;
-  save();
-  quoteView.textContent="“"+data.quote+"”";
-}
+      <label class="tiny">Notas (opcional)</label>
+      <textarea id="callNotes" class="textarea" rows="4" placeholder="Ej. “Me calmó”, “Me quedé con dudas”, “No contestó…”"></textarea>
 
-function exportData(){
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="mi_app_personal.json";
-  a.click();
-}
+      <div class="row">
+        <button class="btn" id="saveCall" type="button">Guardar</button>
+        <button class="btn ghost" id="clearCall" type="button">Limpiar</button>
+      </div>
 
-function importData(e){
-  const f=e.target.files[0];
-  f.text().then(t=>{
-    data=JSON.parse(t);
-    save(); location.reload();
-  });
-}
+      <div class="divider"></div>
+      <p class="tiny muted">Último registro</p>
+      <div id="callSummary" class="badge" style="width:100%; border-style:solid; border-color:rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); padding:12px; border-radius:14px;">
+        —
+      </div>
+    </section>
 
-function clearAll(){
-  if(confirm("¿Borrar todo?")){
-    localStorage.removeItem(KEY);
-    location.reload();
-  }
-}
+    <section class="card">
+      <h2>Frase para ti</h2>
+      <p class="muted">Una frase que te acompañe (tuya o de alguien que te hizo bien).</p>
 
-window.onload=()=>{
-  if(data.mood) setMood(data.mood);
-  thought.value=data.thought||"";
-  quoteView.textContent=data.quote? "“"+data.quote+"”":"—";
-};
+      <textarea id="quote" class="textarea" rows="4" placeholder="Ej. “Hoy solo necesito un paso.”"></textarea>
 
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("sw.js");
-}
-</script>
+      <div class="row">
+        <button class="btn" id="saveQuote" type="button">Guardar</button>
+        <button class="btn ghost" id="saveQuoteToday" type="button">Guardar como ‘frase de hoy’</button>
+      </div>
+
+      <div class="divider"></div>
+      <blockquote class="quote" id="quoteView">—</blockquote>
+      <p class="tiny" id="quoteSavedAt">—</p>
+    </section>
+
+    <section class="card wide">
+      <h2>Respaldo</h2>
+      <p class="muted">Exporta tus datos (JSON) o impórtalos para recuperarlos.</p>
+
+      <div class="row">
+        <button class="btn" id="exportBtn" type="button">Exportar</button>
+        <label class="btn ghost" for="importFile" role="button">Importar</label>
+        <input id="importFile" type="file" accept="application/json" hidden />
+        <button class="btn danger" id="wipeBtn" type="button">Borrar todo</button>
+      </div>
+
+      <details>
+        <summary>Ver datos (solo lectura)</summary>
+        <pre id="dataPreview">{}</pre>
+      </details>
+
+      <p class="tiny muted">Todo se guarda en tu navegador (localStorage).</p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p class="tiny muted">Hecho para ti ✨ — versión local, sin cuentas, sin internet.</p>
+  </footer>
+
+  <script>
+    const STORAGE_KEY = "mi_app_personal_v1";
+    const $ = (s) => document.querySelector(s);
+    const $$ = (s) => document.querySelectorAll(s);
+
+    const state = {
+      mood: null,
+      thought: "",
+      thoughtSavedAt: null,
+      call: { with:"", at:"", notes:"", savedAt:null },
+      quote: "",
+      quoteSavedAt: null,
+    };
+
+    function nowISO(){ return new Date().toISOString(); }
+    function safeParse(j,f){ try{return JSON.parse(j);}catch{return f;} }
+    function formatDate(iso){
+      if(!iso) return "—";
+      const d = new Date(iso);
+      if(Number.isNaN(d.getTime())) return "—";
+      return d.toLocaleString("es-MX",{dateStyle:"medium",timeStyle:"short"});
+    }
+
+    function load(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      const loaded = safeParse(raw,null);
+      if(!loaded || typeof loaded!=="object") return;
+
+      state.mood = loaded.mood ?? state.mood;
+      state.thought = loaded.thought ?? state.thought;
+      state.thoughtSavedAt = loaded.thoughtSavedAt ?? state.thoughtSavedAt;
+
+      if(loaded.call && typeof loaded.call==="object"){
+        state.call.with = loaded.call.with ?? state.call.with;
+        state.call.at = loaded.call.at ?? state.call.at;
+        state.call.notes = loaded.call.notes ?? state.call.notes;
+        state.call.savedAt = loaded.call.savedAt ?? state.call.savedAt;
+      }
+
+      state.quote = loaded.quote ?? state.quote;
+      state.quoteSavedAt = loaded.quoteSavedAt ?? state.quoteSavedAt;
+    }
+
+    function setStatus(t){
+      const el=$("#statusText");
+      if(el) el.textContent=t;
+      clearTimeout(window.__st);
+      window.__st=setTimeout(()=>{ if(el) el.textContent="Listo"; },1200);
+    }
+
+    function save(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state, null, 2));
+      setStatus("Guardado");
+      renderPreview();
+    }
+
+    function renderMood(){
+      $("#moodBadge").textContent = state.mood ? `Hoy: ${state.mood}` : "—";
+      $$(".chip").forEach(btn=>{
+        const m = btn.getAttribute("data-mood");
+        btn.classList.toggle("active", m===state.mood);
+      });
+    }
+
+    function renderThought(){
+      $("#thought").value = state.thought || "";
+      $("#thoughtSavedAt").textContent = state.thoughtSavedAt ? `Guardado: ${formatDate(state.thoughtSavedAt)}` : "—";
+    }
+
+    function renderCall(){
+      $("#callWith").value = state.call.with || "";
+      $("#callAt").value = state.call.at || "";
+      $("#callNotes").value = state.call.notes || "";
+
+      const sum=$("#callSummary");
+      const who = (state.call.with||"").trim() || "—";
+      const when = state.call.at ? new Date(state.call.at) : null;
+      const whenText = (when && !Number.isNaN(when.getTime()))
+        ? when.toLocaleString("es-MX",{dateStyle:"medium",timeStyle:"short"})
+        : "—";
+      const notes = (state.call.notes||"").trim() || "—";
+      const saved = state.call.savedAt ? formatDate(state.call.savedAt) : "—";
+
+      sum.innerHTML = `
+        <div><strong>Con quién:</strong> ${escapeHtml(who)}</div>
+        <div><strong>Fecha/hora:</strong> ${escapeHtml(whenText)}</div>
+        <div><strong>Notas:</strong> ${escapeHtml(notes)}</div>
+        <div class="tiny muted" style="margin-top:8px;">Guardado: ${escapeHtml(saved)}</div>
+      `;
+    }
+
+    function renderQuote(){
+      $("#quote").value = state.quote || "";
+      $("#quoteView").textContent = state.quote?.trim() ? `“${state.quote.trim()}”` : "—";
+      $("#quoteSavedAt").textContent = state.quoteSavedAt ? `Guardado: ${formatDate(state.quoteSavedAt)}` : "—";
+    }
+
+    function renderPreview(){
+      $("#dataPreview").textContent = JSON.stringify(state, null, 2);
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;").replaceAll("<","&lt;")
+        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function wire(){
+      // Mood
+      $$(".chip").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          state.mood = btn.getAttribute("data-mood");
+          save(); renderMood();
+        });
+      });
+      $("#clearMood").addEventListener("click", ()=>{
+        state.mood=null; save(); renderMood();
+      });
+
+      // Thought
+      $("#saveThought").addEventListener("click", ()=>{
+        state.thought = $("#thought").value || "";
+        state.thoughtSavedAt = nowISO();
+        save(); renderThought();
+      });
+      $("#clearThought").addEventListener("click", ()=>{
+        state.thought=""; state.thoughtSavedAt = nowISO();
+        save(); renderThought();
+      });
+
+      // Call
+      $("#saveCall").addEventListener("click", ()=>{
+        state.call.with = $("#callWith").value || "";
+        state.call.at = $("#callAt").value || "";
+        state.call.notes = $("#callNotes").value || "";
+        state.call.savedAt = nowISO();
+        save(); renderCall();
+      });
+      $("#clearCall").addEventListener("click", ()=>{
+        state.call = { with:"", at:"", notes:"", savedAt: nowISO() };
+        save(); renderCall();
+      });
+
+      // Quote
+      $("#saveQuote").addEventListener("click", ()=>{
+        state.quote = $("#quote").value || "";
+        state.quoteSavedAt = nowISO();
+        save(); renderQuote();
+      });
+      $("#saveQuoteToday").addEventListener("click", ()=>{
+        state.quote = $("#quote").value || "";
+        state.quoteSavedAt = nowISO();
+        save(); renderQuote();
+        setStatus("Frase de hoy guardada");
+      });
+
+      // Export / Import / Wipe
+      $("#exportBtn").addEventListener("click", ()=>{
+        const payload = { exportedAt: nowISO(), app:"Mi App Personal", version:1, data: state };
+        const stamp = new Date().toISOString().slice(0,10);
+        const blob = new Blob([JSON.stringify(payload,null,2)],{type:"application/json;charset=utf-8"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = `mi-app-personal_${stamp}.json`;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+        setStatus("Exportado");
+      });
+
+      $("#importFile").addEventListener("change", async (e)=>{
+        const file = e.target.files?.[0];
+        if(!file) return;
+        const text = await file.text();
+        const payload = safeParse(text,null);
+        const incoming = payload?.data ?? payload;
+        if(!incoming || typeof incoming!=="object"){
+          alert("Archivo inválido.");
+          e.target.value=""; return;
+        }
+        state.mood = incoming.mood ?? state.mood;
+        state.thought = incoming.thought ?? state.thought;
+        state.thoughtSavedAt = incoming.thoughtSavedAt ?? state.thoughtSavedAt;
+
+        if(incoming.call && typeof incoming.call==="object"){
+          state.call.with = incoming.call.with ?? state.call.with;
+          state.call.at = incoming.call.at ?? state.call.at;
+          state.call.notes = incoming.call.notes ?? state.call.notes;
+          state.call.savedAt = incoming.call.savedAt ?? state.call.savedAt;
+        }
+        state.quote = incoming.quote ?? state.quote;
+        state.quoteSavedAt = incoming.quoteSavedAt ?? state.quoteSavedAt;
+
+        save();
+        renderAll();
+        setStatus("Importado");
+        e.target.value="";
+      });
+
+      $("#wipeBtn").addEventListener("click", ()=>{
+        if(!confirm("¿Seguro que quieres borrar todo?")) return;
+        localStorage.removeItem(STORAGE_KEY);
+        state.mood=null; state.thought=""; state.thoughtSavedAt=null;
+        state.call={with:"",at:"",notes:"",savedAt:null};
+        state.quote=""; state.quoteSavedAt=null;
+        save(); renderAll(); setStatus("Borrado");
+      });
+
+      // SW (si existe)
+      if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+    }
+
+    function renderAll(){
+      renderMood(); renderThought(); renderCall(); renderQuote(); renderPreview();
+    }
+
+    load();
+    document.addEventListener("DOMContentLoaded", ()=>{
+      renderAll();
+      wire();
+    });
+  </script>
 </body>
 </html>
