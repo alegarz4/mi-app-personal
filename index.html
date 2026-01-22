@@ -47,7 +47,7 @@
     }
     .top{
       display:flex; align-items:center; justify-content:space-between;
-      gap:16px; padding:18px 0;
+      gap:16px; padding:16px 0;
     }
     h1{ margin:0; font-size:22px; }
     .sub{ margin:4px 0 0; color:var(--muted); font-size:13px; }
@@ -78,6 +78,7 @@
     .wide{ grid-column: span 12; }
 
     h2{ margin:2px 0 8px; font-size:18px; }
+    h3{ margin:12px 0 8px; font-size:15px; color:var(--text); }
     .muted{ color:var(--muted); }
     .tiny{ font-size:12px; color:var(--muted2); }
     .row{
@@ -109,7 +110,7 @@
       font-size:13px;
     }
 
-    /* ✅ Contraste mejorado */
+    /* Contraste mejorado */
     .input,.textarea,.select{
       width:100%; margin-top:6px;
       border-radius:14px;
@@ -138,6 +139,7 @@
       cursor:pointer;
       font-size:14px;
       transition: transform .08s ease, filter .2s ease;
+      white-space:nowrap;
     }
     .btn:hover{ transform: translateY(-1px); filter: brightness(1.05); }
     .btn:active{ transform: translateY(0); }
@@ -200,6 +202,29 @@
     .stat strong{ font-size:18px; display:block; }
     .stat span{ font-size:12px; color:var(--muted); }
 
+    /* Slider */
+    .rangeWrap{
+      display:flex; align-items:center; gap:12px; margin-top:10px;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      border-radius:14px;
+      padding:10px 12px;
+    }
+    input[type="range"]{
+      width:100%;
+      accent-color: var(--accent);
+    }
+    .rangeVal{
+      min-width:44px;
+      text-align:center;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.20);
+      color: var(--text);
+      font-weight:700;
+    }
+
     /* Modal */
     .overlay{
       position:fixed; inset:0; z-index:80;
@@ -209,7 +234,7 @@
       padding:18px;
     }
     .modal{
-      width:min(560px, 100%);
+      width:min(680px, 100%);
       border-radius:18px;
       border:1px solid rgba(255,255,255,0.16);
       background: rgba(12,16,32,0.92);
@@ -218,6 +243,20 @@
     }
     .modal h3{ margin:0 0 10px; }
     .modalActions{ display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; margin-top:12px; }
+    .tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+    .tab{
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      padding:8px 10px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:13px;
+    }
+    .tab.active{
+      border-color: rgba(124,58,237,0.65);
+      background: rgba(124,58,237,0.20);
+    }
 
     /* Lock */
     .lockWrap{
@@ -254,7 +293,11 @@
         <h1>Mi App Personal</h1>
         <p class="sub">Regulación emocional: registrar, respirar, entender y avanzar (para todo, no para una sola historia).</p>
       </div>
-      <div class="status"><span class="dot"></span><span id="statusText">Listo</span></div>
+
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+        <button class="btn danger" id="emergencyBtn" type="button">🧯 Estoy muy mal</button>
+        <div class="status"><span class="dot"></span><span id="statusText">Listo</span></div>
+      </div>
     </div>
   </header>
 
@@ -267,7 +310,6 @@
       <div class="row">
         <button class="btn" id="unlockBtn" type="button">Desbloquear</button>
         <button class="btn ghost" id="lockHelpBtn" type="button">¿Olvidé mi PIN?</button>
-        <!-- ✅ Emergencia: quita PIN sin borrar historial -->
         <button class="btn danger" id="lockRemovePinBtn" type="button">Quitar PIN (sin borrar historial)</button>
       </div>
       <p class="tiny" id="lockMsg">—</p>
@@ -295,7 +337,6 @@
       </div>
 
       <div class="row">
-        <!-- ✅ FIX: ya no se ve raro -->
         <div class="badge" id="moodBadge" style="min-width:220px; text-align:center;">Hoy: —</div>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn warn" id="pauseBtn" type="button">Pausa 30s</button>
@@ -322,6 +363,85 @@
       </div>
 
       <p class="tiny" id="thoughtSavedAt">—</p>
+    </section>
+
+    <!-- (1) INTENSIDAD + DETONANTE + NECESIDAD -->
+    <section class="card wide">
+      <h2>Chequeo rápido</h2>
+      <p class="muted">Esto te ayuda a ver patrones: qué tan intenso fue, qué lo detonó y qué necesitas.</p>
+
+      <div class="grid2">
+        <div>
+          <label class="tiny">Intensidad (0–10)</label>
+          <div class="rangeWrap">
+            <input id="intensity" type="range" min="0" max="10" step="1" value="0" />
+            <div class="rangeVal" id="intensityVal">0</div>
+          </div>
+          <p class="tiny muted" style="margin-top:8px;">
+            0 = neutro / 10 = muy fuerte.
+          </p>
+        </div>
+
+        <div>
+          <label class="tiny">Detonante (¿qué lo activó?)</label>
+          <select id="trigger" class="select">
+            <option value="">— Elegir —</option>
+            <option value="Trabajo/escuela">Trabajo/escuela</option>
+            <option value="Familia">Familia</option>
+            <option value="Pareja/relaciones">Pareja/relaciones</option>
+            <option value="Salud/cuerpo">Salud/cuerpo</option>
+            <option value="Dinero">Dinero</option>
+            <option value="Cansancio/sueño">Cansancio/sueño</option>
+            <option value="Recuerdo/duelo">Recuerdo/duelo</option>
+            <option value="Soledad">Soledad</option>
+            <option value="Redes/noticias">Redes/noticias</option>
+            <option value="Otro">Otro</option>
+          </select>
+
+          <div id="triggerOtherWrap" style="display:none; margin-top:10px;">
+            <label class="tiny">Especifica “Otro”</label>
+            <input id="triggerOther" class="input" type="text" placeholder="Ej. discusión, mensaje, presión, etc." />
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="grid2">
+        <div>
+          <label class="tiny">¿Qué necesito ahora?</label>
+          <select id="needNow" class="select">
+            <option value="">— Elegir —</option>
+            <option value="Descansar">Descansar</option>
+            <option value="Comer/agua">Comer/agua</option>
+            <option value="Moverme">Moverme</option>
+            <option value="Poner límites">Poner límites</option>
+            <option value="Hablar con alguien seguro">Hablar con alguien seguro</option>
+            <option value="Silencio/pausa">Silencio/pausa</option>
+            <option value="Organizarme">Organizarme</option>
+            <option value="Ser amable conmigo">Ser amable conmigo</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="tiny">Nota breve (opcional)</label>
+          <input id="checkNote" class="input" type="text" placeholder="Ej. “Me sobrecargué”, “me faltó dormir”, “me sentí juzgada”…"/>
+        </div>
+      </div>
+
+      <div class="row">
+        <button class="btn ok" id="saveCheckBtn" type="button">Guardar chequeo</button>
+        <button class="btn ghost" id="clearCheckBtn" type="button">Limpiar</button>
+        <div class="pill">Último: <span id="checkSavedAt">—</span></div>
+      </div>
+
+      <details>
+        <summary>¿Para qué sirve esto?</summary>
+        <p class="tiny muted">
+          En semanas vas a notar cosas como: “cuando duermo poco sube mi intensidad”, o “cuando pongo límites baja la ansiedad”.
+          Es autoconocimiento, no juicio.
+        </p>
+      </details>
     </section>
 
     <!-- EVENT -->
@@ -386,6 +506,56 @@
       <div class="list" id="favList"></div>
     </section>
 
+    <!-- (3) CBT MINI -->
+    <section class="card wide">
+      <h2>Reestructuración rápida (mini CBT)</h2>
+      <p class="muted">Cuando un pensamiento te está dominando, aquí lo aterrizas con calma.</p>
+
+      <div class="grid2">
+        <div>
+          <label class="tiny">Pensamiento automático</label>
+          <textarea id="cbtAuto" class="textarea" rows="4" placeholder="Ej. “No puedo con esto”, “Voy a fallar”, “Nadie me entiende”…"></textarea>
+        </div>
+        <div>
+          <label class="tiny">Emoción + intensidad</label>
+          <input id="cbtEmotion" class="input" type="text" placeholder="Ej. ansiedad 7/10, tristeza 6/10, enojo 8/10" />
+          <label class="tiny" style="margin-top:10px; display:block;">Qué estoy temiendo (opcional)</label>
+          <input id="cbtFear" class="input" type="text" placeholder="Ej. “que me rechacen”, “quedar mal”, “perder el control”…"/>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="grid2">
+        <div>
+          <label class="tiny">Evidencia a favor</label>
+          <textarea id="cbtFor" class="textarea" rows="4" placeholder="Hechos, no suposiciones."></textarea>
+        </div>
+        <div>
+          <label class="tiny">Evidencia en contra</label>
+          <textarea id="cbtAgainst" class="textarea" rows="4" placeholder="Hechos que matizan o contradicen."></textarea>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <label class="tiny">Pensamiento alternativo más justo</label>
+      <textarea id="cbtAlt" class="textarea" rows="4" placeholder="Ej. “Estoy pasando un momento difícil, pero puedo con un paso pequeño.”"></textarea>
+
+      <div class="row">
+        <button class="btn ok" id="saveCbtBtn" type="button">Guardar CBT</button>
+        <button class="btn ghost" id="clearCbtBtn" type="button">Limpiar</button>
+        <div class="pill">Último: <span id="cbtSavedAt">—</span></div>
+      </div>
+
+      <details>
+        <summary>Tips rápidos</summary>
+        <p class="tiny muted">
+          1) “Hechos” > “historias”. 2) Un pensamiento alternativo no tiene que ser positivo, solo justo. 3) Si estás muy activada, usa “Estoy muy mal” primero.
+        </p>
+      </details>
+    </section>
+
     <!-- HISTORY -->
     <section class="card wide">
       <h2>Historial por día</h2>
@@ -424,6 +594,12 @@
       <h2>Estadísticas suaves (últimos 30 días)</h2>
       <p class="muted">Un espejo, no una calificación.</p>
       <div class="grid2" id="statsGrid"></div>
+      <details>
+        <summary>Extra (nuevo)</summary>
+        <p class="tiny muted">
+          Más adelante podemos graficar intensidad promedio por semana. (Si la quieres, la agrego).
+        </p>
+      </details>
     </section>
 
     <!-- SETTINGS + BACKUP -->
@@ -433,10 +609,35 @@
 
       <div class="divider"></div>
 
-      <h3 style="margin:0 0 8px;">🔐 PIN (opcional)</h3>
+      <h3>🧯 Kit de emergencia</h3>
       <p class="tiny muted" style="margin-top:0;">
-        Bloqueo simple (no cifrado avanzado). Para privacidad básica.
+        Esto alimenta el botón “Estoy muy mal”. Puedes cambiarlo cuando quieras.
       </p>
+
+      <div class="grid2">
+        <div>
+          <label class="tiny">Mis anclas (cosas que me calman)</label>
+          <textarea id="anchors" class="textarea" rows="5" placeholder="Ej. música, té, baño, caminar, oración, escribir, abrazar almohada… (una por línea)"></textarea>
+        </div>
+        <div>
+          <label class="tiny">Personas seguras (solo nombres)</label>
+          <textarea id="safePeople" class="textarea" rows="5" placeholder="Ej. Mamá\nAmiga X\nCompañera Y (una por línea)"></textarea>
+          <p class="tiny muted" style="margin-top:8px;">
+            Nota: No enviamos mensajes solos. Solo te damos un texto para copiar.
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <button class="btn ok" id="saveKitBtn" type="button">Guardar kit</button>
+        <button class="btn ghost" id="clearKitBtn" type="button">Limpiar</button>
+        <div class="pill">Último: <span id="kitSavedAt">—</span></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3>🔐 PIN (opcional)</h3>
+      <p class="tiny muted" style="margin-top:0;">Bloqueo simple (no cifrado avanzado). Para privacidad básica.</p>
 
       <div class="row">
         <div style="flex:1; min-width:220px;">
@@ -458,7 +659,7 @@
 
       <div class="divider"></div>
 
-      <h3 style="margin:0 0 8px;">💾 Respaldo</h3>
+      <h3>💾 Respaldo</h3>
       <div class="row">
         <button class="btn" id="exportJsonBtn" type="button">Exportar JSON</button>
         <button class="btn ghost" id="exportTxtBtn" type="button">Exportar TXT (legible)</button>
@@ -470,8 +671,7 @@
       <details>
         <summary>¿Qué es un JSON?</summary>
         <p class="tiny muted">
-          Un JSON es un archivo de texto que guarda datos “en orden” (como una cajita).
-          Exportar = descargar tu respaldo. Importar = recuperarlo.
+          Un JSON es un archivo de texto que guarda datos “en orden”. Exportar = descargar tu respaldo. Importar = recuperarlo.
         </p>
       </details>
 
@@ -497,12 +697,96 @@
         <button class="btn" id="pauseStartBtn" type="button">Iniciar</button>
         <button class="btn danger" id="pauseCloseBtn" type="button">Cerrar</button>
       </div>
+      <details>
+        <summary>Por qué ayuda</summary>
+        <p class="tiny muted">Primero regulas el cuerpo, luego piensas con más claridad.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- (5) EMERGENCY MODAL -->
+  <div class="overlay" id="emergencyOverlay" aria-hidden="true">
+    <div class="modal">
+      <h3>🧯 Kit de emergencia</h3>
+      <p class="muted" style="margin-top:0;">
+        No tienes que resolverlo todo ahorita. Solo baja la intensidad y elige un paso pequeño.
+      </p>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="calm" type="button">Bajar intensidad</button>
+        <button class="tab" data-tab="ground" type="button">Aterrizar</button>
+        <button class="tab" data-tab="anchors" type="button">Mis anclas</button>
+        <button class="tab" data-tab="support" type="button">Pedir apoyo</button>
+      </div>
+
+      <div id="emTabCalm" style="margin-top:12px;">
+        <div class="quote">
+          <strong>Primero:</strong> 3 respiraciones lentas. <br>
+          <span class="tiny muted">Inhala 4 · sostén 2 · exhala 6 (suave)</span>
+        </div>
+        <div class="row">
+          <button class="btn warn" id="emStart30" type="button">Usar Pausa 30s</button>
+          <button class="btn ghost" id="emMicroPlan" type="button">Dame un paso pequeño</button>
+        </div>
+        <div class="badge" id="emPlanOut" style="border-style:solid; width:100%;">—</div>
+      </div>
+
+      <div id="emTabGround" style="margin-top:12px; display:none;">
+        <div class="quote">
+          <strong>5–4–3–2–1</strong><br>
+          5 cosas que ves · 4 que sientes · 3 que escuchas · 2 que hueles · 1 que agradeces.
+        </div>
+        <div class="row">
+          <button class="btn" id="emCopyGround" type="button">Copiar guía</button>
+          <button class="btn ghost" id="emGroundNext" type="button">Otra guía</button>
+        </div>
+        <div class="badge" id="emGroundOut" style="border-style:solid; width:100%;">—</div>
+      </div>
+
+      <div id="emTabAnchors" style="margin-top:12px; display:none;">
+        <div class="quote">
+          <strong>Elige 1 ancla</strong><br>
+          <span class="tiny muted">No tienes que hacer 5 cosas. Solo una.</span>
+        </div>
+        <div class="list" id="emAnchorsList"></div>
+      </div>
+
+      <div id="emTabSupport" style="margin-top:12px; display:none;">
+        <div class="quote">
+          <strong>Pedir apoyo</strong><br>
+          <span class="tiny muted">Copia un mensaje corto (no se envía solo).</span>
+        </div>
+
+        <label class="tiny">Elige a quién</label>
+        <select id="emPerson" class="select">
+          <option value="">— Elegir —</option>
+        </select>
+
+        <label class="tiny" style="margin-top:10px; display:block;">Mensaje sugerido</label>
+        <textarea id="emMessage" class="textarea" rows="4"></textarea>
+
+        <div class="row">
+          <button class="btn" id="emCopyMsg" type="button">Copiar mensaje</button>
+          <button class="btn ghost" id="emMsgRefresh" type="button">Cambiar texto</button>
+        </div>
+
+        <details>
+          <summary>Si estás en riesgo inmediato</summary>
+          <p class="tiny muted">
+            Si sientes que podrías hacerte daño o estás en peligro, busca ayuda urgente con alguien cercano o servicios de emergencia de tu zona.
+          </p>
+        </details>
+      </div>
+
+      <div class="modalActions">
+        <button class="btn danger" id="emCloseBtn" type="button">Cerrar</button>
+      </div>
     </div>
   </div>
 
   <script>
     // ========= KEYS =========
-    const APP_KEY = "mi_app_personal_v4";
+    const APP_KEY = "mi_app_personal_v4"; // mantenemos para NO perder tus datos
     const PIN_KEY = "mi_app_personal_pin_v1";
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => document.querySelectorAll(s);
@@ -563,7 +847,7 @@
 
     // ========= STATE =========
     const state = {
-      version: 4,
+      version: 5, // subimos versión interna
       mood: null,
       thought: "",
       thoughtSavedAt: null,
@@ -572,9 +856,38 @@
       quoteCurrent: null,
       favorites: [],
       history: {},
-      lastOpenedDate: null
+      lastOpenedDate: null,
+
+      // (1) Chequeo rápido
+      check: {
+        intensity: 0,
+        trigger: "",
+        triggerOther: "",
+        needNow: "",
+        note: "",
+        savedAt: null
+      },
+
+      // (3) CBT mini
+      cbt: {
+        auto: "",
+        emotion: "",
+        fear: "",
+        for: "",
+        against: "",
+        alt: "",
+        savedAt: null
+      },
+
+      // (5) Kit de emergencia
+      kit: {
+        anchors: [],
+        safePeople: [],
+        savedAt: null
+      }
     };
 
+    // ========= UTILS =========
     function nowISO(){ return new Date().toISOString(); }
     function safeParse(j,f){ try{return JSON.parse(j);}catch{return f;} }
     function toDateKey(d=new Date()){
@@ -598,8 +911,16 @@
     function escapeHtml(str){
       return String(str)
         .replaceAll("&","&amp;").replaceAll("<","&lt;")
-        .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
+    }
+    function labelNeed(need){
+      const map = {
+        calma:"Calma", fuerza:"Fuerza", amorpropio:"Amor propio",
+        soltar:"Soltar", ansiedad:"Ansiedad", motivacion:"Motivación", apoyo:"Apoyo"
+      };
+      return map[need] || "Calma";
     }
 
     // ========= SAVE / LOAD =========
@@ -607,12 +928,14 @@
       localStorage.setItem(APP_KEY, JSON.stringify(state, null, 2));
       renderPreview();
     }
+
     function load(){
       const raw = localStorage.getItem(APP_KEY);
       if(!raw) return;
       const loaded = safeParse(raw,null);
       if(!loaded || typeof loaded!=="object") return;
 
+      // compat
       state.version = loaded.version ?? state.version;
       state.mood = loaded.mood ?? state.mood;
       state.thought = loaded.thought ?? state.thought;
@@ -630,30 +953,51 @@
       state.favorites = Array.isArray(loaded.favorites) ? loaded.favorites : state.favorites;
       state.history = (loaded.history && typeof loaded.history==="object") ? loaded.history : state.history;
       state.lastOpenedDate = loaded.lastOpenedDate ?? state.lastOpenedDate;
+
+      // nuevos campos (si existen)
+      if(loaded.check && typeof loaded.check==="object"){
+        state.check = {
+          intensity: Number(loaded.check.intensity ?? state.check.intensity) || 0,
+          trigger: loaded.check.trigger ?? "",
+          triggerOther: loaded.check.triggerOther ?? "",
+          needNow: loaded.check.needNow ?? "",
+          note: loaded.check.note ?? "",
+          savedAt: loaded.check.savedAt ?? null
+        };
+      }
+
+      if(loaded.cbt && typeof loaded.cbt==="object"){
+        state.cbt = {
+          auto: loaded.cbt.auto ?? "",
+          emotion: loaded.cbt.emotion ?? "",
+          fear: loaded.cbt.fear ?? "",
+          for: loaded.cbt.for ?? "",
+          against: loaded.cbt.against ?? "",
+          alt: loaded.cbt.alt ?? "",
+          savedAt: loaded.cbt.savedAt ?? null
+        };
+      }
+
+      if(loaded.kit && typeof loaded.kit==="object"){
+        state.kit = {
+          anchors: Array.isArray(loaded.kit.anchors) ? loaded.kit.anchors : [],
+          safePeople: Array.isArray(loaded.kit.safePeople) ? loaded.kit.safePeople : [],
+          savedAt: loaded.kit.savedAt ?? null
+        };
+      }
     }
 
     // ========= QUOTES =========
-    function labelNeed(need){
-      const map = {
-        calma:"Calma", fuerza:"Fuerza", amorpropio:"Amor propio",
-        soltar:"Soltar", ansiedad:"Ansiedad", motivacion:"Motivación", apoyo:"Apoyo"
-      };
-      return map[need] || "Calma";
-    }
-    function getPool(need){
-      return QUOTES[need] || QUOTES.calma;
-    }
+    function getPool(need){ return QUOTES[need] || QUOTES.calma; }
     function pickRandomQuote(need, excludeText=null){
       const pool = getPool(need);
       if(pool.length===0) return null;
       if(pool.length===1) return {...pool[0], i:0, need};
-
-      let tries = 0;
-      let q = null;
-      while(tries < 12){
-        const i = Math.floor(Math.random()*pool.length);
-        q = {...pool[i], i, need};
-        if(!excludeText || q.t !== excludeText) break;
+      let tries=0, q=null;
+      while(tries<12){
+        const i=Math.floor(Math.random()*pool.length);
+        q={...pool[i], i, need};
+        if(!excludeText || q.t!==excludeText) break;
         tries++;
       }
       return q;
@@ -666,9 +1010,7 @@
     }
 
     // ========= DAILY ENTRY =========
-    function getEntryDate(){
-      return $("#entryDate").value || toDateKey(new Date());
-    }
+    function getEntryDate(){ return $("#entryDate").value || toDateKey(new Date()); }
 
     function buildEntry(dateKey){
       return {
@@ -679,11 +1021,14 @@
         thoughtSavedAt: state.thoughtSavedAt,
         event: {...state.event},
         need: state.need,
-        quoteCurrent: state.quoteCurrent ? {...state.quoteCurrent} : null
+        quoteCurrent: state.quoteCurrent ? {...state.quoteCurrent} : null,
+
+        // nuevos
+        check: {...state.check},
+        cbt: {...state.cbt}
       };
     }
 
-    // ✅ AUTO-GUARDAR EL DÍA (cuando guardas algo)
     function autoSaveDay(){
       const key = getEntryDate();
       state.history[key] = buildEntry(key);
@@ -724,6 +1069,29 @@
       state.need = e.need ?? "calma";
       state.quoteCurrent = e.quoteCurrent ?? null;
 
+      if(e.check && typeof e.check==="object"){
+        state.check = {
+          intensity: Number(e.check.intensity ?? 0) || 0,
+          trigger: e.check.trigger ?? "",
+          triggerOther: e.check.triggerOther ?? "",
+          needNow: e.check.needNow ?? "",
+          note: e.check.note ?? "",
+          savedAt: e.check.savedAt ?? null
+        };
+      }
+
+      if(e.cbt && typeof e.cbt==="object"){
+        state.cbt = {
+          auto: e.cbt.auto ?? "",
+          emotion: e.cbt.emotion ?? "",
+          fear: e.cbt.fear ?? "",
+          for: e.cbt.for ?? "",
+          against: e.cbt.against ?? "",
+          alt: e.cbt.alt ?? "",
+          savedAt: e.cbt.savedAt ?? null
+        };
+      }
+
       state.lastOpenedDate = dateKey;
       $("#entryDate").value = dateKey;
 
@@ -741,12 +1109,14 @@
         btn.classList.toggle("active", m===state.mood);
       });
     }
+
     function renderThought(){
       $("#thought").value = state.thought || "";
       $("#thoughtSavedAt").textContent = state.thoughtSavedAt
         ? `Guardado: ${formatDate(state.thoughtSavedAt)}`
         : "—";
     }
+
     function renderEvent(){
       $("#evtWith").value = state.event.with || "";
       $("#evtAt").value = state.event.at || "";
@@ -849,7 +1219,11 @@
           e?.thought||"",
           e?.event?.with||"",
           e?.event?.notes||"",
-          e?.quoteCurrent?.t||""
+          e?.quoteCurrent?.t||"",
+          e?.check?.trigger||"",
+          e?.check?.needNow||"",
+          e?.cbt?.auto||"",
+          e?.cbt?.alt||""
         ].join(" ").toLowerCase();
         return hay.includes(q);
       });
@@ -862,6 +1236,8 @@
       filtered.forEach(dateKey=>{
         const e = state.history[dateKey];
         const mood = e?.mood || "—";
+        const intensity = (e?.check?.intensity ?? null);
+        const intenTxt = (intensity === null || intensity === undefined) ? "" : ` · Int: ${intensity}/10`;
         const thought = (e?.thought||"").trim();
         const snippet = thought ? thought.slice(0, 110) + (thought.length>110 ? "…" : "") : "Sin pensamiento guardado.";
         const when = e?.savedAt ? formatDate(e.savedAt) : "—";
@@ -871,7 +1247,7 @@
         div.innerHTML = `
           <div class="itemTop">
             <div><strong>${escapeHtml(dateKey)}</strong></div>
-            <div class="pill">Estado: ${escapeHtml(mood)}</div>
+            <div class="pill">Estado: ${escapeHtml(mood)}${escapeHtml(intenTxt)}</div>
           </div>
           <div class="tiny muted" style="margin-top:6px;">Guardado: ${escapeHtml(when)}</div>
           <div style="margin-top:10px;">${escapeHtml(snippet)}</div>
@@ -884,10 +1260,7 @@
       });
 
       list.querySelectorAll("button[data-open]").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          const key = btn.getAttribute("data-open");
-          openDay(key);
-        });
+        btn.addEventListener("click", ()=> openDay(btn.getAttribute("data-open")));
       });
 
       list.querySelectorAll("button[data-del]").forEach(btn=>{
@@ -917,15 +1290,24 @@
       }
 
       const moods = {};
+      let sumIntensity = 0;
+      let countIntensity = 0;
+
       last30.forEach(e=>{
         const m = e?.mood || "Sin registro";
         moods[m] = (moods[m]||0) + 1;
+        const inten = e?.check?.intensity;
+        if(typeof inten === "number" && !Number.isNaN(inten)){
+          sumIntensity += inten;
+          countIntensity++;
+        }
       });
 
       const topMood = Object.entries(moods).sort((a,b)=> b[1]-a[1])[0] || ["—",0];
       const anxious = moods["Ansiosa"] || 0;
       const calm = moods["Tranquila"] || 0;
       const annoyed = moods["Molesta"] || 0;
+      const avgInt = countIntensity ? (sumIntensity / countIntensity).toFixed(1) : "—";
 
       const stats = [
         {big: total, small:"Días guardados (últimos 30)"},
@@ -933,7 +1315,7 @@
         {big: calm, small:"Días Tranquila"},
         {big: anxious, small:"Días Ansiosa"},
         {big: annoyed, small:"Días Molesta"},
-        {big: Object.keys(moods).length, small:"Estados distintos registrados"},
+        {big: avgInt, small:"Intensidad promedio (0–10)"},
       ];
 
       stats.forEach(s=>{
@@ -942,6 +1324,36 @@
         div.innerHTML = `<strong>${escapeHtml(String(s.big))}</strong><span>${escapeHtml(s.small)}</span>`;
         grid.appendChild(div);
       });
+    }
+
+    function renderCheck(){
+      $("#intensity").value = String(state.check.intensity ?? 0);
+      $("#intensityVal").textContent = String(state.check.intensity ?? 0);
+      $("#trigger").value = state.check.trigger ?? "";
+      $("#triggerOther").value = state.check.triggerOther ?? "";
+      $("#needNow").value = state.check.needNow ?? "";
+      $("#checkNote").value = state.check.note ?? "";
+      $("#checkSavedAt").textContent = state.check.savedAt ? formatDate(state.check.savedAt) : "—";
+
+      const showOther = ($("#trigger").value === "Otro");
+      $("#triggerOtherWrap").style.display = showOther ? "block" : "none";
+    }
+
+    function renderCbt(){
+      $("#cbtAuto").value = state.cbt.auto ?? "";
+      $("#cbtEmotion").value = state.cbt.emotion ?? "";
+      $("#cbtFear").value = state.cbt.fear ?? "";
+      $("#cbtFor").value = state.cbt.for ?? "";
+      $("#cbtAgainst").value = state.cbt.against ?? "";
+      $("#cbtAlt").value = state.cbt.alt ?? "";
+      $("#cbtSavedAt").textContent = state.cbt.savedAt ? formatDate(state.cbt.savedAt) : "—";
+    }
+
+    function renderKit(){
+      $("#anchors").value = (state.kit.anchors || []).join("\n");
+      $("#safePeople").value = (state.kit.safePeople || []).join("\n");
+      $("#kitSavedAt").textContent = state.kit.savedAt ? formatDate(state.kit.savedAt) : "—";
+      refreshEmergencyLists();
     }
 
     function renderPreview(){
@@ -954,6 +1366,9 @@
       renderEvent();
       renderQuote();
       renderFavorites();
+      renderCheck();
+      renderCbt();
+      renderKit();
       renderHistory();
       renderStats();
       renderPinStatus();
@@ -966,7 +1381,7 @@
       { title:"Grounding 5–4–3–2–1", steps:["5 cosas que ves.","4 cosas que sientes.","3 que escuchas.","2 que hueles.","1 que agradeces."] },
       { title:"Mano al pecho", steps:["Mano al pecho.","Di: “Estoy a salvo ahora”.","Respira 3 veces.","Elige un paso pequeño."] }
     ];
-    let pauseIdx = 0, pauseT = 30, pauseTimer = null;
+    let pauseIdx=0, pauseT=30, pauseTimer=null;
 
     function updatePauseText(){
       const ex = PAUSE_EX[pauseIdx % PAUSE_EX.length];
@@ -1001,6 +1416,110 @@
       stopPause();
     }
 
+    // ========= (5) EMERGENCY =========
+    const MICRO_PLANS = [
+      "Toma agua y respira 3 veces lento.",
+      "Muévete 2 minutos: estira cuello/hombros.",
+      "Escribe 3 líneas: “Qué siento / qué necesito / un paso pequeño”.",
+      "Lava tu cara con agua fría y exhala largo.",
+      "Haz una cosa mínima: ordenar 1 espacio pequeño.",
+      "Pon un límite micro: “ahorita no puedo, te respondo después”."
+    ];
+    const GROUND_GUIDES = [
+      "5–4–3–2–1: 5 ves · 4 sientes · 3 escuchas · 2 hueles · 1 agradeces.",
+      "Nombra 3 colores alrededor + 3 texturas + 3 sonidos.",
+      "Presiona tus pies en el piso 10s y suelta; repite 3 veces.",
+      "Mira un punto fijo 10s: describe forma, color, sombra, borde."
+    ];
+    let groundIdx = 0;
+
+    function openEmergency(){
+      $("#emergencyOverlay").style.display="flex";
+      $("#emergencyOverlay").setAttribute("aria-hidden","false");
+      setEmergencyTab("calm");
+      $("#emPlanOut").textContent = "—";
+      $("#emGroundOut").textContent = GROUND_GUIDES[groundIdx % GROUND_GUIDES.length];
+      buildSupportMessage();
+    }
+    function closeEmergency(){
+      $("#emergencyOverlay").style.display="none";
+      $("#emergencyOverlay").setAttribute("aria-hidden","true");
+    }
+
+    function setEmergencyTab(tab){
+      $$(".tab").forEach(b=> b.classList.toggle("active", b.getAttribute("data-tab")===tab));
+      $("#emTabCalm").style.display = (tab==="calm") ? "block" : "none";
+      $("#emTabGround").style.display = (tab==="ground") ? "block" : "none";
+      $("#emTabAnchors").style.display = (tab==="anchors") ? "block" : "none";
+      $("#emTabSupport").style.display = (tab==="support") ? "block" : "none";
+    }
+
+    function refreshEmergencyLists(){
+      // Anchors list
+      const list = $("#emAnchorsList");
+      list.innerHTML = "";
+      const anchors = (state.kit.anchors || []).filter(x=> String(x||"").trim());
+      if(!anchors.length){
+        list.innerHTML = `<div class="badge" style="width:100%; border-style:solid;">Aún no escribes anclas. Ve a Ajustes → Kit de emergencia.</div>`;
+      } else {
+        anchors.forEach(a=>{
+          const div = document.createElement("div");
+          div.className="item";
+          div.innerHTML = `
+            <div><strong>${escapeHtml(a)}</strong></div>
+            <div class="tiny muted" style="margin-top:6px;">Elige una sola y hazla 2–5 minutos.</div>
+          `;
+          div.addEventListener("click", ()=>{
+            $("#emPlanOut").textContent = `Elijo mi ancla: ${a}`;
+            setEmergencyTab("calm");
+          });
+          list.appendChild(div);
+        });
+      }
+
+      // People select
+      const sel = $("#emPerson");
+      const people = (state.kit.safePeople || []).filter(x=> String(x||"").trim());
+      const current = sel.value;
+      sel.innerHTML = `<option value="">— Elegir —</option>`;
+      people.forEach(p=>{
+        const opt = document.createElement("option");
+        opt.value = p; opt.textContent = p;
+        sel.appendChild(opt);
+      });
+      if(people.includes(current)) sel.value = current;
+      buildSupportMessage();
+    }
+
+    function buildSupportMessage(){
+      const person = ($("#emPerson").value || "").trim();
+      const intensity = Number(state.check.intensity ?? 0);
+      const mood = state.mood ? state.mood : "algo difícil";
+      const needNow = state.check.needNow ? state.check.needNow : "un poco de apoyo";
+      const name = person ? person : "¿me puedes apoyar?";
+      const msg =
+        `Hola ${name}. Ahorita me siento ${mood} (intensidad ${intensity}/10). ` +
+        `¿Podrías acompañarme un momento? Solo necesito ${needNow}. ` +
+        `Si puedes, ¿me llamas o me respondes cuando tengas chance?`;
+      $("#emMessage").value = msg;
+    }
+
+    async function copyToClipboard(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        setStatus("Copiado");
+      }catch{
+        // fallback
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        setStatus("Copiado");
+      }
+    }
+
     // ========= PIN =========
     function simpleHash(str){
       let h = 2166136261;
@@ -1016,9 +1535,7 @@
       if(!cfg || typeof cfg!=="object") return { enabled:false, pinHash:null };
       return { enabled: !!cfg.enabled, pinHash: cfg.pinHash || null };
     }
-    function setPinConfig(cfg){
-      localStorage.setItem(PIN_KEY, JSON.stringify(cfg));
-    }
+    function setPinConfig(cfg){ localStorage.setItem(PIN_KEY, JSON.stringify(cfg)); }
     function renderPinStatus(){
       const cfg = getPinConfig();
       $("#pinStatus").textContent = cfg.enabled
@@ -1036,15 +1553,6 @@
       $("#lockWrap").style.display="none";
       $("#appMain").style.display="grid";
       $("#footer").style.display="block";
-    }
-    function checkLockOnBoot(){
-      const cfg = getPinConfig();
-      if(cfg.enabled && cfg.pinHash){
-        showLock();
-        return true;
-      }
-      showApp();
-      return false;
     }
     function unlockAttempt(){
       const cfg = getPinConfig();
@@ -1092,10 +1600,16 @@
           const e = state.history[k];
           lines.push(`--- ${k} ---`);
           lines.push(`Estado: ${e.mood || "—"}`);
+          lines.push(`Intensidad: ${(e.check?.intensity ?? "—")}/10`);
+          lines.push(`Detonante: ${e.check?.trigger || "—"}${(e.check?.trigger==="Otro" && e.check?.triggerOther) ? " ("+e.check.triggerOther+")" : ""}`);
+          lines.push(`Necesito: ${e.check?.needNow || "—"}`);
           lines.push(`Pensamiento: ${e.thought ? e.thought.replace(/\s+/g," ").trim() : "—"}`);
           lines.push(`Registro: ${e.event?.with || "—"}`);
           lines.push(`Notas: ${e.event?.notes ? e.event.notes.replace(/\s+/g," ").trim() : "—"}`);
           lines.push(`Frase (${labelNeed(e.need||"calma")}): ${e.quoteCurrent?.t || "—"}`);
+          if(e.cbt?.alt){
+            lines.push(`CBT alternativo: ${e.cbt.alt.replace(/\s+/g," ").trim()}`);
+          }
           lines.push(`Guardado: ${e.savedAt ? formatDate(e.savedAt) : "—"}`);
           lines.push("");
         });
@@ -1125,6 +1639,7 @@
         return;
       }
 
+      // mezcla segura
       state.version = incoming.version ?? state.version;
       state.mood = incoming.mood ?? state.mood;
       state.thought = incoming.thought ?? state.thought;
@@ -1139,11 +1654,40 @@
 
       state.need = incoming.need ?? state.need;
       state.quoteCurrent = incoming.quoteCurrent ?? state.quoteCurrent;
-
       state.favorites = Array.isArray(incoming.favorites) ? incoming.favorites : state.favorites;
       state.history = (incoming.history && typeof incoming.history==="object") ? incoming.history : state.history;
       state.lastOpenedDate = incoming.lastOpenedDate ?? state.lastOpenedDate;
 
+      if(incoming.check && typeof incoming.check==="object"){
+        state.check = {
+          intensity: Number(incoming.check.intensity ?? 0) || 0,
+          trigger: incoming.check.trigger ?? "",
+          triggerOther: incoming.check.triggerOther ?? "",
+          needNow: incoming.check.needNow ?? "",
+          note: incoming.check.note ?? "",
+          savedAt: incoming.check.savedAt ?? null
+        };
+      }
+      if(incoming.cbt && typeof incoming.cbt==="object"){
+        state.cbt = {
+          auto: incoming.cbt.auto ?? "",
+          emotion: incoming.cbt.emotion ?? "",
+          fear: incoming.cbt.fear ?? "",
+          for: incoming.cbt.for ?? "",
+          against: incoming.cbt.against ?? "",
+          alt: incoming.cbt.alt ?? "",
+          savedAt: incoming.cbt.savedAt ?? null
+        };
+      }
+      if(incoming.kit && typeof incoming.kit==="object"){
+        state.kit = {
+          anchors: Array.isArray(incoming.kit.anchors) ? incoming.kit.anchors : [],
+          safePeople: Array.isArray(incoming.kit.safePeople) ? incoming.kit.safePeople : [],
+          savedAt: incoming.kit.savedAt ?? null
+        };
+      }
+
+      ensureCurrentQuote();
       save();
       renderAll();
       setStatus("Importado");
@@ -1163,6 +1707,10 @@
       state.history={};
       state.lastOpenedDate=null;
 
+      state.check={intensity:0,trigger:"",triggerOther:"",needNow:"",note:"",savedAt:null};
+      state.cbt={auto:"",emotion:"",fear:"",for:"",against:"",alt:"",savedAt:null};
+      state.kit={anchors:[],safePeople:[],savedAt:null};
+
       ensureCurrentQuote();
       save();
       renderAll();
@@ -1171,6 +1719,7 @@
 
     // ========= WIRE =========
     function wire(){
+      // default date
       const today = toDateKey(new Date());
       $("#entryDate").value = state.lastOpenedDate || today;
 
@@ -1178,8 +1727,7 @@
       $$(".chip").forEach(btn=>{
         btn.addEventListener("click", ()=>{
           state.mood = btn.getAttribute("data-mood");
-          save();
-          renderMood();
+          save(); renderMood();
           autoSaveDay();
         });
       });
@@ -1201,6 +1749,37 @@
         state.thoughtSavedAt = nowISO();
         save(); renderThought();
         autoSaveDay();
+      });
+
+      // Check (1)
+      $("#intensity").addEventListener("input", ()=>{
+        const v = Number($("#intensity").value||0);
+        $("#intensityVal").textContent = String(v);
+      });
+      $("#trigger").addEventListener("change", ()=>{
+        const isOther = ($("#trigger").value === "Otro");
+        $("#triggerOtherWrap").style.display = isOther ? "block" : "none";
+        if(!isOther) $("#triggerOther").value = "";
+      });
+
+      $("#saveCheckBtn").addEventListener("click", ()=>{
+        state.check.intensity = Number($("#intensity").value||0);
+        state.check.trigger = $("#trigger").value || "";
+        state.check.triggerOther = ($("#trigger").value==="Otro") ? ($("#triggerOther").value||"") : "";
+        state.check.needNow = $("#needNow").value || "";
+        state.check.note = $("#checkNote").value || "";
+        state.check.savedAt = nowISO();
+
+        save(); renderCheck();
+        autoSaveDay();
+        setStatus("Chequeo guardado");
+      });
+
+      $("#clearCheckBtn").addEventListener("click", ()=>{
+        state.check = { intensity:0, trigger:"", triggerOther:"", needNow:"", note:"", savedAt: nowISO() };
+        save(); renderCheck();
+        autoSaveDay();
+        setStatus("Chequeo limpio");
       });
 
       // Event
@@ -1237,9 +1816,9 @@
         setStatus("Nueva frase");
       });
 
+      // “Guardar frase” = guardar favorita rápida (y deja rastro)
       $("#saveQuoteBtn").addEventListener("click", ()=>{
         ensureCurrentQuote();
-        // Guardar la frase como favorita “rápido” también sirve como guardado:
         const q = state.quoteCurrent;
         if(q){
           const exists = state.favorites.some(f=> f.t===q.t && f.need===q.need);
@@ -1271,6 +1850,43 @@
         setStatus("Favoritas limpias");
       });
 
+      // CBT (3)
+      $("#saveCbtBtn").addEventListener("click", ()=>{
+        state.cbt.auto = $("#cbtAuto").value || "";
+        state.cbt.emotion = $("#cbtEmotion").value || "";
+        state.cbt.fear = $("#cbtFear").value || "";
+        state.cbt.for = $("#cbtFor").value || "";
+        state.cbt.against = $("#cbtAgainst").value || "";
+        state.cbt.alt = $("#cbtAlt").value || "";
+        state.cbt.savedAt = nowISO();
+        save(); renderCbt();
+        autoSaveDay();
+        setStatus("CBT guardado");
+      });
+
+      $("#clearCbtBtn").addEventListener("click", ()=>{
+        state.cbt = { auto:"", emotion:"", fear:"", for:"", against:"", alt:"", savedAt: nowISO() };
+        save(); renderCbt();
+        autoSaveDay();
+        setStatus("CBT limpio");
+      });
+
+      // Kit (5)
+      $("#saveKitBtn").addEventListener("click", ()=>{
+        const anchors = ($("#anchors").value||"").split("\n").map(s=>s.trim()).filter(Boolean);
+        const people = ($("#safePeople").value||"").split("\n").map(s=>s.trim()).filter(Boolean);
+        state.kit.anchors = anchors;
+        state.kit.safePeople = people;
+        state.kit.savedAt = nowISO();
+        save(); renderKit();
+        setStatus("Kit guardado");
+      });
+      $("#clearKitBtn").addEventListener("click", ()=>{
+        state.kit = { anchors:[], safePeople:[], savedAt: nowISO() };
+        save(); renderKit();
+        setStatus("Kit limpio");
+      });
+
       // History
       $("#saveDayBtn").addEventListener("click", saveDayManual);
       $("#openDayBtn").addEventListener("click", ()=> openDay(getEntryDate()));
@@ -1286,6 +1902,34 @@
         stopPause();
         $("#pauseTimer").textContent="30s";
       });
+
+      // Emergency
+      $("#emergencyBtn").addEventListener("click", openEmergency);
+      $("#emCloseBtn").addEventListener("click", closeEmergency);
+
+      $$(".tab").forEach(t=>{
+        t.addEventListener("click", ()=> setEmergencyTab(t.getAttribute("data-tab")));
+      });
+
+      $("#emStart30").addEventListener("click", ()=>{
+        closeEmergency();
+        openPause();
+      });
+
+      $("#emMicroPlan").addEventListener("click", ()=>{
+        const plan = MICRO_PLANS[Math.floor(Math.random()*MICRO_PLANS.length)];
+        $("#emPlanOut").textContent = plan;
+      });
+
+      $("#emCopyGround").addEventListener("click", ()=> copyToClipboard($("#emGroundOut").textContent || ""));
+      $("#emGroundNext").addEventListener("click", ()=>{
+        groundIdx++;
+        $("#emGroundOut").textContent = GROUND_GUIDES[groundIdx % GROUND_GUIDES.length];
+      });
+
+      $("#emPerson").addEventListener("change", buildSupportMessage);
+      $("#emMsgRefresh").addEventListener("click", buildSupportMessage);
+      $("#emCopyMsg").addEventListener("click", ()=> copyToClipboard($("#emMessage").value || ""));
 
       // Export / Import / Wipe
       $("#exportJsonBtn").addEventListener("click", exportJSON);
@@ -1334,9 +1978,8 @@
 
       // Lock screen
       $("#unlockBtn").addEventListener("click", unlockAttempt);
-      $("#pinInput").addEventListener("keydown", (e)=>{
-        if(e.key==="Enter") unlockAttempt();
-      });
+      $("#pinInput").addEventListener("keydown", (e)=>{ if(e.key==="Enter") unlockAttempt(); });
+
       $("#lockHelpBtn").addEventListener("click", ()=>{
         alert(
           "Si olvidaste el PIN:\n\n" +
@@ -1345,7 +1988,6 @@
         );
       });
 
-      // ✅ Emergencia: quita PIN sin borrar historial
       $("#lockRemovePinBtn").addEventListener("click", ()=>{
         if(!confirm("Esto quitará el PIN y podrás entrar. NO borra tu historial. ¿Continuar?")) return;
         localStorage.removeItem(PIN_KEY);
@@ -1363,48 +2005,11 @@
     ensureCurrentQuote();
     save();
 
-    const locked = (function(){
+    (function(){
       const cfg = getPinConfig();
-      if(cfg.enabled && cfg.pinHash){ showLock(); return true; }
-      showApp(); return false;
+      if(cfg.enabled && cfg.pinHash){ showLock(); return; }
+      showApp();
     })();
-
-    function getPinConfig(){
-      const raw = localStorage.getItem(PIN_KEY);
-      const cfg = safeParse(raw, null);
-      if(!cfg || typeof cfg!=="object") return { enabled:false, pinHash:null };
-      return { enabled: !!cfg.enabled, pinHash: cfg.pinHash || null };
-    }
-    function setPinConfig(cfg){ localStorage.setItem(PIN_KEY, JSON.stringify(cfg)); }
-    function renderPinStatus(){
-      const cfg = getPinConfig();
-      $("#pinStatus").textContent = cfg.enabled
-        ? "PIN: ACTIVADO ✅"
-        : (cfg.pinHash ? "PIN guardado pero DESACTIVADO" : "PIN: no configurado");
-    }
-    function showLock(){
-      $("#lockWrap").style.display="flex";
-      $("#appMain").style.display="none";
-      $("#footer").style.display="none";
-      $("#lockMsg").textContent="—";
-      $("#pinInput").value="";
-    }
-    function showApp(){
-      $("#lockWrap").style.display="none";
-      $("#appMain").style.display="grid";
-      $("#footer").style.display="block";
-    }
-    function unlockAttempt(){
-      const cfg = getPinConfig();
-      const pin = ($("#pinInput").value||"").trim();
-      if(!pin){ $("#lockMsg").textContent="Escribe tu PIN."; return; }
-      if(simpleHash(pin) === cfg.pinHash){
-        showApp();
-        setStatus("Desbloqueado");
-      }else{
-        $("#lockMsg").textContent="PIN incorrecto.";
-      }
-    }
 
     document.addEventListener("DOMContentLoaded", ()=>{
       renderAll();
