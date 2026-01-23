@@ -278,6 +278,12 @@
 
     footer{ padding:18px 0 28px; }
 
+    /* FIX: Menú desplegable visible en Chrome/Windows */
+select option {
+  background: #111827 !important;  /* fondo oscuro */
+  color: #ffffff !important;       /* letras blancas */
+}
+
     @media (max-width: 920px){
       .card{ grid-column: span 12; }
       .top{ flex-direction:column; align-items:flex-start; }
