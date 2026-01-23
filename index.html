@@ -2047,27 +2047,7 @@ select option {
         showApp();
       });
 
-      // About modal
-$("#aboutBtn").addEventListener("click", ()=>{
-  $("#aboutOverlay").style.display = "flex";
-  $("#aboutOverlay").setAttribute("aria-hidden","false");
-  $("#aboutYear").textContent = new Date().getFullYear();
-});
-
-$("#aboutCloseBtn").addEventListener("click", ()=>{
-  $("#aboutOverlay").style.display = "none";
-  $("#aboutOverlay").setAttribute("aria-hidden","true");
-});
-
-$("#aboutCopyBtn").addEventListener("click", ()=>{
-  const txt =
-    "Mi App Personal — Autoría: Claudia Alejandra Garza Hernandez. © " +
-    new Date().getFullYear() +
-    " Claudia Alejandra Garza Hernandez. Todos los derechos reservados.";
-  copyToClipboard(txt);
-});
-
-      // Service Worker
+        // Service Worker
       if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
     }
 
