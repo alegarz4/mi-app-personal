@@ -1,38 +1,33 @@
-const CACHE = "mi-app-personal-v2"; // cambia a v3, v4... cada vez que actualices
+const CACHE = "mi-app-personal-cache-v2";
+const ASSETS = [
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./icon.svg",
+  "./sw.js"
+];
 
-self.addEventListener("install", (e) => {
-  self.skipWaiting();
+self.addEventListener("install", (e)=>{
   e.waitUntil(
-    caches.open(CACHE).then((c) =>
-      c.addAll(["./", "./index.html", "./manifest.webmanifest", "./icon.svg"])
-    )
+    caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())
   );
 });
 
-self.addEventListener("activate", (e) => {
+self.addEventListener("activate", (e)=>{
   e.waitUntil(
-    (async () => {
-      const keys = await caches.keys();
-      await Promise.all(keys.map((k) => (k !== CACHE ? caches.delete(k) : null)));
-      await self.clients.claim();
-    })()
+    caches.keys().then(keys=>Promise.all(keys.map(k=> k!==CACHE ? caches.delete(k) : null )))
+      .then(()=>self.clients.claim())
   );
 });
 
-// Network-first: intenta SIEMPRE lo nuevo
-self.addEventListener("fetch", (e) => {
-  if (e.request.method !== "GET") return;
-
+self.addEventListener("fetch", (e)=>{
   e.respondWith(
-    (async () => {
-      try {
-        const fresh = await fetch(e.request, { cache: "no-store" });
-        const cache = await caches.open(CACHE);
-        cache.put(e.request, fresh.clone());
-        return fresh;
-      } catch {
-        return (await caches.match(e.request)) || (await caches.match("./index.html"));
-      }
-    })()
+    caches.match(e.request).then(cached=>{
+      return cached || fetch(e.request).then(resp=>{
+        const copy = resp.clone();
+        caches.open(CACHE).then(c=>c.put(e.request, copy));
+        return resp;
+      }).catch(()=>cached);
+    })
   );
 });
