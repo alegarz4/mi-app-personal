@@ -1,348 +1,246 @@
-<!--
-Mi App Personal (PWA)
-Autoría: Claudia Alejandra Garza Hernandez
-© 2026 Claudia Alejandra Garza Hernandez. Todos los derechos reservados.
-Prohibida la copia, modificación o distribución sin permiso por escrito.
--->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mi App Personal — Regulación Emocional</title>
+  <meta name="theme-color" content="#0b1220" />
+  <title>Mi App Personal</title>
 
-  <!-- PWA -->
   <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#7c3aed">
-  <link rel="icon" href="icon.svg">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
 
   <style>
     :root{
-      --bg:#0b1020;
-      --panel: rgba(255,255,255,0.07);
-      --panel2: rgba(255,255,255,0.10);
-      --border: rgba(255,255,255,0.14);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.70);
-      --muted2: rgba(255,255,255,0.55);
-      --accent:#7c3aed;
-      --ok:#22c55e;
+      --bg:#070b14;
+      --panel:#0b1220;
+      --panel2:#0d1a2c;
+      --muted:#9aa6b2;
+      --text:#e5e7eb;
+      --border:rgba(255,255,255,.10);
+      --shadow:0 18px 50px rgba(0,0,0,.45);
+      --radius:22px;
+      --brand:#7c3aed;
       --danger:#ef4444;
       --warn:#f59e0b;
-      --radius:18px;
-      --shadow:0 10px 30px rgba(0,0,0,0.35);
-      --max:1100px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-    }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family:var(--font);
-      background:
-        radial-gradient(1100px 600px at 15% 0%, rgba(124,58,237,0.25), transparent 60%),
-        radial-gradient(900px 500px at 85% 15%, rgba(34,197,94,0.18), transparent 60%),
-        linear-gradient(180deg, #070a14, #0b1020);
-      color:var(--text);
-    }
-    .wrap{ width:min(var(--max), calc(100% - 32px)); margin:0 auto; }
-    header{
-      position:sticky; top:0; z-index:30;
-      backdrop-filter: blur(10px);
-      background: rgba(10,14,28,0.65);
-      border-bottom:1px solid var(--border);
-    }
-    .top{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:16px; padding:16px 0;
-    }
-    h1{ margin:0; font-size:22px; }
-    .sub{ margin:4px 0 0; color:var(--muted); font-size:13px; }
-    .status{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:10px 12px; border-radius:999px;
-      background:var(--panel); border:1px solid var(--border);
-      font-size:13px; color:var(--muted);
-    }
-    .dot{ width:10px; height:10px; border-radius:999px; background:var(--ok);
-      box-shadow:0 0 0 4px rgba(34,197,94,0.16);
+      --ok:#22c55e;
+      --chip:rgba(255,255,255,.06);
+      --chipOn:rgba(124,58,237,.25);
     }
 
-    main{
-      padding:22px 0 40px;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(900px 600px at 20% 10%, rgba(124,58,237,.25), transparent 55%),
+        radial-gradient(900px 600px at 80% 30%, rgba(34,197,94,.18), transparent 55%),
+        radial-gradient(900px 600px at 70% 85%, rgba(245,158,11,.12), transparent 55%),
+        linear-gradient(180deg, #050914, #070b14 40%, #050914);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    header{
+      position:sticky; top:0; z-index:50;
+      background: linear-gradient(180deg, rgba(7,11,20,.95), rgba(7,11,20,.70));
+      backdrop-filter: blur(12px);
+      border-bottom:1px solid var(--border);
+    }
+    .wrap{max-width:1100px; margin:0 auto; padding:18px 18px;}
+    .top{
+      display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    }
+    .title h1{margin:0; font-size:28px; letter-spacing:.2px}
+    .title p{margin:6px 0 0; color:var(--muted)}
+    .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+
+    .status{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background: rgba(255,255,255,.04);
+    }
+    .dot{
+      width:10px; height:10px; border-radius:99px; background:var(--ok);
+      box-shadow:0 0 0 5px rgba(34,197,94,.15);
+    }
+    #statusText{color:var(--text); font-weight:600; font-size:14px}
+
+    main{max-width:1100px; margin:0 auto; padding:18px;}
+    .grid{
       display:grid;
       grid-template-columns: repeat(12, 1fr);
       gap:16px;
     }
     .card{
       grid-column: span 6;
-      background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.04));
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
       border:1px solid var(--border);
       border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:16px;
+      box-shadow: var(--shadow);
+      padding:18px;
+      overflow:hidden;
+      position:relative;
     }
-    .wide{ grid-column: span 12; }
+    .card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(500px 260px at 10% 0%, rgba(124,58,237,.20), transparent 55%),
+                  radial-gradient(500px 260px at 90% 0%, rgba(34,197,94,.14), transparent 55%);
+      pointer-events:none;
+      opacity:.75;
+    }
+    .card > *{position:relative}
 
-    h2{ margin:2px 0 8px; font-size:18px; }
-    h3{ margin:12px 0 8px; font-size:15px; color:var(--text); }
-    .muted{ color:var(--muted); }
-    .tiny{ font-size:12px; color:var(--muted2); }
-    .row{
-      display:flex; gap:10px; align-items:center; justify-content:space-between;
-      margin-top:12px; flex-wrap:wrap;
-    }
-    .chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    h2{margin:0 0 10px; font-size:22px}
+    .muted{color:var(--muted)}
+    .tiny{font-size:12px; color:var(--muted)}
+    .divider{height:1px; background:var(--border); margin:14px 0}
+
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+
     .chip{
       border:1px solid var(--border);
-      background: rgba(255,255,255,0.06);
+      background: var(--chip);
       color:var(--text);
-      padding:10px 12px;
+      padding:10px 14px;
       border-radius:999px;
       cursor:pointer;
-      font-size:14px;
-      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+      font-weight:600;
+      transition: transform .08s ease, background .15s ease;
+      user-select:none;
     }
-    .chip:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.09); }
-    .chip.active{
-      border-color: rgba(124,58,237,0.65);
-      background: rgba(124,58,237,0.22);
-    }
+    .chip:hover{transform: translateY(-1px)}
+    .chip.active{background: var(--chipOn); border-color: rgba(124,58,237,.35)}
 
-    .badge{
-      padding:8px 12px; border-radius:999px;
-      border:1px dashed rgba(255,255,255,0.28);
-      background: rgba(255,255,255,0.05);
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    /* Contraste mejorado */
-    .input,.textarea,.select{
-      width:100%; margin-top:6px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,0.08);
+    textarea, input, select{
+      width:100%;
+      background: rgba(0,0,0,.18);
       color:var(--text);
-      padding:12px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px 12px;
       outline:none;
-      font-size:14px;
     }
-    .textarea{ resize:vertical; }
-    .input:focus,.textarea:focus,.select:focus{
-      border-color: rgba(124,58,237,0.65);
-      box-shadow: 0 0 0 4px rgba(124,58,237,0.16);
-    }
-    .textarea::placeholder, .input::placeholder{
-      color: rgba(255,255,255,0.45);
-    }
+    textarea{min-height:110px; resize:vertical}
 
     .btn{
-      border:0;
-      background: rgba(124,58,237,0.92);
-      color:white;
-      padding:10px 12px;
-      border-radius:12px;
-      cursor:pointer;
-      font-size:14px;
-      transition: transform .08s ease, filter .2s ease;
-      white-space:nowrap;
-    }
-    .btn:hover{ transform: translateY(-1px); filter: brightness(1.05); }
-    .btn:active{ transform: translateY(0); }
-    .ghost{ background: rgba(255,255,255,0.06); border:1px solid var(--border); color:var(--text); }
-    .danger{ background: rgba(239,68,68,0.92); }
-    .warn{ background: rgba(245,158,11,0.92); }
-    .ok{ background: rgba(34,197,94,0.92); }
-
-    .divider{ margin:14px 0; height:1px; background: rgba(255,255,255,0.08); }
-
-    .quote{
-      margin:0;
-      padding:12px 14px;
-      border-left:3px solid rgba(124,58,237,0.75);
-      background: rgba(255,255,255,0.05);
-      border-radius:12px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
       color:var(--text);
-      line-height:1.35;
+      padding:10px 14px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:700;
+      transition: transform .08s ease, background .15s ease;
+      user-select:none;
     }
+    .btn:hover{transform: translateY(-1px)}
+    .btn.primary{background: rgba(124,58,237,.25); border-color: rgba(124,58,237,.40)}
+    .btn.warn{background: rgba(245,158,11,.20); border-color: rgba(245,158,11,.35)}
+    .btn.danger{background: rgba(239,68,68,.20); border-color: rgba(239,68,68,.38)}
+    .btn.ghost{background: rgba(255,255,255,.03)}
 
+    .two{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
     .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top:12px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background: rgba(0,0,0,.12);
+      overflow:hidden;
     }
     .item{
-      padding:12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
-      cursor:pointer;
-      transition: transform .08s ease, background .2s ease;
+      padding:12px 12px;
+      border-top:1px solid var(--border);
     }
-    .item:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.06); }
-    .itemTop{ display:flex; justify-content:space-between; gap:10px; }
+    .item:first-child{border-top:none}
+    .item .meta{font-size:12px; color:var(--muted); margin-bottom:6px}
     .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
+      display:inline-block;
       font-size:12px;
-      color:var(--muted);
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      margin-right:6px;
     }
 
-    details{ margin-top:12px; border:1px solid rgba(255,255,255,0.10); border-radius:14px; padding:10px 12px; background: rgba(255,255,255,0.03); }
-    summary{ cursor:pointer; color:var(--muted); font-size:13px; }
-    pre{ overflow:auto; margin:10px 0 0; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.25); color: rgba(255,255,255,0.85); font-size:12px; }
-
-    .grid2{ display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
-    .stat{
-      padding:12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
-    }
-    .stat strong{ font-size:18px; display:block; }
-    .stat span{ font-size:12px; color:var(--muted); }
-
-    /* Slider */
-    .rangeWrap{
-      display:flex; align-items:center; gap:12px; margin-top:10px;
-      border:1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
-      border-radius:14px;
-      padding:10px 12px;
-    }
-    input[type="range"]{
-      width:100%;
-      accent-color: var(--accent);
-    }
-    .rangeVal{
-      min-width:44px;
-      text-align:center;
-      padding:8px 10px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.20);
-      color: var(--text);
-      font-weight:700;
-    }
-
-    /* Modal */
     .overlay{
-      position:fixed; inset:0; z-index:80;
-      background: rgba(0,0,0,0.55);
-      display:none;
-      align-items:center; justify-content:center;
-      padding:18px;
-    }
-    .modal{
-      width:min(680px, 100%);
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.16);
-      background: rgba(12,16,32,0.92);
-      box-shadow: var(--shadow);
-      padding:16px;
-    }
-    .modal h3{ margin:0 0 10px; }
-    .modalActions{ display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; margin-top:12px; }
-    .tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
-    .tab{
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.05);
-      color: var(--text);
-      padding:8px 10px;
-      border-radius:12px;
-      cursor:pointer;
-      font-size:13px;
-    }
-    .tab.active{
-      border-color: rgba(124,58,237,0.65);
-      background: rgba(124,58,237,0.20);
-    }
-
-    /* Lock */
-    .lockWrap{
-      min-height: calc(100vh - 80px);
+      position:fixed; inset:0;
       display:none;
       align-items:center;
       justify-content:center;
-      padding:22px;
+      padding:18px;
+      background: rgba(0,0,0,.55);
+      z-index:999;
     }
-    .lockCard{
-      width:min(520px, 100%);
-      background: linear-gradient(180deg, var(--panel), rgba(255,255,255,0.04));
+    .modal{
+      width:min(720px, 100%);
+      border-radius:24px;
       border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:16px;
-      text-align:left;
+      background: linear-gradient(180deg, rgba(11,18,32,.96), rgba(11,18,32,.90));
+      box-shadow: 0 30px 90px rgba(0,0,0,.65);
+      padding:18px;
     }
+    .modal h3{margin:0 0 10px; font-size:20px}
+    .modalActions{display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; margin-top:14px}
 
-    footer{ padding:18px 0 28px; }
+    .tabs{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .tab{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      cursor:pointer;
+      font-weight:700;
+    }
+    .tab.active{background: rgba(124,58,237,.22); border-color: rgba(124,58,237,.35)}
+    .tabPanel{margin-top:12px}
+
+    footer{max-width:1100px; margin:0 auto; padding:14px 18px 28px; color:var(--muted)}
 
     /* FIX: Menú desplegable visible en Chrome/Windows */
-select option {
-  background: #111827 !important;  /* fondo oscuro */
-  color: #ffffff !important;       /* letras blancas */
-}
+    select option {
+      background: #111827 !important;
+      color: #ffffff !important;
+    }
 
     @media (max-width: 920px){
-      .card{ grid-column: span 12; }
-      .top{ flex-direction:column; align-items:flex-start; }
-      .grid2{ grid-template-columns: 1fr; }
+      .card{grid-column: span 12;}
+      .two{grid-template-columns: 1fr}
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="wrap top">
-      <div>
-        <h1>Mi App Personal</h1>
-        <p class="sub">Regulación emocional: registrar, respirar, entender y avanzar (para todo, no para una sola historia).</p>
-      </div>
-
-      <<div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
-  <button class="btn danger" id="emergencyBtn" type="button">🧯 Estoy muy mal</button>
-  <button class="btn ghost" id="aboutBtn" type="button">ℹ️ Acerca de</button>
-  <div class="status"><span class="dot"></span><span id="statusText">Listo</span></div>
-</div>
-
+<header>
+  <div class="wrap top">
+    <div class="title">
+      <h1>Mi App Personal</h1>
+      <p>Regulación emocional: registrar, respirar, entender y avanzar (para todo, no para una sola historia).</p>
     </div>
-  </header>
 
-  <!-- LOCK SCREEN -->
-  <div class="lockWrap" id="lockWrap">
-    <div class="lockCard">
-      <h2>🔒 App bloqueada</h2>
-      <p class="muted">Ingresa tu PIN para abrir.</p>
-      <input id="pinInput" class="input" type="password" inputmode="numeric" placeholder="PIN (solo números)" />
-      <div class="row">
-        <button class="btn" id="unlockBtn" type="button">Desbloquear</button>
-        <button class="btn ghost" id="lockHelpBtn" type="button">¿Olvidé mi PIN?</button>
-        <button class="btn danger" id="lockRemovePinBtn" type="button">Quitar PIN (sin borrar historial)</button>
+    <div class="right">
+      <button class="btn danger" id="emergencyBtn" type="button">🧯 Estoy muy mal</button>
+      <button class="btn ghost" id="aboutBtn" type="button">ℹ️ Acerca de</button>
+
+      <div class="status" aria-live="polite">
+        <span class="dot"></span>
+        <span id="statusText">Listo</span>
       </div>
-      <p class="tiny" id="lockMsg">—</p>
-      <details>
-        <summary>Consejo rápido</summary>
-        <p class="tiny muted">
-          El PIN es un bloqueo simple. Si lo olvidas, este botón de emergencia lo quita sin borrar historial.
-        </p>
-      </details>
     </div>
   </div>
+</header>
 
-  <main class="wrap" id="appMain" style="display:none;">
+<main>
+  <div class="grid">
+
     <!-- MOOD -->
     <section class="card">
       <h2>¿Cómo me siento hoy?</h2>
       <p class="muted">Elige una opción (o cambia cuando lo necesites).</p>
 
-      <div class="chips" role="group" aria-label="Selección de estado emocional">
+      <div class="row" id="moodRow">
         <button class="chip" data-mood="Tranquila" type="button">Tranquila</button>
         <button class="chip" data-mood="Ansiosa" type="button">Ansiosa</button>
         <button class="chip" data-mood="Triste" type="button">Triste</button>
@@ -350,16 +248,14 @@ select option {
         <button class="chip" data-mood="Molesta" type="button">Molesta</button>
       </div>
 
+      <div class="divider"></div>
+
       <div class="row">
-        <div class="badge" id="moodBadge" style="min-width:220px; text-align:center;">Hoy: —</div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn warn" id="pauseBtn" type="button">Pausa 30s</button>
-          <button class="btn ghost" id="clearMood" type="button">Limpiar</button>
-        </div>
+        <button class="btn warn" id="pause30Btn" type="button">⏱️ Pausa 30s</button>
+        <button class="btn ghost" id="clearMoodBtn" type="button">Limpiar</button>
       </div>
 
-      <div class="divider"></div>
-      <p class="tiny muted">
+      <p class="tiny" style="margin-top:12px;">
         Tip: si estás “Molesta” o “Ansiosa”, usa “Pausa 30s” antes de escribir. Baja la intensidad primero.
       </p>
     </section>
@@ -369,438 +265,169 @@ select option {
       <h2>¿Qué pensamiento domina?</h2>
       <p class="muted">Escríbelo tal cual. No es juicio, es registro.</p>
 
-      <textarea id="thought" class="textarea" rows="5" placeholder="Ej. “Me siento en alerta…” o “Necesito descansar…”"></textarea>
+      <textarea id="thoughtInput" placeholder='Ej. “Me siento en alerta…” o “Necesito descansar…”'></textarea>
 
-      <div class="row">
-        <button class="btn" id="saveThought" type="button">Guardar</button>
-        <button class="btn ghost" id="clearThought" type="button">Limpiar</button>
-      </div>
-
-      <p class="tiny" id="thoughtSavedAt">—</p>
-    </section>
-
-    <!-- (1) INTENSIDAD + DETONANTE + NECESIDAD -->
-    <section class="card wide">
-      <h2>Chequeo rápido</h2>
-      <p class="muted">Esto te ayuda a ver patrones: qué tan intenso fue, qué lo detonó y qué necesitas.</p>
-
-      <div class="grid2">
-        <div>
-          <label class="tiny">Intensidad (0–10)</label>
-          <div class="rangeWrap">
-            <input id="intensity" type="range" min="0" max="10" step="1" value="0" />
-            <div class="rangeVal" id="intensityVal">0</div>
-          </div>
-          <p class="tiny muted" style="margin-top:8px;">
-            0 = neutro / 10 = muy fuerte.
-          </p>
-        </div>
-
-        <div>
-          <label class="tiny">Detonante (¿qué lo activó?)</label>
-          <select id="trigger" class="select">
-            <option value="">— Elegir —</option>
-            <option value="Trabajo/escuela">Trabajo/escuela</option>
-            <option value="Familia">Familia</option>
-            <option value="Pareja/relaciones">Pareja/relaciones</option>
-            <option value="Salud/cuerpo">Salud/cuerpo</option>
-            <option value="Dinero">Dinero</option>
-            <option value="Cansancio/sueño">Cansancio/sueño</option>
-            <option value="Recuerdo/duelo">Recuerdo/duelo</option>
-            <option value="Soledad">Soledad</option>
-            <option value="Redes/noticias">Redes/noticias</option>
-            <option value="Otro">Otro</option>
-          </select>
-
-          <div id="triggerOtherWrap" style="display:none; margin-top:10px;">
-            <label class="tiny">Especifica “Otro”</label>
-            <input id="triggerOther" class="input" type="text" placeholder="Ej. discusión, mensaje, presión, etc." />
-          </div>
-        </div>
+      <div class="row" style="margin-top:10px; justify-content:space-between;">
+        <button class="btn primary" id="saveThoughtBtn" type="button">Guardar</button>
+        <button class="btn ghost" id="clearThoughtBtn" type="button">Limpiar</button>
       </div>
 
       <div class="divider"></div>
 
-      <div class="grid2">
-        <div>
-          <label class="tiny">¿Qué necesito ahora?</label>
-          <select id="needNow" class="select">
-            <option value="">— Elegir —</option>
-            <option value="Descansar">Descansar</option>
-            <option value="Comer/agua">Comer/agua</option>
-            <option value="Moverme">Moverme</option>
-            <option value="Poner límites">Poner límites</option>
-            <option value="Hablar con alguien seguro">Hablar con alguien seguro</option>
-            <option value="Silencio/pausa">Silencio/pausa</option>
-            <option value="Organizarme">Organizarme</option>
-            <option value="Ser amable conmigo">Ser amable conmigo</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="tiny">Nota breve (opcional)</label>
-          <input id="checkNote" class="input" type="text" placeholder="Ej. “Me sobrecargué”, “me faltó dormir”, “me sentí juzgada”…"/>
-        </div>
+      <div class="row" style="justify-content:space-between;">
+        <span class="tiny">Fecha del registro</span>
+        <input id="entryDate" type="date" style="max-width:220px" />
       </div>
 
-      <div class="row">
-        <button class="btn ok" id="saveCheckBtn" type="button">Guardar chequeo</button>
-        <button class="btn ghost" id="clearCheckBtn" type="button">Limpiar</button>
-        <div class="pill">Último: <span id="checkSavedAt">—</span></div>
-      </div>
-
-      <details>
-        <summary>¿Para qué sirve esto?</summary>
-        <p class="tiny muted">
-          En semanas vas a notar cosas como: “cuando duermo poco sube mi intensidad”, o “cuando pongo límites baja la ansiedad”.
-          Es autoconocimiento, no juicio.
-        </p>
-      </details>
+      <p class="tiny" id="lastSavedInfo" style="margin-top:10px;"></p>
     </section>
 
-    <!-- EVENT -->
+    <!-- IMPORTANT LOG -->
     <section class="card">
       <h2>Registro importante</h2>
-      <p class="muted">Registra una llamada, evento o algo que movió tu día.</p>
+      <p class="muted">Aquí puedes registrar una llamada, un evento, o algo que movió tu día.</p>
 
-      <label class="tiny">¿Qué fue? (persona / evento)</label>
-      <input id="evtWith" class="input" type="text" placeholder="Ej. reunión, escuela, familia, trámite, etc." />
+      <textarea id="eventInput" placeholder="Ej. “Tuve una conversación difícil”, “Me sentí mejor después de caminar”, etc."></textarea>
 
-      <label class="tiny">Fecha y hora</label>
-      <input id="evtAt" class="input" type="datetime-local" />
-
-      <label class="tiny">Notas (opcional)</label>
-      <textarea id="evtNotes" class="textarea" rows="4" placeholder="Ej. “Me saturé…”, “Me dio claridad…”, etc."></textarea>
-
-      <div class="row">
-        <button class="btn" id="saveEvt" type="button">Guardar</button>
-        <button class="btn ghost" id="clearEvt" type="button">Limpiar</button>
+      <div class="row" style="margin-top:10px; justify-content:space-between;">
+        <button class="btn primary" id="saveEventBtn" type="button">Guardar</button>
+        <button class="btn ghost" id="clearEventBtn" type="button">Limpiar</button>
       </div>
 
       <div class="divider"></div>
-      <p class="tiny muted">Último registro</p>
-      <div id="evtSummary" class="badge" style="width:100%; border-style:solid; border-color:rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); padding:12px; border-radius:14px;">
-        —
-      </div>
+      <div class="list" id="historyList" aria-label="Historial reciente"></div>
+      <p class="tiny" style="margin-top:10px;">Se guarda solo en tu dispositivo (localStorage). No hay cuentas ni servidor.</p>
     </section>
 
-    <!-- QUOTES -->
+    <!-- QUOTE -->
     <section class="card">
       <h2>Frase para ti</h2>
       <p class="muted">Elige lo que necesitas hoy. Si no te gusta la frase, cámbiala.</p>
 
-      <label class="tiny">Hoy necesito…</label>
-      <select id="needSelect" class="select">
-        <option value="calma">Calma</option>
-        <option value="fuerza">Fuerza</option>
-        <option value="amorpropio">Amor propio</option>
-        <option value="soltar">Soltar</option>
-        <option value="ansiedad">Ansiedad</option>
-        <option value="motivacion">Motivación</option>
-        <option value="apoyo">Apoyo</option>
-      </select>
-
-      <div class="divider"></div>
-      <blockquote class="quote" id="quoteView">—</blockquote>
-      <p class="tiny" id="quoteMeta">—</p>
-
-      <div class="row">
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn" id="newQuoteBtn" type="button">Cambiar frase</button>
-          <button class="btn ghost" id="saveQuoteBtn" type="button">Guardar frase</button>
-          <button class="btn ghost" id="favQuoteBtn" type="button">⭐ Favorita</button>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-      <div class="row" style="margin-top:0;">
-        <p class="tiny muted" style="margin:0;">Favoritas</p>
-        <button class="btn ghost" id="clearFavBtn" type="button">Limpiar favoritas</button>
-      </div>
-      <div class="list" id="favList"></div>
-    </section>
-
-    <!-- (3) CBT MINI -->
-    <section class="card wide">
-      <h2>Reestructuración rápida (mini CBT)</h2>
-      <p class="muted">Cuando un pensamiento te está dominando, aquí lo aterrizas con calma.</p>
-
-      <div class="grid2">
+      <div class="two" style="margin-top:10px;">
         <div>
-          <label class="tiny">Pensamiento automático</label>
-          <textarea id="cbtAuto" class="textarea" rows="4" placeholder="Ej. “No puedo con esto”, “Voy a fallar”, “Nadie me entiende”…"></textarea>
+          <label class="tiny" for="needSelect">Necesito hoy</label>
+          <select id="needSelect">
+            <option value="calma">Calma</option>
+            <option value="autoestima">Autoestima</option>
+            <option value="apoyo">Apoyo</option>
+            <option value="claridad">Claridad</option>
+            <option value="fuerza">Fuerza</option>
+          </select>
         </div>
         <div>
-          <label class="tiny">Emoción + intensidad</label>
-          <input id="cbtEmotion" class="input" type="text" placeholder="Ej. ansiedad 7/10, tristeza 6/10, enojo 8/10" />
-          <label class="tiny" style="margin-top:10px; display:block;">Qué estoy temiendo (opcional)</label>
-          <input id="cbtFear" class="input" type="text" placeholder="Ej. “que me rechacen”, “quedar mal”, “perder el control”…"/>
+          <label class="tiny" for="quoteAuthor">Autor (opcional)</label>
+          <input id="quoteAuthor" placeholder="Ej. Anónimo / Maya Angelou / etc." />
         </div>
       </div>
 
       <div class="divider"></div>
 
-      <div class="grid2">
-        <div>
-          <label class="tiny">Evidencia a favor</label>
-          <textarea id="cbtFor" class="textarea" rows="4" placeholder="Hechos, no suposiciones."></textarea>
+      <div class="list">
+        <div class="item">
+          <div class="meta">
+            <span class="pill" id="quoteNeedPill">calma</span>
+            <span class="pill" id="quoteMoodPill">—</span>
+          </div>
+          <div style="font-size:18px; line-height:1.45; font-weight:800;" id="quoteText">—</div>
+          <div class="tiny" id="quoteBy" style="margin-top:8px;"></div>
         </div>
-        <div>
-          <label class="tiny">Evidencia en contra</label>
-          <textarea id="cbtAgainst" class="textarea" rows="4" placeholder="Hechos que matizan o contradicen."></textarea>
-        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px; justify-content:space-between;">
+        <button class="btn primary" id="newQuoteBtn" type="button">🔁 Cambiar frase</button>
+        <button class="btn ghost" id="saveQuoteBtn" type="button">⭐ Guardar en favoritas</button>
       </div>
 
       <div class="divider"></div>
-
-      <label class="tiny">Pensamiento alternativo más justo</label>
-      <textarea id="cbtAlt" class="textarea" rows="4" placeholder="Ej. “Estoy pasando un momento difícil, pero puedo con un paso pequeño.”"></textarea>
-
-      <div class="row">
-        <button class="btn ok" id="saveCbtBtn" type="button">Guardar CBT</button>
-        <button class="btn ghost" id="clearCbtBtn" type="button">Limpiar</button>
-        <div class="pill">Último: <span id="cbtSavedAt">—</span></div>
+      <h3 style="margin:0 0 8px; font-size:16px;">Favoritas</h3>
+      <div class="list" id="favoritesList"></div>
+      <div class="row" style="margin-top:10px; justify-content:flex-end;">
+        <button class="btn ghost" id="clearFavBtn" type="button">Borrar favoritas</button>
       </div>
-
-      <details>
-        <summary>Tips rápidos</summary>
-        <p class="tiny muted">
-          1) “Hechos” > “historias”. 2) Un pensamiento alternativo no tiene que ser positivo, solo justo. 3) Si estás muy activada, usa “Estoy muy mal” primero.
-        </p>
-      </details>
     </section>
 
-    <!-- HISTORY -->
-    <section class="card wide">
-      <h2>Historial por día</h2>
-      <p class="muted">Se guarda automáticamente cuando registras algo. También puedes guardarlo manualmente.</p>
+    <!-- BACKUP -->
+    <section class="card">
+      <h2>Respaldo</h2>
+      <p class="muted">Descarga/recupera tu información. El archivo es <strong>JSON</strong> (un formato de texto para guardar datos).</p>
 
-      <div class="row" style="align-items:flex-end;">
-        <div style="flex:1; min-width:220px;">
-          <label class="tiny">Fecha de la entrada</label>
-          <input id="entryDate" class="input" type="date" />
-          <p class="tiny muted" style="margin:6px 0 0;">Por defecto es hoy.</p>
-        </div>
-
-        <div style="flex:1; min-width:220px;">
-          <label class="tiny">Buscar en historial</label>
-          <input id="searchInput" class="input" type="text" placeholder="Ej. ansiedad, escuela, enojo, calma..." />
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn ok" id="saveDayBtn" type="button">Guardar día</button>
-          <button class="btn ghost" id="openDayBtn" type="button">Abrir ese día</button>
-        </div>
+      <div class="row" style="margin-top:10px;">
+        <button class="btn primary" id="exportBtn" type="button">⬇️ Exportar JSON</button>
+        <label class="btn ghost" for="importFile" style="display:inline-flex; align-items:center; gap:8px;">
+          ⬆️ Importar JSON
+        </label>
+        <input id="importFile" type="file" accept="application/json" style="display:none" />
       </div>
 
       <div class="divider"></div>
 
-      <div class="row" style="margin-top:0;">
-        <div class="pill">📌 Entradas: <span id="entryCount">0</span></div>
-        <div class="pill">🗓️ Últimos primero</div>
-      </div>
-
-      <div class="list" id="historyList"></div>
-    </section>
-
-    <!-- STATS -->
-    <section class="card wide">
-      <h2>Estadísticas suaves (últimos 30 días)</h2>
-      <p class="muted">Un espejo, no una calificación.</p>
-      <div class="grid2" id="statsGrid"></div>
-      <details>
-        <summary>Extra (nuevo)</summary>
-        <p class="tiny muted">
-          Más adelante podemos graficar intensidad promedio por semana. (Si la quieres, la agrego).
-        </p>
-      </details>
-    </section>
-
-    <!-- SETTINGS + BACKUP -->
-    <section class="card wide">
-      <h2>Ajustes y Respaldo</h2>
-      <p class="muted">Privado y local. PIN opcional. Respaldo JSON/TXT.</p>
-
-      <div class="divider"></div>
-
-      <h3>🧯 Kit de emergencia</h3>
-      <p class="tiny muted" style="margin-top:0;">
-        Esto alimenta el botón “Estoy muy mal”. Puedes cambiarlo cuando quieras.
+      <p class="tiny">
+        Importar reemplaza tu información actual por la del archivo. Si quieres, exporta primero.
       </p>
-
-      <div class="grid2">
-        <div>
-          <label class="tiny">Mis anclas (cosas que me calman)</label>
-          <textarea id="anchors" class="textarea" rows="5" placeholder="Ej. música, té, baño, caminar, oración, escribir, abrazar almohada… (una por línea)"></textarea>
-        </div>
-        <div>
-          <label class="tiny">Personas seguras (solo nombres)</label>
-          <textarea id="safePeople" class="textarea" rows="5" placeholder="Ej. Mamá\nAmiga X\nCompañera Y (una por línea)"></textarea>
-          <p class="tiny muted" style="margin-top:8px;">
-            Nota: No enviamos mensajes solos. Solo te damos un texto para copiar.
-          </p>
-        </div>
-      </div>
-
-      <div class="row">
-        <button class="btn ok" id="saveKitBtn" type="button">Guardar kit</button>
-        <button class="btn ghost" id="clearKitBtn" type="button">Limpiar</button>
-        <div class="pill">Último: <span id="kitSavedAt">—</span></div>
-      </div>
-
-      <div class="divider"></div>
-
-      <h3>🔐 PIN (opcional)</h3>
-      <p class="tiny muted" style="margin-top:0;">Bloqueo simple (no cifrado avanzado). Para privacidad básica.</p>
-
-      <div class="row">
-        <div style="flex:1; min-width:220px;">
-          <label class="tiny">Nuevo PIN (solo números)</label>
-          <input id="pinSet" class="input" type="password" inputmode="numeric" placeholder="Ej. 1234" />
-        </div>
-        <div style="flex:1; min-width:220px;">
-          <label class="tiny">Confirmar PIN</label>
-          <input id="pinSet2" class="input" type="password" inputmode="numeric" placeholder="Repite el PIN" />
-        </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn" id="setPinBtn" type="button">Guardar PIN</button>
-          <button class="btn ghost" id="togglePinBtn" type="button">Activar/Desactivar PIN</button>
-          <button class="btn danger" id="removePinBtn" type="button">Quitar PIN</button>
-        </div>
-      </div>
-
-      <p class="tiny" id="pinStatus">—</p>
-
-      <div class="divider"></div>
-
-      <h3>💾 Respaldo</h3>
-      <div class="row">
-        <button class="btn" id="exportJsonBtn" type="button">Exportar JSON</button>
-        <button class="btn ghost" id="exportTxtBtn" type="button">Exportar TXT (legible)</button>
-        <label class="btn ghost" for="importFile" role="button">Importar</label>
-        <input id="importFile" type="file" accept="application/json" hidden />
-        <button class="btn danger" id="wipeBtn" type="button">Borrar todo</button>
-      </div>
-
-      <details>
-        <summary>¿Qué es un JSON?</summary>
-        <p class="tiny muted">
-          Un JSON es un archivo de texto que guarda datos “en orden”. Exportar = descargar tu respaldo. Importar = recuperarlo.
-        </p>
-      </details>
-
-      <details>
-        <summary>Ver datos (solo lectura)</summary>
-        <pre id="dataPreview">{}</pre>
-      </details>
     </section>
-  </main>
 
-  <footer class="wrap" id="footer" style="display:none;">
-    <p class="tiny muted">Hecho por Claudia Alejandra Garza Hernandez ✨ — privado, offline, sin cuentas.</p>
+  </div>
+</main>
 
-  </footer>
+<footer class="wrap">
+  Hecho para ti ✨ — privado, offline, sin cuentas. <span class="tiny">Por Claudia Alejandra Garza Hernandez.</span>
+</footer>
 
-  <!-- PAUSE MODAL -->
-  <div class="overlay" id="pauseOverlay" aria-hidden="true">
-    <div class="modal">
-      <h3>🧘 Pausa de 30 segundos</h3>
-      <p class="muted" id="pauseText" style="margin-top:0;">—</p>
-      <div class="badge" id="pauseTimer" style="width:max-content;">30s</div>
-      <div class="modalActions">
-        <button class="btn ghost" id="pauseSwitchBtn" type="button">Cambiar ejercicio</button>
-        <button class="btn" id="pauseStartBtn" type="button">Iniciar</button>
-        <button class="btn danger" id="pauseCloseBtn" type="button">Cerrar</button>
+<!-- PAUSE MODAL -->
+<div class="overlay" id="pauseOverlay" aria-hidden="true">
+  <div class="modal">
+    <h3>⏱️ Pausa 30s</h3>
+    <p class="muted" style="margin-top:0;">
+      Respira. Suelta hombros. Inhala 4, sostén 2, exhala 6. Repite.
+    </p>
+
+    <div class="divider"></div>
+
+    <div class="list">
+      <div class="item">
+        <div class="meta">Guía rápida</div>
+        <div style="font-weight:800;">1) Pies en el suelo</div>
+        <div class="tiny">2) Nombra 3 cosas que ves · 2 que sientes · 1 que puedes hacer ahora</div>
       </div>
-      <details>
-        <summary>Por qué ayuda</summary>
-        <p class="tiny muted">Primero regulas el cuerpo, luego piensas con más claridad.</p>
-      </details>
+    </div>
+
+    <div class="modalActions">
+      <button class="btn danger" id="pauseCloseBtn" type="button">Cerrar</button>
     </div>
   </div>
+</div>
 
-  <!-- (5) EMERGENCY MODAL -->
-  <div class="overlay" id="emergencyOverlay" aria-hidden="true">
-    <div class="modal">
-      <h3>🧯 Kit de emergencia</h3>
-      <p class="muted" style="margin-top:0;">
-        No tienes que resolverlo todo ahorita. Solo baja la intensidad y elige un paso pequeño.
-      </p>
+<!-- EMERGENCY MODAL -->
+<div class="overlay" id="emergencyOverlay" aria-hidden="true">
+  <div class="modal">
+    <h3>🧯 Kit de emergencia</h3>
+    <p class="muted" style="margin-top:0;">
+      No tienes que resolverlo todo ahorita. Solo baja la intensidad y elige un paso pequeño.
+    </p>
 
-      <div class="tabs">
-        <button class="tab active" data-tab="calm" type="button">Bajar intensidad</button>
-        <button class="tab" data-tab="ground" type="button">Aterrizar</button>
-        <button class="tab" data-tab="anchors" type="button">Mis anclas</button>
-        <button class="tab" data-tab="support" type="button">Pedir apoyo</button>
-      </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="calm" type="button">Bajan intensidad</button>
+      <button class="tab" data-tab="ground" type="button">Aterrizar</button>
+      <button class="tab" data-tab="anchors" type="button">Mis anclas</button>
+      <button class="tab" data-tab="support" type="button">Pedir apoyo</button>
+    </div>
 
-      <div id="emTabCalm" style="margin-top:12px;">
-        <div class="quote">
-          <strong>Primero:</strong> 3 respiraciones lentas. <br>
-          <span class="tiny muted">Inhala 4 · sostén 2 · exhala 6 (suave)</span>
-        </div>
-        <div class="row">
-          <button class="btn warn" id="emStart30" type="button">Usar Pausa 30s</button>
-          <button class="btn ghost" id="emMicroPlan" type="button">Dame un paso pequeño</button>
-        </div>
-        <div class="badge" id="emPlanOut" style="border-style:solid; width:100%;">—</div>
-      </div>
+    <div class="tabPanel" id="tabPanel"></div>
 
-      <div id="emTabGround" style="margin-top:12px; display:none;">
-        <div class="quote">
-          <strong>5–4–3–2–1</strong><br>
-          5 cosas que ves · 4 que sientes · 3 que escuchas · 2 que hueles · 1 que agradeces.
-        </div>
-        <div class="row">
-          <button class="btn" id="emCopyGround" type="button">Copiar guía</button>
-          <button class="btn ghost" id="emGroundNext" type="button">Otra guía</button>
-        </div>
-        <div class="badge" id="emGroundOut" style="border-style:solid; width:100%;">—</div>
-      </div>
+    <div class="modalActions">
+      <button class="btn ghost" id="emStart30" type="button">⏱️ Pausa 30s</button>
+      <button class="btn danger" id="emCloseBtn" type="button">Cerrar</button>
+    </div>
+  </div>
+</div>
 
-      <div id="emTabAnchors" style="margin-top:12px; display:none;">
-        <div class="quote">
-          <strong>Elige 1 ancla</strong><br>
-          <span class="tiny muted">No tienes que hacer 5 cosas. Solo una.</span>
-        </div>
-        <div class="list" id="emAnchorsList"></div>
-      </div>
-
-      <div id="emTabSupport" style="margin-top:12px; display:none;">
-        <div class="quote">
-          <strong>Pedir apoyo</strong><br>
-          <span class="tiny muted">Copia un mensaje corto (no se envía solo).</span>
-        </div>
-
-        <label class="tiny">Elige a quién</label>
-        <select id="emPerson" class="select">
-          <option value="">— Elegir —</option>
-        </select>
-
-        <label class="tiny" style="margin-top:10px; display:block;">Mensaje sugerido</label>
-        <textarea id="emMessage" class="textarea" rows="4"></textarea>
-
-        <div class="row">
-          <button class="btn" id="emCopyMsg" type="button">Copiar mensaje</button>
-          <button class="btn ghost" id="emMsgRefresh" type="button">Cambiar texto</button>
-        </div>
-
-        <details>
-          <summary>Si estás en riesgo inmediato</summary>
-          <p class="tiny muted">
-            Si sientes que podrías hacerte daño o estás en peligro, busca ayuda urgente con alguien cercano o servicios de emergencia de tu zona.
-          </p>
-        </details>
-      </div>
-
-      <!-- ABOUT MODAL -->
+<!-- ABOUT MODAL -->
 <div class="overlay" id="aboutOverlay" aria-hidden="true">
   <div class="modal">
     <h3>ℹ️ Acerca de</h3>
-
     <p class="muted" style="margin-top:0;">
-      <strong>Mi App Personal</strong> es una herramienta de regulación emocional:
-      registrar, respirar, entender y avanzar.
+      <strong>Mi App Personal</strong> es una herramienta de regulación emocional: registrar, respirar, entender y avanzar.
     </p>
 
     <div class="divider"></div>
@@ -811,15 +438,13 @@ select option {
     </p>
 
     <p class="tiny muted" style="margin-top:10px;">
-      Esta app funciona offline y guarda la información solo en tu dispositivo.
-      No usa cuentas ni servidores.
+      Esta app funciona offline y guarda la información solo en tu dispositivo (localStorage). No usa cuentas ni servidores.
     </p>
 
     <details>
       <summary>Licencia</summary>
       <p class="tiny muted">
-        Prohibida la copia, modificación o distribución sin permiso por escrito
-        de la autora.
+        Prohibida la copia, modificación o distribución sin permiso por escrito de la autora.
       </p>
     </details>
 
@@ -830,1322 +455,567 @@ select option {
   </div>
 </div>
 
-      <div class="modalActions">
-        <button class="btn danger" id="emCloseBtn" type="button">Cerrar</button>
-      </div>
-    </div>
-  </div>
+<script>
+  // Helpers
+  const $  = (sel)=> document.querySelector(sel);
+  const $$ = (sel)=> Array.from(document.querySelectorAll(sel));
+  const KEY = "mi_app_personal_v2";
 
-  <script>
-    // ========= KEYS =========
-    const APP_KEY = "mi_app_personal_v4"; // mantenemos para NO perder tus datos
-    const PIN_KEY = "mi_app_personal_pin_v1";
-    const $ = (s) => document.querySelector(s);
-    const $$ = (s) => document.querySelectorAll(s);
+  function setStatus(msg){
+    const el = $("#statusText");
+    if (el) el.textContent = msg;
+  }
 
-    // ========= QUOTES =========
-    const QUOTES = {
-      calma: [
-        {t:"Respira. Aquí y ahora es suficiente.", a:"Anónima"},
-        {t:"La calma también se entrena.", a:"Anónima"},
-        {t:"No corras: vuelve a tu cuerpo.", a:"Anónima"},
-        {t:"Un minuto de paz cambia el día.", a:"Anónima"},
-        {t:"Lo simple: inhalar, exhalar, seguir.", a:"Anónima"},
-        {t:"No tienes prisa para sanar.", a:"Anónima"},
-      ],
-      fuerza: [
-        {t:"No se trata de aguantar; se trata de sostenerte.", a:"Anónima"},
-        {t:"Tu fuerza es real, incluso cuando dudas.", a:"Anónima"},
-        {t:"Hazlo con miedo, pero hazlo.", a:"Anónima"},
-        {t:"Un paso pequeño también es avance.", a:"Anónima"},
-        {t:"La valentía puede ser silenciosa.", a:"Anónima"},
-      ],
-      amorpropio: [
-        {t:"Sé amable contigo: estás aprendiendo.", a:"Anónima"},
-        {t:"Tu valor no depende de tu día.", a:"Anónima"},
-        {t:"Trátate como tratarías a quien amas.", a:"Anónima"},
-        {t:"No te abandones.", a:"Anónima"},
-        {t:"Cuidarte no es egoísmo; es necesidad.", a:"Anónima"},
-      ],
-      soltar: [
-        {t:"Soltar no es olvidar: es dejar de cargar.", a:"Anónima"},
-        {t:"No todo lo que duele es para quedarse.", a:"Anónima"},
-        {t:"Suelta lo que no puedes controlar.", a:"Anónima"},
-        {t:"Tu paz vale más que la costumbre.", a:"Anónima"},
-        {t:"Cerrar ciclos también es amor.", a:"Anónima"},
-      ],
-      ansiedad: [
-        {t:"No todo pensamiento es una verdad.", a:"Anónima"},
-        {t:"Esto es una ola: pasa.", a:"Anónima"},
-        {t:"Regresa a la respiración: es tu ancla.", a:"Anónima"},
-        {t:"Tu mente grita, pero tú decides el ritmo.", a:"Anónima"},
-        {t:"La ansiedad miente con urgencia.", a:"Anónima"},
-      ],
-      motivacion: [
-        {t:"El secreto de avanzar es comenzar.", a:"Anónima"},
-        {t:"Lo importante: volver a intentarlo.", a:"Anónima"},
-        {t:"Hoy cuenta, aunque sea lento.", a:"Anónima"},
-        {t:"Haz lo que puedas con lo que tienes.", a:"Anónima"},
-        {t:"Eres capaz de más de lo que crees.", a:"Anónima"},
-      ],
-      apoyo: [
-        {t:"No tienes que poder con todo sola.", a:"Anónima"},
-        {t:"Pedir ayuda también es valentía.", a:"Anónima"},
-        {t:"Lo que sientes es válido.", a:"Anónima"},
-        {t:"Estoy contigo: un paso a la vez.", a:"Anónima"},
-        {t:"Mereces cuidado y descanso.", a:"Anónima"},
-      ]
-    };
+  function nowISO(){ return new Date().toISOString(); }
+  function toDateKey(d){
+    const x = new Date(d);
+    const y = x.getFullYear();
+    const m = String(x.getMonth()+1).padStart(2,"0");
+    const day = String(x.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
+  }
 
-    // ========= STATE =========
-    const state = {
-      version: 5, // subimos versión interna
-      mood: null,
-      thought: "",
-      thoughtSavedAt: null,
-      event: { with:"", at:"", notes:"", savedAt:null },
-      need: "calma",
-      quoteCurrent: null,
-      favorites: [],
-      history: {},
-      lastOpenedDate: null,
+  // State
+  const state = load() || {
+    mood: null,
+    lastOpenedDate: toDateKey(new Date()),
+    days: {},        // { "YYYY-MM-DD": { mood, thought, event, updatedAt } }
+    favorites: [],   // { t, a, need, addedAt }
+    quoteCurrent: null
+  };
 
-      // (1) Chequeo rápido
-      check: {
-        intensity: 0,
-        trigger: "",
-        triggerOther: "",
-        needNow: "",
-        note: "",
-        savedAt: null
-      },
+  function save(){
+    localStorage.setItem(KEY, JSON.stringify(state));
+  }
 
-      // (3) CBT mini
-      cbt: {
-        auto: "",
-        emotion: "",
-        fear: "",
-        for: "",
-        against: "",
-        alt: "",
-        savedAt: null
-      },
+  function load(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){ return null; }
+  }
 
-      // (5) Kit de emergencia
-      kit: {
-        anchors: [],
-        safePeople: [],
-        savedAt: null
-      }
-    };
+  function ensureDay(dateKey){
+    if (!state.days[dateKey]) state.days[dateKey] = { mood:null, thought:"", event:"", updatedAt:null };
+    return state.days[dateKey];
+  }
 
-    // ========= UTILS =========
-    function nowISO(){ return new Date().toISOString(); }
-    function safeParse(j,f){ try{return JSON.parse(j);}catch{return f;} }
-    function toDateKey(d=new Date()){
-      const y=d.getFullYear();
-      const m=String(d.getMonth()+1).padStart(2,"0");
-      const day=String(d.getDate()).padStart(2,"0");
-      return `${y}-${m}-${day}`;
+  // Quotes (muchas, por categoría)
+  const QUOTES = {
+    calma: [
+      {t:"Respira. Esto también pasará.", a:"Anónimo"},
+      {t:"Haz las paces con el minuto que estás viviendo.", a:"Anónimo"},
+      {t:"Un paso pequeño sigue siendo un paso.", a:"Anónimo"},
+      {t:"No tienes que hacer todo hoy. Solo lo siguiente.", a:"Anónimo"},
+      {t:"La calma no es ausencia de caos; es presencia de ti.", a:"Anónimo"},
+      {t:"Tu mente grita, pero tu cuerpo puede volver al presente.", a:"Anónimo"}
+    ],
+    autoestima: [
+      {t:"Eres más que tu peor día.", a:"Anónimo"},
+      {t:"Habla contigo como hablarías con alguien que amas.", a:"Anónimo"},
+      {t:"Tu valor no depende de tu productividad.", a:"Anónimo"},
+      {t:"No naciste para encogerte.", a:"Anónimo"},
+      {t:"Hay una versión de ti que ya sobrevivió a esto.", a:"Anónimo"},
+      {t:"Tu historia merece ternura.", a:"Anónimo"}
+    ],
+    apoyo: [
+      {t:"Pedir ayuda también es fuerza.", a:"Anónimo"},
+      {t:"No tienes que cargarlo sola.", a:"Anónimo"},
+      {t:"Un mensaje a la persona correcta puede cambiar tu día.", a:"Anónimo"},
+      {t:"A veces, sostenerte es dejarte sostener.", a:"Anónimo"},
+      {t:"Estoy contigo: una cosa a la vez.", a:"Anónimo"},
+      {t:"Tu dolor merece cuidado, no silencio.", a:"Anónimo"}
+    ],
+    claridad: [
+      {t:"No decidas en medio de la tormenta.", a:"Anónimo"},
+      {t:"Lo que hoy parece confuso, mañana será aprendizaje.", a:"Anónimo"},
+      {t:"Escribe: lo que nombras, se ordena.", a:"Anónimo"},
+      {t:"Primero calma, luego claridad.", a:"Anónimo"},
+      {t:"Tu intuición se escucha mejor cuando bajas el ruido.", a:"Anónimo"},
+      {t:"Elige el siguiente paso, no el final de la historia.", a:"Anónimo"}
+    ],
+    fuerza: [
+      {t:"Has sobrevivido a días difíciles antes. Puedes hoy.", a:"Anónimo"},
+      {t:"La valentía también tiembla.", a:"Anónimo"},
+      {t:"Sigue, aunque sea despacio.", a:"Anónimo"},
+      {t:"Tu fortaleza no se ve en el silencio: se ve en que sigues aquí.", a:"Anónimo"},
+      {t:"No te rindas con la versión cansada de ti.", a:"Anónimo"},
+      {t:"Hoy cuenta. Tú cuentas.", a:"Anónimo"}
+    ]
+  };
+
+  const GROUND_GUIDES = [
+    "Nombra 5 cosas que ves, 4 que sientes, 3 que escuchas, 2 que hueles, 1 que saboreas.",
+    "Presiona tus pies contra el suelo 10 segundos. Suelta. Repite 3 veces.",
+    "Toca una superficie fría. Describe su textura con detalle.",
+    "Mueve tu cuello suave: izquierda, derecha. Suelta mandíbula."
+  ];
+
+  function pick(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
+  }
+
+  function ensureCurrentQuote(){
+    const need = $("#needSelect")?.value || "calma";
+    const pool = QUOTES[need] || QUOTES.calma;
+    const q = pick(pool);
+    state.quoteCurrent = { t:q.t, a:q.a, need };
+    save();
+  }
+
+  function renderQuote(){
+    const q = state.quoteCurrent;
+    if (!q){
+      ensureCurrentQuote();
     }
-    function formatDate(iso){
-      if(!iso) return "—";
-      const d = new Date(iso);
-      if(Number.isNaN(d.getTime())) return "—";
-      return d.toLocaleString("es-MX",{dateStyle:"medium",timeStyle:"short"});
-    }
-    function setStatus(t){
-      const el=$("#statusText");
-      if(el) el.textContent=t;
-      clearTimeout(window.__st);
-      window.__st=setTimeout(()=>{ if(el) el.textContent="Listo"; },1200);
-    }
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;").replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-    function labelNeed(need){
-      const map = {
-        calma:"Calma", fuerza:"Fuerza", amorpropio:"Amor propio",
-        soltar:"Soltar", ansiedad:"Ansiedad", motivacion:"Motivación", apoyo:"Apoyo"
-      };
-      return map[need] || "Calma";
+    const qq = state.quoteCurrent;
+    $("#quoteText").textContent = qq.t;
+    $("#quoteNeedPill").textContent = qq.need;
+    $("#quoteMoodPill").textContent = state.mood || "—";
+    const authorInput = $("#quoteAuthor")?.value?.trim();
+    const by = authorInput ? authorInput : (qq.a || "Anónimo");
+    $("#quoteBy").textContent = by ? "— " + by : "";
+  }
+
+  function renderMood(){
+    $$("#moodRow .chip").forEach(btn=>{
+      btn.classList.toggle("active", btn.getAttribute("data-mood") === state.mood);
+    });
+  }
+
+  function renderHistory(){
+    const list = $("#historyList");
+    if (!list) return;
+    const keys = Object.keys(state.days || {}).sort().reverse().slice(0, 12);
+
+    if (keys.length === 0){
+      list.innerHTML = `<div class="item"><div class="meta">Aún no hay registros</div><div class="tiny">Cuando guardes un pensamiento o evento, aparecerá aquí.</div></div>`;
+      return;
     }
 
-    // ========= SAVE / LOAD =========
-    function save(){
-      localStorage.setItem(APP_KEY, JSON.stringify(state, null, 2));
-      renderPreview();
-    }
-
-    function load(){
-      const raw = localStorage.getItem(APP_KEY);
-      if(!raw) return;
-      const loaded = safeParse(raw,null);
-      if(!loaded || typeof loaded!=="object") return;
-
-      // compat
-      state.version = loaded.version ?? state.version;
-      state.mood = loaded.mood ?? state.mood;
-      state.thought = loaded.thought ?? state.thought;
-      state.thoughtSavedAt = loaded.thoughtSavedAt ?? state.thoughtSavedAt;
-
-      if(loaded.event && typeof loaded.event==="object"){
-        state.event.with = loaded.event.with ?? state.event.with;
-        state.event.at = loaded.event.at ?? state.event.at;
-        state.event.notes = loaded.event.notes ?? state.event.notes;
-        state.event.savedAt = loaded.event.savedAt ?? state.event.savedAt;
-      }
-
-      state.need = loaded.need ?? state.need;
-      state.quoteCurrent = loaded.quoteCurrent ?? state.quoteCurrent;
-      state.favorites = Array.isArray(loaded.favorites) ? loaded.favorites : state.favorites;
-      state.history = (loaded.history && typeof loaded.history==="object") ? loaded.history : state.history;
-      state.lastOpenedDate = loaded.lastOpenedDate ?? state.lastOpenedDate;
-
-      // nuevos campos (si existen)
-      if(loaded.check && typeof loaded.check==="object"){
-        state.check = {
-          intensity: Number(loaded.check.intensity ?? state.check.intensity) || 0,
-          trigger: loaded.check.trigger ?? "",
-          triggerOther: loaded.check.triggerOther ?? "",
-          needNow: loaded.check.needNow ?? "",
-          note: loaded.check.note ?? "",
-          savedAt: loaded.check.savedAt ?? null
-        };
-      }
-
-      if(loaded.cbt && typeof loaded.cbt==="object"){
-        state.cbt = {
-          auto: loaded.cbt.auto ?? "",
-          emotion: loaded.cbt.emotion ?? "",
-          fear: loaded.cbt.fear ?? "",
-          for: loaded.cbt.for ?? "",
-          against: loaded.cbt.against ?? "",
-          alt: loaded.cbt.alt ?? "",
-          savedAt: loaded.cbt.savedAt ?? null
-        };
-      }
-
-      if(loaded.kit && typeof loaded.kit==="object"){
-        state.kit = {
-          anchors: Array.isArray(loaded.kit.anchors) ? loaded.kit.anchors : [],
-          safePeople: Array.isArray(loaded.kit.safePeople) ? loaded.kit.safePeople : [],
-          savedAt: loaded.kit.savedAt ?? null
-        };
-      }
-    }
-
-    // ========= QUOTES =========
-    function getPool(need){ return QUOTES[need] || QUOTES.calma; }
-    function pickRandomQuote(need, excludeText=null){
-      const pool = getPool(need);
-      if(pool.length===0) return null;
-      if(pool.length===1) return {...pool[0], i:0, need};
-      let tries=0, q=null;
-      while(tries<12){
-        const i=Math.floor(Math.random()*pool.length);
-        q={...pool[i], i, need};
-        if(!excludeText || q.t!==excludeText) break;
-        tries++;
-      }
-      return q;
-    }
-    function ensureCurrentQuote(){
-      const need = state.need || "calma";
-      if(!state.quoteCurrent || typeof state.quoteCurrent!=="object" || state.quoteCurrent.need !== need){
-        state.quoteCurrent = pickRandomQuote(need, null);
-      }
-    }
-
-    // ========= DAILY ENTRY =========
-    function getEntryDate(){ return $("#entryDate").value || toDateKey(new Date()); }
-
-    function buildEntry(dateKey){
-      return {
-        date: dateKey,
-        savedAt: nowISO(),
-        mood: state.mood,
-        thought: state.thought,
-        thoughtSavedAt: state.thoughtSavedAt,
-        event: {...state.event},
-        need: state.need,
-        quoteCurrent: state.quoteCurrent ? {...state.quoteCurrent} : null,
-
-        // nuevos
-        check: {...state.check},
-        cbt: {...state.cbt}
-      };
-    }
-
-    function autoSaveDay(){
-      const key = getEntryDate();
-      state.history[key] = buildEntry(key);
-      state.lastOpenedDate = key;
-      save();
-      renderHistory();
-      renderStats();
-      setStatus("Guardado (auto)");
-    }
-
-    function saveDayManual(){
-      const key = getEntryDate();
-      state.history[key] = buildEntry(key);
-      state.lastOpenedDate = key;
-      save();
-      renderHistory();
-      renderStats();
-      setStatus("Día guardado");
-    }
-
-    function openDay(dateKey){
-      const e = state.history[dateKey];
-      if(!e){ alert("No existe esa entrada."); return; }
-
-      state.mood = e.mood ?? null;
-      state.thought = e.thought ?? "";
-      state.thoughtSavedAt = e.thoughtSavedAt ?? null;
-
-      if(e.event && typeof e.event==="object"){
-        state.event.with = e.event.with ?? "";
-        state.event.at = e.event.at ?? "";
-        state.event.notes = e.event.notes ?? "";
-        state.event.savedAt = e.event.savedAt ?? null;
-      }else{
-        state.event = { with:"", at:"", notes:"", savedAt:null };
-      }
-
-      state.need = e.need ?? "calma";
-      state.quoteCurrent = e.quoteCurrent ?? null;
-
-      if(e.check && typeof e.check==="object"){
-        state.check = {
-          intensity: Number(e.check.intensity ?? 0) || 0,
-          trigger: e.check.trigger ?? "",
-          triggerOther: e.check.triggerOther ?? "",
-          needNow: e.check.needNow ?? "",
-          note: e.check.note ?? "",
-          savedAt: e.check.savedAt ?? null
-        };
-      }
-
-      if(e.cbt && typeof e.cbt==="object"){
-        state.cbt = {
-          auto: e.cbt.auto ?? "",
-          emotion: e.cbt.emotion ?? "",
-          fear: e.cbt.fear ?? "",
-          for: e.cbt.for ?? "",
-          against: e.cbt.against ?? "",
-          alt: e.cbt.alt ?? "",
-          savedAt: e.cbt.savedAt ?? null
-        };
-      }
-
-      state.lastOpenedDate = dateKey;
-      $("#entryDate").value = dateKey;
-
-      save();
-      renderAll();
-      setStatus("Día abierto");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    // ========= RENDER =========
-    function renderMood(){
-      $("#moodBadge").textContent = state.mood ? `Hoy: ${state.mood}` : "Hoy: —";
-      $$(".chip").forEach(btn=>{
-        const m = btn.getAttribute("data-mood");
-        btn.classList.toggle("active", m===state.mood);
-      });
-    }
-
-    function renderThought(){
-      $("#thought").value = state.thought || "";
-      $("#thoughtSavedAt").textContent = state.thoughtSavedAt
-        ? `Guardado: ${formatDate(state.thoughtSavedAt)}`
-        : "—";
-    }
-
-    function renderEvent(){
-      $("#evtWith").value = state.event.with || "";
-      $("#evtAt").value = state.event.at || "";
-      $("#evtNotes").value = state.event.notes || "";
-
-      const sum=$("#evtSummary");
-      const who = (state.event.with||"").trim() || "—";
-      const when = state.event.at ? new Date(state.event.at) : null;
-      const whenText = (when && !Number.isNaN(when.getTime()))
-        ? when.toLocaleString("es-MX",{dateStyle:"medium",timeStyle:"short"})
-        : "—";
-      const notes = (state.event.notes||"").trim() || "—";
-      const saved = state.event.savedAt ? formatDate(state.event.savedAt) : "—";
-
-      sum.innerHTML = `
-        <div><strong>¿Qué fue?:</strong> ${escapeHtml(who)}</div>
-        <div><strong>Fecha/hora:</strong> ${escapeHtml(whenText)}</div>
-        <div><strong>Notas:</strong> ${escapeHtml(notes)}</div>
-        <div class="tiny muted" style="margin-top:8px;">Guardado: ${escapeHtml(saved)}</div>
+    list.innerHTML = keys.map(k=>{
+      const d = state.days[k];
+      const mood = d.mood || "—";
+      const thought = (d.thought || "").trim();
+      const event = (d.event || "").trim();
+      const updated = d.updatedAt ? new Date(d.updatedAt).toLocaleString() : "";
+      return `
+        <div class="item">
+          <div class="meta"><span class="pill">${k}</span><span class="pill">${mood}</span> ${updated ? "· " + updated : ""}</div>
+          ${thought ? `<div><strong>Pensamiento:</strong> ${escapeHtml(thought)}</div>` : `<div class="tiny muted">Sin pensamiento</div>`}
+          ${event ? `<div style="margin-top:6px;"><strong>Evento:</strong> ${escapeHtml(event)}</div>` : ""}
+        </div>
       `;
-    }
+    }).join("");
+  }
 
-    function renderQuote(){
-      $("#needSelect").value = state.need || "calma";
+  function renderFavorites(){
+    const box = $("#favoritesList");
+    if (!box) return;
+    const favs = state.favorites || [];
+    if (!favs.length){
+      box.innerHTML = `<div class="item"><div class="tiny muted">Aún no tienes favoritas.</div></div>`;
+      return;
+    }
+    box.innerHTML = favs.slice().reverse().map(f=>{
+      const when = f.addedAt ? new Date(f.addedAt).toLocaleString() : "";
+      return `
+        <div class="item">
+          <div class="meta"><span class="pill">${escapeHtml(f.need||"")}</span> ${when}</div>
+          <div style="font-weight:800;">${escapeHtml(f.t)}</div>
+          ${f.a ? `<div class="tiny">${escapeHtml(f.a)}</div>` : ""}
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderAll(){
+    // date
+    const today = toDateKey(new Date());
+    $("#entryDate").value = state.lastOpenedDate || today;
+
+    // restore day fields
+    const day = ensureDay($("#entryDate").value);
+    state.mood = day.mood || state.mood || null;
+    $("#thoughtInput").value = day.thought || "";
+    $("#eventInput").value = day.event || "";
+
+    renderMood();
+    ensureCurrentQuote();
+    renderQuote();
+    renderHistory();
+    renderFavorites();
+
+    $("#lastSavedInfo").textContent = day.updatedAt ? `Último guardado: ${new Date(day.updatedAt).toLocaleString()}` : "";
+  }
+
+  function autoSaveDay(){
+    const dateKey = $("#entryDate").value || toDateKey(new Date());
+    const d = ensureDay(dateKey);
+    d.mood = state.mood || null;
+    d.thought = $("#thoughtInput").value || "";
+    d.event = $("#eventInput").value || "";
+    d.updatedAt = nowISO();
+    save();
+    $("#lastSavedInfo").textContent = `Último guardado: ${new Date(d.updatedAt).toLocaleString()}`;
+  }
+
+  function openOverlay(id){
+    const ov = $(id);
+    if (!ov) return;
+    ov.style.display = "flex";
+    ov.setAttribute("aria-hidden","false");
+  }
+  function closeOverlay(id){
+    const ov = $(id);
+    if (!ov) return;
+    ov.style.display = "none";
+    ov.setAttribute("aria-hidden","true");
+  }
+
+  function copyToClipboard(txt){
+    if (navigator.clipboard?.writeText){
+      navigator.clipboard.writeText(txt).then(()=> setStatus("Copiado ✅")).catch(()=> setStatus("No se pudo copiar"));
+    }else{
+      setStatus("Copia no disponible");
+    }
+  }
+
+  function escapeHtml(s){
+    return String(s)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // Emergency tabs
+  function setEmergencyTab(tab){
+    $$("#emergencyOverlay .tab").forEach(b=>{
+      b.classList.toggle("active", b.getAttribute("data-tab") === tab);
+    });
+
+    const panel = $("#tabPanel");
+    if (!panel) return;
+
+    if (tab === "calm"){
+      panel.innerHTML = `
+        <div class="list">
+          <div class="item">
+            <div class="meta">1 minuto</div>
+            <div style="font-weight:900;">Inhala 4 · sostén 2 · exhala 6 (x5)</div>
+            <div class="tiny">Suaviza mandíbula, baja hombros.</div>
+          </div>
+          <div class="item">
+            <div class="meta">Bajar intensidad</div>
+            <div class="tiny">Agua fría en muñecas / cara · camina 2 minutos · nombra lo que sientes sin juzgar.</div>
+          </div>
+        </div>
+      `;
+    } else if (tab === "ground"){
+      panel.innerHTML = `
+        <div class="list">
+          <div class="item">
+            <div class="meta">Aterrizar</div>
+            <div style="font-weight:900;">${escapeHtml(pick(GROUND_GUIDES))}</div>
+            <div class="tiny">Repite si lo necesitas.</div>
+          </div>
+        </div>
+      `;
+    } else if (tab === "anchors"){
+      panel.innerHTML = `
+        <div class="list">
+          <div class="item">
+            <div class="meta">Mis anclas</div>
+            <div class="tiny">Escribe 1 cosa que sí controlas hoy (aunque sea pequeña).</div>
+            <textarea id="emAnchor" placeholder="Ej. “Tomar agua”, “Bañarme”, “Enviar un mensaje”, “Salir a caminar”"></textarea>
+            <div class="row" style="margin-top:10px; justify-content:flex-end;">
+              <button class="btn primary" id="emSaveAnchor" type="button">Guardar en evento</button>
+            </div>
+          </div>
+        </div>
+      `;
+      // wire anchor button
+      setTimeout(()=>{
+        const b = $("#emSaveAnchor");
+        if (b) b.addEventListener("click", ()=>{
+          const t = $("#emAnchor")?.value?.trim();
+          if (!t) return;
+          const prev = $("#eventInput").value?.trim();
+          $("#eventInput").value = prev ? (prev + "\n• " + t) : ("• " + t);
+          autoSaveDay();
+          setStatus("Ancla guardada ⭐");
+        });
+      }, 0);
+    } else if (tab === "support"){
+      panel.innerHTML = `
+        <div class="list">
+          <div class="item">
+            <div class="meta">Mensaje sugerido</div>
+            <div style="font-weight:900;">“Hola, ¿me puedes acompañar un momento? No necesito soluciones, solo compañía.”</div>
+            <div class="row" style="margin-top:10px; justify-content:flex-end;">
+              <button class="btn ghost" id="emCopyMsg" type="button">Copiar mensaje</button>
+            </div>
+          </div>
+        </div>
+      `;
+      setTimeout(()=>{
+        const b = $("#emCopyMsg");
+        if (b) b.addEventListener("click", ()=> copyToClipboard("Hola, ¿me puedes acompañar un momento? No necesito soluciones, solo compañía."));
+      }, 0);
+    }
+  }
+
+  // Wire all
+  function wire(){
+    // default date
+    const today = toDateKey(new Date());
+    $("#entryDate").value = state.lastOpenedDate || today;
+
+    // date change
+    $("#entryDate").addEventListener("change", ()=>{
+      state.lastOpenedDate = $("#entryDate").value;
+      const d = ensureDay(state.lastOpenedDate);
+      state.mood = d.mood || null;
+      $("#thoughtInput").value = d.thought || "";
+      $("#eventInput").value = d.event || "";
+      renderMood();
+      renderQuote();
+      renderHistory();
+      $("#lastSavedInfo").textContent = d.updatedAt ? `Último guardado: ${new Date(d.updatedAt).toLocaleString()}` : "";
+      save();
+      setStatus("Fecha cambiada");
+    });
+
+    // mood chips
+    $$("#moodRow .chip").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        state.mood = btn.getAttribute("data-mood");
+        renderMood();
+        autoSaveDay();
+        setStatus("Estado guardado");
+      });
+    });
+
+    $("#clearMoodBtn").addEventListener("click", ()=>{
+      state.mood = null;
+      renderMood();
+      autoSaveDay();
+      setStatus("Mood limpio");
+    });
+
+    // thought
+    $("#saveThoughtBtn").addEventListener("click", ()=>{
+      autoSaveDay();
+      renderHistory();
+      setStatus("Guardado");
+    });
+    $("#clearThoughtBtn").addEventListener("click", ()=>{
+      $("#thoughtInput").value = "";
+      autoSaveDay();
+      renderHistory();
+      setStatus("Borrado");
+    });
+
+    // event
+    $("#saveEventBtn").addEventListener("click", ()=>{
+      autoSaveDay();
+      renderHistory();
+      setStatus("Guardado");
+    });
+    $("#clearEventBtn").addEventListener("click", ()=>{
+      $("#eventInput").value = "";
+      autoSaveDay();
+      renderHistory();
+      setStatus("Borrado");
+    });
+
+    // quote
+    $("#needSelect").addEventListener("change", ()=>{
+      ensureCurrentQuote();
+      renderQuote();
+      setStatus("Frase actualizada");
+    });
+
+    $("#newQuoteBtn").addEventListener("click", ()=>{
+      ensureCurrentQuote();
+      renderQuote();
+      setStatus("Nueva frase");
+    });
+
+    // “Guardar frase” = favorita
+    $("#saveQuoteBtn").addEventListener("click", ()=>{
       ensureCurrentQuote();
       const q = state.quoteCurrent;
-      $("#quoteView").textContent = q ? `“${q.t}”` : "—";
-      $("#quoteMeta").textContent = q ? `— ${q.a} · Tema: ${labelNeed(q.need)}` : "—";
-    }
-
-    function renderFavorites(){
-      const box = $("#favList");
-      box.innerHTML = "";
-      if(!state.favorites.length){
-        box.innerHTML = `<div class="badge" style="width:100%; border-style:solid;">No tienes favoritas aún. Usa ⭐ para guardar.</div>`;
-        return;
-      }
-
-      state.favorites
-        .slice()
-        .sort((a,b)=> (b.addedAt||"").localeCompare(a.addedAt||""))
-        .forEach((f, idx)=>{
-          const div = document.createElement("div");
-          div.className = "item";
-          div.innerHTML = `
-            <div class="itemTop">
-              <div class="pill">⭐ ${escapeHtml(labelNeed(f.need||"calma"))}</div>
-              <div class="tiny muted">${escapeHtml(formatDate(f.addedAt))}</div>
-            </div>
-            <div style="margin-top:8px;">“${escapeHtml(f.t)}”</div>
-            <div class="tiny muted" style="margin-top:6px;">— ${escapeHtml(f.a||"Anónima")}</div>
-            <div class="row" style="justify-content:flex-end;">
-              <button class="btn ghost" data-act="use" data-idx="${idx}" type="button">Usar</button>
-              <button class="btn danger" data-act="del" data-idx="${idx}" type="button">Eliminar</button>
-            </div>
-          `;
-          box.appendChild(div);
-        });
-
-      box.querySelectorAll("button[data-act]").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          const act = btn.getAttribute("data-act");
-          const idx = Number(btn.getAttribute("data-idx"));
-          const sorted = state.favorites.slice().sort((a,b)=> (b.addedAt||"").localeCompare(a.addedAt||""));
-          const fav = sorted[idx];
-          if(!fav) return;
-
-          if(act==="use"){
-            state.need = fav.need || "calma";
-            state.quoteCurrent = { t:fav.t, a:fav.a||"Anónima", i:null, need: state.need };
-            save();
-            renderQuote();
-            setStatus("Frase aplicada");
-            autoSaveDay();
-          }
-          if(act==="del"){
-            state.favorites = state.favorites.filter(x => !(x.t===fav.t && x.addedAt===fav.addedAt));
-            save();
-            renderFavorites();
-            setStatus("Eliminada");
-          }
-        });
-      });
-    }
-
-    function renderHistory(){
-      const list = $("#historyList");
-      list.innerHTML = "";
-
-      const keys = Object.keys(state.history || {}).sort((a,b)=> b.localeCompare(a));
-      $("#entryCount").textContent = String(keys.length);
-
-      const q = ($("#searchInput").value || "").trim().toLowerCase();
-      const filtered = keys.filter(k=>{
-        if(!q) return true;
-        const e = state.history[k];
-        const hay = [
-          k,
-          e?.mood||"",
-          e?.thought||"",
-          e?.event?.with||"",
-          e?.event?.notes||"",
-          e?.quoteCurrent?.t||"",
-          e?.check?.trigger||"",
-          e?.check?.needNow||"",
-          e?.cbt?.auto||"",
-          e?.cbt?.alt||""
-        ].join(" ").toLowerCase();
-        return hay.includes(q);
-      });
-
-      if(!filtered.length){
-        list.innerHTML = `<div class="badge" style="width:100%; border-style:solid;">No hay resultados.</div>`;
-        return;
-      }
-
-      filtered.forEach(dateKey=>{
-        const e = state.history[dateKey];
-        const mood = e?.mood || "—";
-        const intensity = (e?.check?.intensity ?? null);
-        const intenTxt = (intensity === null || intensity === undefined) ? "" : ` · Int: ${intensity}/10`;
-        const thought = (e?.thought||"").trim();
-        const snippet = thought ? thought.slice(0, 110) + (thought.length>110 ? "…" : "") : "Sin pensamiento guardado.";
-        const when = e?.savedAt ? formatDate(e.savedAt) : "—";
-
-        const div = document.createElement("div");
-        div.className = "item";
-        div.innerHTML = `
-          <div class="itemTop">
-            <div><strong>${escapeHtml(dateKey)}</strong></div>
-            <div class="pill">Estado: ${escapeHtml(mood)}${escapeHtml(intenTxt)}</div>
-          </div>
-          <div class="tiny muted" style="margin-top:6px;">Guardado: ${escapeHtml(when)}</div>
-          <div style="margin-top:10px;">${escapeHtml(snippet)}</div>
-          <div class="row" style="justify-content:flex-end;">
-            <button class="btn ghost" data-open="${escapeHtml(dateKey)}" type="button">Abrir</button>
-            <button class="btn danger" data-del="${escapeHtml(dateKey)}" type="button">Eliminar</button>
-          </div>
-        `;
-        list.appendChild(div);
-      });
-
-      list.querySelectorAll("button[data-open]").forEach(btn=>{
-        btn.addEventListener("click", ()=> openDay(btn.getAttribute("data-open")));
-      });
-
-      list.querySelectorAll("button[data-del]").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          const key = btn.getAttribute("data-del");
-          if(!confirm(`¿Eliminar la entrada del ${key}?`)) return;
-          delete state.history[key];
+      if (q){
+        const authorInput = $("#quoteAuthor")?.value?.trim();
+        const a = authorInput ? authorInput : (q.a || "");
+        const exists = (state.favorites || []).some(f=> f.t===q.t && f.need===q.need);
+        if (!exists){
+          state.favorites.push({ t:q.t, a, need:q.need, addedAt: nowISO() });
           save();
-          renderHistory();
-          renderStats();
-          setStatus("Eliminada");
-        });
-      });
-    }
-
-    function renderStats(){
-      const grid = $("#statsGrid");
-      grid.innerHTML = "";
-
-      const keys = Object.keys(state.history || {}).sort((a,b)=> b.localeCompare(a));
-      const last30 = keys.slice(0, 30).map(k=> state.history[k]);
-      const total = last30.length;
-
-      if(!total){
-        grid.innerHTML = `<div class="badge" style="width:100%; border-style:solid;">Aún no hay entradas diarias. Se guardan en automático cuando registras algo.</div>`;
-        return;
-      }
-
-      const moods = {};
-      let sumIntensity = 0;
-      let countIntensity = 0;
-
-      last30.forEach(e=>{
-        const m = e?.mood || "Sin registro";
-        moods[m] = (moods[m]||0) + 1;
-        const inten = e?.check?.intensity;
-        if(typeof inten === "number" && !Number.isNaN(inten)){
-          sumIntensity += inten;
-          countIntensity++;
+          renderFavorites();
+          setStatus("Frase guardada ⭐");
+        }else{
+          setStatus("Ya estaba en favoritas");
         }
-      });
+      }
+    });
 
-      const topMood = Object.entries(moods).sort((a,b)=> b[1]-a[1])[0] || ["—",0];
-      const anxious = moods["Ansiosa"] || 0;
-      const calm = moods["Tranquila"] || 0;
-      const annoyed = moods["Molesta"] || 0;
-      const avgInt = countIntensity ? (sumIntensity / countIntensity).toFixed(1) : "—";
-
-      const stats = [
-        {big: total, small:"Días guardados (últimos 30)"},
-        {big: topMood[0], small:`Más frecuente (${topMood[1]} días)`},
-        {big: calm, small:"Días Tranquila"},
-        {big: anxious, small:"Días Ansiosa"},
-        {big: annoyed, small:"Días Molesta"},
-        {big: avgInt, small:"Intensidad promedio (0–10)"},
-      ];
-
-      stats.forEach(s=>{
-        const div = document.createElement("div");
-        div.className = "stat";
-        div.innerHTML = `<strong>${escapeHtml(String(s.big))}</strong><span>${escapeHtml(s.small)}</span>`;
-        grid.appendChild(div);
-      });
-    }
-
-    function renderCheck(){
-      $("#intensity").value = String(state.check.intensity ?? 0);
-      $("#intensityVal").textContent = String(state.check.intensity ?? 0);
-      $("#trigger").value = state.check.trigger ?? "";
-      $("#triggerOther").value = state.check.triggerOther ?? "";
-      $("#needNow").value = state.check.needNow ?? "";
-      $("#checkNote").value = state.check.note ?? "";
-      $("#checkSavedAt").textContent = state.check.savedAt ? formatDate(state.check.savedAt) : "—";
-
-      const showOther = ($("#trigger").value === "Otro");
-      $("#triggerOtherWrap").style.display = showOther ? "block" : "none";
-    }
-
-    function renderCbt(){
-      $("#cbtAuto").value = state.cbt.auto ?? "";
-      $("#cbtEmotion").value = state.cbt.emotion ?? "";
-      $("#cbtFear").value = state.cbt.fear ?? "";
-      $("#cbtFor").value = state.cbt.for ?? "";
-      $("#cbtAgainst").value = state.cbt.against ?? "";
-      $("#cbtAlt").value = state.cbt.alt ?? "";
-      $("#cbtSavedAt").textContent = state.cbt.savedAt ? formatDate(state.cbt.savedAt) : "—";
-    }
-
-    function renderKit(){
-      $("#anchors").value = (state.kit.anchors || []).join("\n");
-      $("#safePeople").value = (state.kit.safePeople || []).join("\n");
-      $("#kitSavedAt").textContent = state.kit.savedAt ? formatDate(state.kit.savedAt) : "—";
-      refreshEmergencyLists();
-    }
-
-    function renderPreview(){
-      $("#dataPreview").textContent = JSON.stringify(state, null, 2);
-    }
-
-    function renderAll(){
-      renderMood();
-      renderThought();
-      renderEvent();
-      renderQuote();
+    $("#clearFavBtn").addEventListener("click", ()=>{
+      if (!confirm("¿Borrar todas las favoritas?")) return;
+      state.favorites = [];
+      save();
       renderFavorites();
-      renderCheck();
-      renderCbt();
-      renderKit();
-      renderHistory();
-      renderStats();
-      renderPinStatus();
-      renderPreview();
-    }
+      setStatus("Favoritas borradas");
+    });
 
-    // ========= PAUSE =========
-    const PAUSE_EX = [
-      { title:"Respiración 4–4–6", steps:["Inhala 4s.","Sostén 4s.","Exhala 6s.","Repite suave."] },
-      { title:"Grounding 5–4–3–2–1", steps:["5 cosas que ves.","4 cosas que sientes.","3 que escuchas.","2 que hueles.","1 que agradeces."] },
-      { title:"Mano al pecho", steps:["Mano al pecho.","Di: “Estoy a salvo ahora”.","Respira 3 veces.","Elige un paso pequeño."] }
-    ];
-    let pauseIdx=0, pauseT=30, pauseTimer=null;
+    // Pause
+    $("#pause30Btn").addEventListener("click", ()=> openOverlay("#pauseOverlay"));
+    $("#pauseCloseBtn").addEventListener("click", ()=> closeOverlay("#pauseOverlay"));
+    $("#pauseOverlay").addEventListener("click", (e)=>{ if (e.target.id==="pauseOverlay") closeOverlay("#pauseOverlay"); });
 
-    function updatePauseText(){
-      const ex = PAUSE_EX[pauseIdx % PAUSE_EX.length];
-      $("#pauseText").innerHTML = `<strong>${escapeHtml(ex.title)}</strong><br><br>${ex.steps.map(s=>`• ${escapeHtml(s)}`).join("<br>")}`;
-    }
-    function openPause(){
-      $("#pauseOverlay").style.display = "flex";
-      $("#pauseOverlay").setAttribute("aria-hidden","false");
-      pauseT=30; updatePauseText();
-      $("#pauseTimer").textContent="30s";
-    }
-    function stopPause(){
-      if(pauseTimer){ clearInterval(pauseTimer); pauseTimer=null; }
-    }
-    function startPause(){
-      stopPause();
-      pauseT=30;
-      $("#pauseTimer").textContent="30s";
-      pauseTimer=setInterval(()=>{
-        pauseT--;
-        $("#pauseTimer").textContent = `${pauseT}s`;
-        if(pauseT<=0){
-          stopPause();
-          $("#pauseTimer").textContent="Listo";
-          setStatus("Pausa completa");
-        }
-      },1000);
-    }
-    function closePause(){
-      $("#pauseOverlay").style.display="none";
-      $("#pauseOverlay").setAttribute("aria-hidden","true");
-      stopPause();
-    }
-
-    // ========= (5) EMERGENCY =========
-    const MICRO_PLANS = [
-      "Toma agua y respira 3 veces lento.",
-      "Muévete 2 minutos: estira cuello/hombros.",
-      "Escribe 3 líneas: “Qué siento / qué necesito / un paso pequeño”.",
-      "Lava tu cara con agua fría y exhala largo.",
-      "Haz una cosa mínima: ordenar 1 espacio pequeño.",
-      "Pon un límite micro: “ahorita no puedo, te respondo después”."
-    ];
-    const GROUND_GUIDES = [
-      "5–4–3–2–1: 5 ves · 4 sientes · 3 escuchas · 2 hueles · 1 agradeces.",
-      "Nombra 3 colores alrededor + 3 texturas + 3 sonidos.",
-      "Presiona tus pies en el piso 10s y suelta; repite 3 veces.",
-      "Mira un punto fijo 10s: describe forma, color, sombra, borde."
-    ];
-    let groundIdx = 0;
-
-    function openEmergency(){
-      $("#emergencyOverlay").style.display="flex";
-      $("#emergencyOverlay").setAttribute("aria-hidden","false");
+    // Emergency
+    $("#emergencyBtn").addEventListener("click", ()=>{
+      openOverlay("#emergencyOverlay");
       setEmergencyTab("calm");
-      $("#emPlanOut").textContent = "—";
-      $("#emGroundOut").textContent = GROUND_GUIDES[groundIdx % GROUND_GUIDES.length];
-      buildSupportMessage();
-    }
-    function closeEmergency(){
-      $("#emergencyOverlay").style.display="none";
-      $("#emergencyOverlay").setAttribute("aria-hidden","true");
-    }
-
-    function setEmergencyTab(tab){
-      $$(".tab").forEach(b=> b.classList.toggle("active", b.getAttribute("data-tab")===tab));
-      $("#emTabCalm").style.display = (tab==="calm") ? "block" : "none";
-      $("#emTabGround").style.display = (tab==="ground") ? "block" : "none";
-      $("#emTabAnchors").style.display = (tab==="anchors") ? "block" : "none";
-      $("#emTabSupport").style.display = (tab==="support") ? "block" : "none";
-    }
-
-    function refreshEmergencyLists(){
-      // Anchors list
-      const list = $("#emAnchorsList");
-      list.innerHTML = "";
-      const anchors = (state.kit.anchors || []).filter(x=> String(x||"").trim());
-      if(!anchors.length){
-        list.innerHTML = `<div class="badge" style="width:100%; border-style:solid;">Aún no escribes anclas. Ve a Ajustes → Kit de emergencia.</div>`;
-      } else {
-        anchors.forEach(a=>{
-          const div = document.createElement("div");
-          div.className="item";
-          div.innerHTML = `
-            <div><strong>${escapeHtml(a)}</strong></div>
-            <div class="tiny muted" style="margin-top:6px;">Elige una sola y hazla 2–5 minutos.</div>
-          `;
-          div.addEventListener("click", ()=>{
-            $("#emPlanOut").textContent = `Elijo mi ancla: ${a}`;
-            setEmergencyTab("calm");
-          });
-          list.appendChild(div);
-        });
-      }
-
-      // People select
-      const sel = $("#emPerson");
-      const people = (state.kit.safePeople || []).filter(x=> String(x||"").trim());
-      const current = sel.value;
-      sel.innerHTML = `<option value="">— Elegir —</option>`;
-      people.forEach(p=>{
-        const opt = document.createElement("option");
-        opt.value = p; opt.textContent = p;
-        sel.appendChild(opt);
-      });
-      if(people.includes(current)) sel.value = current;
-      buildSupportMessage();
-    }
-
-    function buildSupportMessage(){
-      const person = ($("#emPerson").value || "").trim();
-      const intensity = Number(state.check.intensity ?? 0);
-      const mood = state.mood ? state.mood : "algo difícil";
-      const needNow = state.check.needNow ? state.check.needNow : "un poco de apoyo";
-      const name = person ? person : "¿me puedes apoyar?";
-      const msg =
-        `Hola ${name}. Ahorita me siento ${mood} (intensidad ${intensity}/10). ` +
-        `¿Podrías acompañarme un momento? Solo necesito ${needNow}. ` +
-        `Si puedes, ¿me llamas o me respondes cuando tengas chance?`;
-      $("#emMessage").value = msg;
-    }
-
-    async function copyToClipboard(text){
-      try{
-        await navigator.clipboard.writeText(text);
-        setStatus("Copiado");
-      }catch{
-        // fallback
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        ta.remove();
-        setStatus("Copiado");
-      }
-    }
-
-    // ========= PIN =========
-    function simpleHash(str){
-      let h = 2166136261;
-      for(let i=0;i<str.length;i++){
-        h ^= str.charCodeAt(i);
-        h = Math.imul(h, 16777619);
-      }
-      return (h>>>0).toString(16);
-    }
-    function getPinConfig(){
-      const raw = localStorage.getItem(PIN_KEY);
-      const cfg = safeParse(raw, null);
-      if(!cfg || typeof cfg!=="object") return { enabled:false, pinHash:null };
-      return { enabled: !!cfg.enabled, pinHash: cfg.pinHash || null };
-    }
-    function setPinConfig(cfg){ localStorage.setItem(PIN_KEY, JSON.stringify(cfg)); }
-    function renderPinStatus(){
-      const cfg = getPinConfig();
-      $("#pinStatus").textContent = cfg.enabled
-        ? "PIN: ACTIVADO ✅"
-        : (cfg.pinHash ? "PIN guardado pero DESACTIVADO" : "PIN: no configurado");
-    }
-    function showLock(){
-      $("#lockWrap").style.display="flex";
-      $("#appMain").style.display="none";
-      $("#footer").style.display="none";
-      $("#lockMsg").textContent="—";
-      $("#pinInput").value="";
-    }
-    function showApp(){
-      $("#lockWrap").style.display="none";
-      $("#appMain").style.display="grid";
-      $("#footer").style.display="block";
-    }
-    function unlockAttempt(){
-      const cfg = getPinConfig();
-      const pin = ($("#pinInput").value||"").trim();
-      if(!pin){ $("#lockMsg").textContent="Escribe tu PIN."; return; }
-      if(simpleHash(pin) === cfg.pinHash){
-        showApp();
-        setStatus("Desbloqueado");
-      }else{
-        $("#lockMsg").textContent="PIN incorrecto.";
-      }
-    }
-
-    // ========= EXPORT / IMPORT / WIPE =========
-    function download(filename, text, mime="application/json;charset=utf-8"){
-      const blob = new Blob([text], { type: mime });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href=url; a.download=filename;
-      document.body.appendChild(a);
-      a.click(); a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function exportJSON(){
-      const payload = { exportedAt: nowISO(), app:"Mi App Personal", version: state.version, data: state };
-      const stamp = new Date().toISOString().slice(0,10);
-      download(`mi-app-personal_${stamp}.json`, JSON.stringify(payload,null,2));
-      setStatus("Exportado JSON");
-    }
-
-    function exportTXT(){
-      const keys = Object.keys(state.history||{}).sort((a,b)=> a.localeCompare(b));
-      const lines = [];
-      lines.push("MI APP PERSONAL — REGULACIÓN EMOCIONAL");
-      lines.push(`Exportado: ${new Date().toLocaleString("es-MX")}`);
-      lines.push("");
-      lines.push("=== HISTORIAL ===");
-      lines.push("");
-
-      if(!keys.length){
-        lines.push("(No hay entradas guardadas)");
-      }else{
-        keys.forEach(k=>{
-          const e = state.history[k];
-          lines.push(`--- ${k} ---`);
-          lines.push(`Estado: ${e.mood || "—"}`);
-          lines.push(`Intensidad: ${(e.check?.intensity ?? "—")}/10`);
-          lines.push(`Detonante: ${e.check?.trigger || "—"}${(e.check?.trigger==="Otro" && e.check?.triggerOther) ? " ("+e.check.triggerOther+")" : ""}`);
-          lines.push(`Necesito: ${e.check?.needNow || "—"}`);
-          lines.push(`Pensamiento: ${e.thought ? e.thought.replace(/\s+/g," ").trim() : "—"}`);
-          lines.push(`Registro: ${e.event?.with || "—"}`);
-          lines.push(`Notas: ${e.event?.notes ? e.event.notes.replace(/\s+/g," ").trim() : "—"}`);
-          lines.push(`Frase (${labelNeed(e.need||"calma")}): ${e.quoteCurrent?.t || "—"}`);
-          if(e.cbt?.alt){
-            lines.push(`CBT alternativo: ${e.cbt.alt.replace(/\s+/g," ").trim()}`);
-          }
-          lines.push(`Guardado: ${e.savedAt ? formatDate(e.savedAt) : "—"}`);
-          lines.push("");
-        });
-      }
-
-      lines.push("");
-      lines.push("=== FAVORITAS ===");
-      lines.push("");
-      if(!state.favorites.length){
-        lines.push("(No hay favoritas)");
-      }else{
-        state.favorites.slice().sort((a,b)=> (a.addedAt||"").localeCompare(b.addedAt||""))
-          .forEach(f=> lines.push(`• [${labelNeed(f.need||"calma")}] "${f.t}" — ${f.a||"Anónima"}`));
-      }
-
-      const stamp = new Date().toISOString().slice(0,10);
-      download(`mi-app-personal_${stamp}.txt`, lines.join("\n"), "text/plain;charset=utf-8");
-      setStatus("Exportado TXT");
-    }
-
-    async function importJSON(file){
-      const text = await file.text();
-      const payload = safeParse(text, null);
-      const incoming = payload?.data ?? payload;
-      if(!incoming || typeof incoming !== "object"){
-        alert("Archivo inválido.");
-        return;
-      }
-
-      // mezcla segura
-      state.version = incoming.version ?? state.version;
-      state.mood = incoming.mood ?? state.mood;
-      state.thought = incoming.thought ?? state.thought;
-      state.thoughtSavedAt = incoming.thoughtSavedAt ?? state.thoughtSavedAt;
-
-      if(incoming.event && typeof incoming.event==="object"){
-        state.event.with = incoming.event.with ?? state.event.with;
-        state.event.at = incoming.event.at ?? state.event.at;
-        state.event.notes = incoming.event.notes ?? state.event.notes;
-        state.event.savedAt = incoming.event.savedAt ?? state.event.savedAt;
-      }
-
-      state.need = incoming.need ?? state.need;
-      state.quoteCurrent = incoming.quoteCurrent ?? state.quoteCurrent;
-      state.favorites = Array.isArray(incoming.favorites) ? incoming.favorites : state.favorites;
-      state.history = (incoming.history && typeof incoming.history==="object") ? incoming.history : state.history;
-      state.lastOpenedDate = incoming.lastOpenedDate ?? state.lastOpenedDate;
-
-      if(incoming.check && typeof incoming.check==="object"){
-        state.check = {
-          intensity: Number(incoming.check.intensity ?? 0) || 0,
-          trigger: incoming.check.trigger ?? "",
-          triggerOther: incoming.check.triggerOther ?? "",
-          needNow: incoming.check.needNow ?? "",
-          note: incoming.check.note ?? "",
-          savedAt: incoming.check.savedAt ?? null
-        };
-      }
-      if(incoming.cbt && typeof incoming.cbt==="object"){
-        state.cbt = {
-          auto: incoming.cbt.auto ?? "",
-          emotion: incoming.cbt.emotion ?? "",
-          fear: incoming.cbt.fear ?? "",
-          for: incoming.cbt.for ?? "",
-          against: incoming.cbt.against ?? "",
-          alt: incoming.cbt.alt ?? "",
-          savedAt: incoming.cbt.savedAt ?? null
-        };
-      }
-      if(incoming.kit && typeof incoming.kit==="object"){
-        state.kit = {
-          anchors: Array.isArray(incoming.kit.anchors) ? incoming.kit.anchors : [],
-          safePeople: Array.isArray(incoming.kit.safePeople) ? incoming.kit.safePeople : [],
-          savedAt: incoming.kit.savedAt ?? null
-        };
-      }
-
-      ensureCurrentQuote();
-      save();
-      renderAll();
-      setStatus("Importado");
-    }
-
-    function wipeAll(){
-      if(!confirm("¿Seguro que quieres borrar TODO? Esto borra historial y favoritas.")) return;
-      localStorage.removeItem(APP_KEY);
-
-      state.mood=null;
-      state.thought="";
-      state.thoughtSavedAt=null;
-      state.event={with:"",at:"",notes:"",savedAt:null};
-      state.need="calma";
-      state.quoteCurrent=null;
-      state.favorites=[];
-      state.history={};
-      state.lastOpenedDate=null;
-
-      state.check={intensity:0,trigger:"",triggerOther:"",needNow:"",note:"",savedAt:null};
-      state.cbt={auto:"",emotion:"",fear:"",for:"",against:"",alt:"",savedAt:null};
-      state.kit={anchors:[],safePeople:[],savedAt:null};
-
-      ensureCurrentQuote();
-      save();
-      renderAll();
-      setStatus("Borrado");
-    }
-
-    // ========= WIRE =========
-    function wire(){
-      // default date
-      const today = toDateKey(new Date());
-      $("#entryDate").value = state.lastOpenedDate || today;
-
-      // Mood
-      $$(".chip").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          state.mood = btn.getAttribute("data-mood");
-          save(); renderMood();
-          autoSaveDay();
-        });
-      });
-      $("#clearMood").addEventListener("click", ()=>{
-        state.mood=null;
-        save(); renderMood();
-        autoSaveDay();
-      });
-
-      // Thought
-      $("#saveThought").addEventListener("click", ()=>{
-        state.thought = $("#thought").value || "";
-        state.thoughtSavedAt = nowISO();
-        save(); renderThought();
-        autoSaveDay();
-      });
-      $("#clearThought").addEventListener("click", ()=>{
-        state.thought = "";
-        state.thoughtSavedAt = nowISO();
-        save(); renderThought();
-        autoSaveDay();
-      });
-
-      // Check (1)
-      $("#intensity").addEventListener("input", ()=>{
-        const v = Number($("#intensity").value||0);
-        $("#intensityVal").textContent = String(v);
-      });
-      $("#trigger").addEventListener("change", ()=>{
-        const isOther = ($("#trigger").value === "Otro");
-        $("#triggerOtherWrap").style.display = isOther ? "block" : "none";
-        if(!isOther) $("#triggerOther").value = "";
-      });
-
-      $("#saveCheckBtn").addEventListener("click", ()=>{
-        state.check.intensity = Number($("#intensity").value||0);
-        state.check.trigger = $("#trigger").value || "";
-        state.check.triggerOther = ($("#trigger").value==="Otro") ? ($("#triggerOther").value||"") : "";
-        state.check.needNow = $("#needNow").value || "";
-        state.check.note = $("#checkNote").value || "";
-        state.check.savedAt = nowISO();
-
-        save(); renderCheck();
-        autoSaveDay();
-        setStatus("Chequeo guardado");
-      });
-
-      $("#clearCheckBtn").addEventListener("click", ()=>{
-        state.check = { intensity:0, trigger:"", triggerOther:"", needNow:"", note:"", savedAt: nowISO() };
-        save(); renderCheck();
-        autoSaveDay();
-        setStatus("Chequeo limpio");
-      });
-
-      // Event
-      $("#saveEvt").addEventListener("click", ()=>{
-        state.event.with = $("#evtWith").value || "";
-        state.event.at = $("#evtAt").value || "";
-        state.event.notes = $("#evtNotes").value || "";
-        state.event.savedAt = nowISO();
-        save(); renderEvent();
-        autoSaveDay();
-      });
-      $("#clearEvt").addEventListener("click", ()=>{
-        state.event = { with:"", at:"", notes:"", savedAt: nowISO() };
-        save(); renderEvent();
-        autoSaveDay();
-      });
-
-      // Quotes
-      $("#needSelect").addEventListener("change", ()=>{
-        state.need = $("#needSelect").value || "calma";
-        state.quoteCurrent = null;
-        ensureCurrentQuote();
-        save(); renderQuote();
-        autoSaveDay();
-        setStatus("Tema actualizado");
-      });
-
-      $("#newQuoteBtn").addEventListener("click", ()=>{
-        ensureCurrentQuote();
-        const prev = state.quoteCurrent?.t || null;
-        state.quoteCurrent = pickRandomQuote(state.need, prev);
-        save(); renderQuote();
-        autoSaveDay();
-        setStatus("Nueva frase");
-      });
-
-      // “Guardar frase” = guardar favorita rápida (y deja rastro)
-      $("#saveQuoteBtn").addEventListener("click", ()=>{
-        ensureCurrentQuote();
-        const q = state.quoteCurrent;
-        if(q){
-          const exists = state.favorites.some(f=> f.t===q.t && f.need===q.need);
-          if(!exists){
-            state.favorites.push({ t:q.t, a:q.a, need:q.need, addedAt: nowISO() });
-          }
-        }
-        save(); renderFavorites();
-        autoSaveDay();
-        setStatus("Frase guardada ⭐");
-      });
-
-      $("#favQuoteBtn").addEventListener("click", ()=>{
-        ensureCurrentQuote();
-        const q = state.quoteCurrent;
-        if(!q) return;
-        const exists = state.favorites.some(f=> f.t===q.t && f.need===q.need);
-        if(exists){ setStatus("Ya estaba en favoritas"); return; }
-        state.favorites.push({ t:q.t, a:q.a, need:q.need, addedAt: nowISO() });
-        save(); renderFavorites();
-        autoSaveDay();
-        setStatus("Guardada ⭐");
-      });
-
-      $("#clearFavBtn").addEventListener("click", ()=>{
-        if(!confirm("¿Eliminar TODAS las favoritas?")) return;
-        state.favorites=[];
-        save(); renderFavorites();
-        setStatus("Favoritas limpias");
-      });
-
-      // CBT (3)
-      $("#saveCbtBtn").addEventListener("click", ()=>{
-        state.cbt.auto = $("#cbtAuto").value || "";
-        state.cbt.emotion = $("#cbtEmotion").value || "";
-        state.cbt.fear = $("#cbtFear").value || "";
-        state.cbt.for = $("#cbtFor").value || "";
-        state.cbt.against = $("#cbtAgainst").value || "";
-        state.cbt.alt = $("#cbtAlt").value || "";
-        state.cbt.savedAt = nowISO();
-        save(); renderCbt();
-        autoSaveDay();
-        setStatus("CBT guardado");
-      });
-
-      $("#clearCbtBtn").addEventListener("click", ()=>{
-        state.cbt = { auto:"", emotion:"", fear:"", for:"", against:"", alt:"", savedAt: nowISO() };
-        save(); renderCbt();
-        autoSaveDay();
-        setStatus("CBT limpio");
-      });
-
-      // Kit (5)
-      $("#saveKitBtn").addEventListener("click", ()=>{
-        const anchors = ($("#anchors").value||"").split("\n").map(s=>s.trim()).filter(Boolean);
-        const people = ($("#safePeople").value||"").split("\n").map(s=>s.trim()).filter(Boolean);
-        state.kit.anchors = anchors;
-        state.kit.safePeople = people;
-        state.kit.savedAt = nowISO();
-        save(); renderKit();
-        setStatus("Kit guardado");
-      });
-      $("#clearKitBtn").addEventListener("click", ()=>{
-        state.kit = { anchors:[], safePeople:[], savedAt: nowISO() };
-        save(); renderKit();
-        setStatus("Kit limpio");
-      });
-
-      // History
-      $("#saveDayBtn").addEventListener("click", saveDayManual);
-      $("#openDayBtn").addEventListener("click", ()=> openDay(getEntryDate()));
-      $("#searchInput").addEventListener("input", renderHistory);
-
-      // Pause
-      $("#pauseBtn").addEventListener("click", openPause);
-      $("#pauseCloseBtn").addEventListener("click", closePause);
-      $("#pauseStartBtn").addEventListener("click", startPause);
-      $("#pauseSwitchBtn").addEventListener("click", ()=>{
-        pauseIdx++;
-        updatePauseText();
-        stopPause();
-        $("#pauseTimer").textContent="30s";
-      });
-
-      // Emergency
-      $("#emergencyBtn").addEventListener("click", openEmergency);
-      $("#emCloseBtn").addEventListener("click", closeEmergency);
-
-      $$(".tab").forEach(t=>{
-        t.addEventListener("click", ()=> setEmergencyTab(t.getAttribute("data-tab")));
-      });
-
-      $("#emStart30").addEventListener("click", ()=>{
-        closeEmergency();
-        openPause();
-      });
-
-      $("#emMicroPlan").addEventListener("click", ()=>{
-        const plan = MICRO_PLANS[Math.floor(Math.random()*MICRO_PLANS.length)];
-        $("#emPlanOut").textContent = plan;
-      });
-
-      $("#emCopyGround").addEventListener("click", ()=> copyToClipboard($("#emGroundOut").textContent || ""));
-      $("#emGroundNext").addEventListener("click", ()=>{
-        groundIdx++;
-        $("#emGroundOut").textContent = GROUND_GUIDES[groundIdx % GROUND_GUIDES.length];
-      });
-
-      $("#emPerson").addEventListener("change", buildSupportMessage);
-      $("#emMsgRefresh").addEventListener("click", buildSupportMessage);
-      $("#emCopyMsg").addEventListener("click", ()=> copyToClipboard($("#emMessage").value || ""));
-
-      // Export / Import / Wipe
-      $("#exportJsonBtn").addEventListener("click", exportJSON);
-      $("#exportTxtBtn").addEventListener("click", exportTXT);
-      $("#importFile").addEventListener("change", async (e)=>{
-        const file = e.target.files?.[0];
-        if(!file) return;
-        await importJSON(file);
-        e.target.value="";
-      });
-      $("#wipeBtn").addEventListener("click", wipeAll);
-
-      // PIN controls
-      $("#setPinBtn").addEventListener("click", ()=>{
-        const p1 = ($("#pinSet").value||"").trim();
-        const p2 = ($("#pinSet2").value||"").trim();
-        if(!p1 || !p2){ setStatus("Escribe y confirma el PIN"); return; }
-        if(!/^\d+$/.test(p1)){ setStatus("PIN solo números"); return; }
-        if(p1 !== p2){ setStatus("No coincide"); return; }
-
-        const cfg = getPinConfig();
-        cfg.pinHash = simpleHash(p1);
-        setPinConfig(cfg);
-        $("#pinSet").value=""; $("#pinSet2").value="";
-        renderPinStatus();
-        setStatus("PIN guardado");
-      });
-
-      $("#togglePinBtn").addEventListener("click", ()=>{
-        const cfg = getPinConfig();
-        if(!cfg.pinHash){ alert("Primero guarda un PIN."); return; }
-        cfg.enabled = !cfg.enabled;
-        setPinConfig(cfg);
-        renderPinStatus();
-        setStatus(cfg.enabled ? "PIN activado" : "PIN desactivado");
-        if(cfg.enabled) showLock();
-      });
-
-      $("#removePinBtn").addEventListener("click", ()=>{
-        if(!confirm("¿Quitar PIN?")) return;
-        setPinConfig({ enabled:false, pinHash:null });
-        renderPinStatus();
-        setStatus("PIN eliminado");
-        showApp();
-      });
-
-      // Lock screen
-      $("#unlockBtn").addEventListener("click", unlockAttempt);
-      $("#pinInput").addEventListener("keydown", (e)=>{ if(e.key==="Enter") unlockAttempt(); });
-
-      $("#lockHelpBtn").addEventListener("click", ()=>{
-        alert(
-          "Si olvidaste el PIN:\n\n" +
-          "• Usa el botón: 'Quitar PIN (sin borrar historial)'\n" +
-          "• Luego puedes crear otro PIN desde Ajustes."
-        );
-      });
-
-      $("#lockRemovePinBtn").addEventListener("click", ()=>{
-        if(!confirm("Esto quitará el PIN y podrás entrar. NO borra tu historial. ¿Continuar?")) return;
-        localStorage.removeItem(PIN_KEY);
-        setStatus("PIN eliminado");
-        showApp();
-      });
-
-        // Service Worker
-      if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
-    }
-
-    // ========= BOOT =========
-    load();
-    if(!state.need) state.need="calma";
-    ensureCurrentQuote();
-    save();
-
-    (function(){
-      const cfg = getPinConfig();
-      if(cfg.enabled && cfg.pinHash){ showLock(); return; }
-      showApp();
-    })();
-
-  document.addEventListener("DOMContentLoaded", ()=>{
-  renderAll();
-
-  // ====== ABOUT (siempre funcional, aunque wire falle) ======
-  const aboutBtn = document.getElementById("aboutBtn");
-  const aboutOv  = document.getElementById("aboutOverlay");
-  const aboutClose = document.getElementById("aboutCloseBtn");
-  const aboutCopy  = document.getElementById("aboutCopyBtn");
-  const aboutYear  = document.getElementById("aboutYear");
-
-  const openAbout = () => {
-    if (!aboutOv) return;
-    if (aboutYear) aboutYear.textContent = new Date().getFullYear();
-    aboutOv.style.display = "flex";
-    aboutOv.setAttribute("aria-hidden","false");
-  };
-
-  const closeAbout = () => {
-    if (!aboutOv) return;
-    aboutOv.style.display = "none";
-    aboutOv.setAttribute("aria-hidden","true");
-  };
-
-  if (aboutBtn) aboutBtn.addEventListener("click", openAbout);
-  if (aboutClose) aboutClose.addEventListener("click", closeAbout);
-
-  if (aboutCopy) aboutCopy.addEventListener("click", ()=>{
-    const txt =
-      "Mi App Personal — Autoría: Claudia Alejandra Garza Hernandez. © " +
-      new Date().getFullYear() +
-      " Claudia Alejandra Garza Hernandez. Todos los derechos reservados.";
-    navigator.clipboard?.writeText(txt).catch(()=>{});
-  });
-
-  // cerrar tocando fuera
-  if (aboutOv) aboutOv.addEventListener("click", (e)=>{
-    if (e.target === aboutOv) closeAbout();
-  });
-  // ====== FIN ABOUT ======
-
-  wire();
-});
-
-  </script>
-<script>
-  (function(){
-    const btn   = document.getElementById("aboutBtn");
-    const ov    = document.getElementById("aboutOverlay");
-    const close = document.getElementById("aboutCloseBtn");
-    const copy  = document.getElementById("aboutCopyBtn");
-    const year  = document.getElementById("aboutYear");
-
-    if (!btn || !ov) return; // si algo falta, no rompe nada
-
-    btn.onclick = () => {
-      if (year) year.textContent = new Date().getFullYear();
-      ov.style.display = "flex";
-      ov.setAttribute("aria-hidden","false");
-    };
-
-    if (close) close.onclick = () => {
-      ov.style.display = "none";
-      ov.setAttribute("aria-hidden","true");
-    };
-
-    if (copy) copy.onclick = () => {
+    });
+    $("#emCloseBtn").addEventListener("click", ()=> closeOverlay("#emergencyOverlay"));
+    $("#emergencyOverlay").addEventListener("click", (e)=>{ if (e.target.id==="emergencyOverlay") closeOverlay("#emergencyOverlay"); });
+
+    $$("#emergencyOverlay .tab").forEach(t=>{
+      t.addEventListener("click", ()=> setEmergencyTab(t.getAttribute("data-tab")));
+    });
+
+    $("#emStart30").addEventListener("click", ()=>{
+      closeOverlay("#emergencyOverlay");
+      openOverlay("#pauseOverlay");
+    });
+
+    // About (autoría)
+    $("#aboutBtn").addEventListener("click", ()=>{
+      $("#aboutYear").textContent = new Date().getFullYear();
+      openOverlay("#aboutOverlay");
+    });
+    $("#aboutCloseBtn").addEventListener("click", ()=> closeOverlay("#aboutOverlay"));
+    $("#aboutOverlay").addEventListener("click", (e)=>{ if (e.target.id==="aboutOverlay") closeOverlay("#aboutOverlay"); });
+
+    $("#aboutCopyBtn").addEventListener("click", ()=>{
       const txt =
         "Mi App Personal — Autoría: Claudia Alejandra Garza Hernandez. © " +
         new Date().getFullYear() +
         " Claudia Alejandra Garza Hernandez. Todos los derechos reservados.";
-      if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(txt).catch(()=>{});
-      }
-    };
+      copyToClipboard(txt);
+    });
 
-    ov.addEventListener("click", (e)=>{
-      if (e.target === ov) {
-        ov.style.display = "none";
-        ov.setAttribute("aria-hidden","true");
+    // Export / Import JSON
+    $("#exportBtn").addEventListener("click", ()=>{
+      const data = JSON.stringify(state, null, 2);
+      const blob = new Blob([data], {type:"application/json"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `mi-app-personal-respaldo-${toDateKey(new Date())}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setStatus("Respaldo descargado");
+    });
+
+    $("#importFile").addEventListener("change", async (e)=>{
+      const file = e.target.files?.[0];
+      if (!file) return;
+      if (!confirm("Importar reemplazará tu información actual. ¿Continuar?")){ e.target.value=""; return; }
+
+      try{
+        const text = await file.text();
+        const obj = JSON.parse(text);
+        // mínima validación
+        if (!obj || typeof obj !== "object") throw new Error("Formato inválido");
+        localStorage.setItem(KEY, JSON.stringify(obj));
+        location.reload();
+      }catch(err){
+        alert("No se pudo importar ese archivo. Asegúrate de que sea un JSON de esta app.");
+      }finally{
+        e.target.value="";
       }
     });
+
+    // Service Worker
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+  }
+
+  // Boot
+  (function(){
+    // fecha por si cambia de día
+    const today = toDateKey(new Date());
+    if (!state.lastOpenedDate) state.lastOpenedDate = today;
+    ensureDay(state.lastOpenedDate);
+    save();
+    renderAll();
   })();
+
+  document.addEventListener("DOMContentLoaded", ()=>{
+    wire();
+  });
 </script>
 
 </body>
 </html>
+2) ✅ sw.js (reemplaza tu sw.js completo)
+Copiar código
+Js
+const CACHE = "mi-app-personal-cache-v2";
+const ASSETS = [
+  "./",
+  "./index.html",
+  "./manifest.webmanifest",
+  "./icon.svg",
+  "./sw.js"
+];
+
+self.addEventListener("install", (e)=>{
+  e.waitUntil(
+    caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())
+  );
+});
+
+self.addEventListener("activate", (e)=>{
+  e.waitUntil(
+    caches.keys().then(keys=>Promise.all(keys.map(k=> k!==CACHE ? caches.delete(k) : null )))
+      .then(()=>self.clients.claim())
+  );
+});
+
+self.addEventListener("fetch", (e)=>{
+  e.respondWith(
+    caches.match(e.request).then(cached=>{
+      return cached || fetch(e.request).then(resp=>{
+        const copy = resp.clone();
+        caches.open(CACHE).then(c=>c.put(e.request, copy));
+        return resp;
+      }).catch(()=>cached);
+    })
+  );
+});
+3) ✅ manifest.webmanifest (reemplaza completo)
+Copiar código
+Json
+{
+  "name": "Mi App Personal",
+  "short_name": "Mi App",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#0b1220",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
+
