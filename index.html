@@ -2063,10 +2063,49 @@ select option {
       showApp();
     })();
 
-    document.addEventListener("DOMContentLoaded", ()=>{
-      renderAll();
-      wire();
-    });
+  document.addEventListener("DOMContentLoaded", ()=>{
+  renderAll();
+
+  // ====== ABOUT (siempre funcional, aunque wire falle) ======
+  const aboutBtn = document.getElementById("aboutBtn");
+  const aboutOv  = document.getElementById("aboutOverlay");
+  const aboutClose = document.getElementById("aboutCloseBtn");
+  const aboutCopy  = document.getElementById("aboutCopyBtn");
+  const aboutYear  = document.getElementById("aboutYear");
+
+  const openAbout = () => {
+    if (!aboutOv) return;
+    if (aboutYear) aboutYear.textContent = new Date().getFullYear();
+    aboutOv.style.display = "flex";
+    aboutOv.setAttribute("aria-hidden","false");
+  };
+
+  const closeAbout = () => {
+    if (!aboutOv) return;
+    aboutOv.style.display = "none";
+    aboutOv.setAttribute("aria-hidden","true");
+  };
+
+  if (aboutBtn) aboutBtn.addEventListener("click", openAbout);
+  if (aboutClose) aboutClose.addEventListener("click", closeAbout);
+
+  if (aboutCopy) aboutCopy.addEventListener("click", ()=>{
+    const txt =
+      "Mi App Personal — Autoría: Claudia Alejandra Garza Hernandez. © " +
+      new Date().getFullYear() +
+      " Claudia Alejandra Garza Hernandez. Todos los derechos reservados.";
+    navigator.clipboard?.writeText(txt).catch(()=>{});
+  });
+
+  // cerrar tocando fuera
+  if (aboutOv) aboutOv.addEventListener("click", (e)=>{
+    if (e.target === aboutOv) closeAbout();
+  });
+  // ====== FIN ABOUT ======
+
+  wire();
+});
+
   </script>
 </body>
 </html>
