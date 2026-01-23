@@ -2107,5 +2107,45 @@ select option {
 });
 
   </script>
+<script>
+  (function(){
+    const btn   = document.getElementById("aboutBtn");
+    const ov    = document.getElementById("aboutOverlay");
+    const close = document.getElementById("aboutCloseBtn");
+    const copy  = document.getElementById("aboutCopyBtn");
+    const year  = document.getElementById("aboutYear");
+
+    if (!btn || !ov) return; // si algo falta, no rompe nada
+
+    btn.onclick = () => {
+      if (year) year.textContent = new Date().getFullYear();
+      ov.style.display = "flex";
+      ov.setAttribute("aria-hidden","false");
+    };
+
+    if (close) close.onclick = () => {
+      ov.style.display = "none";
+      ov.setAttribute("aria-hidden","true");
+    };
+
+    if (copy) copy.onclick = () => {
+      const txt =
+        "Mi App Personal — Autoría: Claudia Alejandra Garza Hernandez. © " +
+        new Date().getFullYear() +
+        " Claudia Alejandra Garza Hernandez. Todos los derechos reservados.";
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(txt).catch(()=>{});
+      }
+    };
+
+    ov.addEventListener("click", (e)=>{
+      if (e.target === ov) {
+        ov.style.display = "none";
+        ov.setAttribute("aria-hidden","true");
+      }
+    });
+  })();
+</script>
+
 </body>
 </html>
