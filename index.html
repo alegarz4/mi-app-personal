@@ -306,10 +306,12 @@ select option {
         <p class="sub">Regulación emocional: registrar, respirar, entender y avanzar (para todo, no para una sola historia).</p>
       </div>
 
-      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
-        <button class="btn danger" id="emergencyBtn" type="button">🧯 Estoy muy mal</button>
-        <div class="status"><span class="dot"></span><span id="statusText">Listo</span></div>
-      </div>
+      <<div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+  <button class="btn danger" id="emergencyBtn" type="button">🧯 Estoy muy mal</button>
+  <button class="btn ghost" id="aboutBtn" type="button">ℹ️ Acerca de</button>
+  <div class="status"><span class="dot"></span><span id="statusText">Listo</span></div>
+</div>
+
     </div>
   </header>
 
@@ -790,6 +792,43 @@ select option {
           </p>
         </details>
       </div>
+
+      <!-- ABOUT MODAL -->
+<div class="overlay" id="aboutOverlay" aria-hidden="true">
+  <div class="modal">
+    <h3>ℹ️ Acerca de</h3>
+
+    <p class="muted" style="margin-top:0;">
+      <strong>Mi App Personal</strong> es una herramienta de regulación emocional:
+      registrar, respirar, entender y avanzar.
+    </p>
+
+    <div class="divider"></div>
+
+    <p class="muted" style="margin:0;">
+      <strong>Autoría:</strong> Claudia Alejandra Garza Hernandez<br>
+      <strong>©</strong> <span id="aboutYear"></span> · Todos los derechos reservados.
+    </p>
+
+    <p class="tiny muted" style="margin-top:10px;">
+      Esta app funciona offline y guarda la información solo en tu dispositivo.
+      No usa cuentas ni servidores.
+    </p>
+
+    <details>
+      <summary>Licencia</summary>
+      <p class="tiny muted">
+        Prohibida la copia, modificación o distribución sin permiso por escrito
+        de la autora.
+      </p>
+    </details>
+
+    <div class="modalActions">
+      <button class="btn ghost" id="aboutCopyBtn" type="button">Copiar autoría</button>
+      <button class="btn danger" id="aboutCloseBtn" type="button">Cerrar</button>
+    </div>
+  </div>
+</div>
 
       <div class="modalActions">
         <button class="btn danger" id="emCloseBtn" type="button">Cerrar</button>
@@ -2007,6 +2046,26 @@ select option {
         setStatus("PIN eliminado");
         showApp();
       });
+
+      // About modal
+$("#aboutBtn").addEventListener("click", ()=>{
+  $("#aboutOverlay").style.display = "flex";
+  $("#aboutOverlay").setAttribute("aria-hidden","false");
+  $("#aboutYear").textContent = new Date().getFullYear();
+});
+
+$("#aboutCloseBtn").addEventListener("click", ()=>{
+  $("#aboutOverlay").style.display = "none";
+  $("#aboutOverlay").setAttribute("aria-hidden","true");
+});
+
+$("#aboutCopyBtn").addEventListener("click", ()=>{
+  const txt =
+    "Mi App Personal — Autoría: Claudia Alejandra Garza Hernandez. © " +
+    new Date().getFullYear() +
+    " Claudia Alejandra Garza Hernandez. Todos los derechos reservados.";
+  copyToClipboard(txt);
+});
 
       // Service Worker
       if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
