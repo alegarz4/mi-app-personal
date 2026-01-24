@@ -8,8 +8,6 @@
 
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <!-- iOS icon (opcional pero recomendado si lo tienes) -->
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
   <style>
     :root{
@@ -557,16 +555,8 @@
     return arr[Math.floor(Math.random()*arr.length)];
   }
 
-  /**
-   * CORRECCIÓN CLAVE:
-   * - Si ya hay frase actual y el need no cambió, NO la cambies (para que Guardar favoritas guarde la que ves).
-   * - Si forceNew=true, entonces sí genera una nueva random (para el botón "Cambiar frase").
-   */
-  function ensureCurrentQuote(forceNew = false){
+  function ensureCurrentQuote(){
     const need = $("#needSelect")?.value || "calma";
-
-    if (!forceNew && state.quoteCurrent && state.quoteCurrent.need === need) return;
-
     const pool = QUOTES[need] || QUOTES.calma;
     const q = pick(pool);
     state.quoteCurrent = { t:q.t, a:q.a, need };
@@ -574,16 +564,14 @@
   }
 
   function renderQuote(){
-    if (!state.quoteCurrent){
-      ensureCurrentQuote(true);
+    const q = state.quoteCurrent;
+    if (!q){
+      ensureCurrentQuote();
     }
-
     const qq = state.quoteCurrent;
-
     $("#quoteText").textContent = qq.t;
     $("#quoteNeedPill").textContent = qq.need;
     $("#quoteMoodPill").textContent = state.mood || "—";
-
     const authorInput = $("#quoteAuthor")?.value?.trim();
     const by = authorInput ? authorInput : (qq.a || "Anónimo");
     $("#quoteBy").textContent = by ? "— " + by : "";
@@ -642,20 +630,19 @@
   }
 
   function renderAll(){
+    // date
     const today = toDateKey(new Date());
     $("#entryDate").value = state.lastOpenedDate || today;
 
+    // restore day fields
     const day = ensureDay($("#entryDate").value);
     state.mood = day.mood || state.mood || null;
     $("#thoughtInput").value = day.thought || "";
     $("#eventInput").value = day.event || "";
 
     renderMood();
-
-    // Si no hay frase actual, crea una. Si ya hay, NO la cambies aquí.
-    ensureCurrentQuote(false);
+    ensureCurrentQuote();
     renderQuote();
-
     renderHistory();
     renderFavorites();
 
@@ -749,6 +736,7 @@
           </div>
         </div>
       `;
+      // wire anchor button
       setTimeout(()=>{
         const b = $("#emSaveAnchor");
         if (b) b.addEventListener("click", ()=>{
@@ -781,9 +769,11 @@
 
   // Wire all
   function wire(){
+    // default date
     const today = toDateKey(new Date());
     $("#entryDate").value = state.lastOpenedDate || today;
 
+    // date change
     $("#entryDate").addEventListener("change", ()=>{
       state.lastOpenedDate = $("#entryDate").value;
       const d = ensureDay(state.lastOpenedDate);
@@ -791,10 +781,7 @@
       $("#thoughtInput").value = d.thought || "";
       $("#eventInput").value = d.event || "";
       renderMood();
-
-      // Mantén la frase actual si coincide; si cambiaste el need, se ajusta en el handler del select.
       renderQuote();
-
       renderHistory();
       $("#lastSavedInfo").textContent = d.updatedAt ? `Último guardado: ${new Date(d.updatedAt).toLocaleString()}` : "";
       save();
@@ -807,7 +794,6 @@
         state.mood = btn.getAttribute("data-mood");
         renderMood();
         autoSaveDay();
-        renderQuote(); // actualizar pill de mood en la frase
         setStatus("Estado guardado");
       });
     });
@@ -816,7 +802,6 @@
       state.mood = null;
       renderMood();
       autoSaveDay();
-      renderQuote();
       setStatus("Mood limpio");
     });
 
@@ -846,40 +831,35 @@
       setStatus("Borrado");
     });
 
-    // quote: cambio de necesidad -> genera frase si cambió categoría
+    // quote
     $("#needSelect").addEventListener("change", ()=>{
-      ensureCurrentQuote(false);
-      // Si cambiaste el need, el ensureCurrentQuote(false) generará una nueva (porque need cambia).
+      ensureCurrentQuote();
       renderQuote();
       setStatus("Frase actualizada");
     });
 
-    // 🔁 Cambiar frase = SIEMPRE random nueva
     $("#newQuoteBtn").addEventListener("click", ()=>{
-      ensureCurrentQuote(true);
+      ensureCurrentQuote();
       renderQuote();
       setStatus("Nueva frase");
     });
 
-    // ⭐ Guardar en favoritas = guardar la ACTUAL (NO random)
+    // “Guardar frase” = favorita
     $("#saveQuoteBtn").addEventListener("click", ()=>{
+      ensureCurrentQuote();
       const q = state.quoteCurrent;
-      if (!q){
-        setStatus("No hay frase para guardar");
-        return;
-      }
-
-      const authorInput = $("#quoteAuthor")?.value?.trim();
-      const a = authorInput ? authorInput : (q.a || "");
-      const exists = (state.favorites || []).some(f=> f.t===q.t && f.need===q.need);
-
-      if (!exists){
-        state.favorites.push({ t:q.t, a, need:q.need, addedAt: nowISO() });
-        save();
-        renderFavorites();
-        setStatus("Frase guardada ⭐");
-      }else{
-        setStatus("Ya estaba en favoritas");
+      if (q){
+        const authorInput = $("#quoteAuthor")?.value?.trim();
+        const a = authorInput ? authorInput : (q.a || "");
+        const exists = (state.favorites || []).some(f=> f.t===q.t && f.need===q.need);
+        if (!exists){
+          state.favorites.push({ t:q.t, a, need:q.need, addedAt: nowISO() });
+          save();
+          renderFavorites();
+          setStatus("Frase guardada ⭐");
+        }else{
+          setStatus("Ya estaba en favoritas");
+        }
       }
     });
 
@@ -950,6 +930,7 @@
       try{
         const text = await file.text();
         const obj = JSON.parse(text);
+        // mínima validación
         if (!obj || typeof obj !== "object") throw new Error("Formato inválido");
         localStorage.setItem(KEY, JSON.stringify(obj));
         location.reload();
@@ -966,13 +947,10 @@
 
   // Boot
   (function(){
+    // fecha por si cambia de día
     const today = toDateKey(new Date());
     if (!state.lastOpenedDate) state.lastOpenedDate = today;
     ensureDay(state.lastOpenedDate);
-
-    // No forzar random aquí si ya hay una frase guardada.
-    if (!state.quoteCurrent) ensureCurrentQuote(true);
-
     save();
     renderAll();
   })();
