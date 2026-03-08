@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Brújula Emocional">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-  
+
 <style>
 :root{
   --bg:#0f172a;
@@ -310,12 +310,12 @@ canvas{
     </div>
 
     <div class="themeBar" style="margin-top:10px">
-      <button class="themeBtn active" data-theme="noche"><span class="themePreview" style="background:#7c3aed"></span>Noche</button>
-      <button class="themeBtn" data-theme="orquidea"><span class="themePreview" style="background:#c77dff"></span>Orquídea</button>
-      <button class="themeBtn" data-theme="cielo"><span class="themePreview" style="background:#38bdf8"></span>Cielo</button>
-      <button class="themeBtn" data-theme="bosque"><span class="themePreview" style="background:#22c55e"></span>Bosque</button>
-      <button class="themeBtn" data-theme="aurora"><span class="themePreview" style="background:#ec4899"></span>Aurora</button>
-      <button class="themeBtn" data-theme="vino"><span class="themePreview" style="background:#9f1239"></span>Vino</button>
+      <button class="themeBtn active" data-theme="noche" type="button"><span class="themePreview" style="background:#7c3aed"></span>Noche</button>
+      <button class="themeBtn" data-theme="orquidea" type="button"><span class="themePreview" style="background:#c77dff"></span>Orquídea</button>
+      <button class="themeBtn" data-theme="cielo" type="button"><span class="themePreview" style="background:#38bdf8"></span>Cielo</button>
+      <button class="themeBtn" data-theme="bosque" type="button"><span class="themePreview" style="background:#22c55e"></span>Bosque</button>
+      <button class="themeBtn" data-theme="aurora" type="button"><span class="themePreview" style="background:#ec4899"></span>Aurora</button>
+      <button class="themeBtn" data-theme="vino" type="button"><span class="themePreview" style="background:#9f1239"></span>Vino</button>
     </div>
   </div>
 </header>
@@ -366,11 +366,11 @@ canvas{
 
         <label>¿Cómo te sientes hoy?</label>
         <div class="moodGrid" id="moodGrid">
-          <button class="moodBtn active" data-mood="calma"><span class="emoji">😌</span>Calma</button>
-          <button class="moodBtn" data-mood="alegria"><span class="emoji">🙂</span>Alegría</button>
-          <button class="moodBtn" data-mood="estres"><span class="emoji">😵</span>Estrés</button>
-          <button class="moodBtn" data-mood="tristeza"><span class="emoji">😢</span>Tristeza</button>
-          <button class="moodBtn" data-mood="enojo"><span class="emoji">😠</span>Enojo</button>
+          <button class="moodBtn active" data-mood="calma" type="button"><span class="emoji">😌</span>Calma</button>
+          <button class="moodBtn" data-mood="alegria" type="button"><span class="emoji">🙂</span>Alegría</button>
+          <button class="moodBtn" data-mood="estres" type="button"><span class="emoji">😵</span>Estrés</button>
+          <button class="moodBtn" data-mood="tristeza" type="button"><span class="emoji">😢</span>Tristeza</button>
+          <button class="moodBtn" data-mood="enojo" type="button"><span class="emoji">😠</span>Enojo</button>
         </div>
 
         <div class="row">
@@ -495,9 +495,9 @@ canvas{
         <textarea id="note" placeholder="Ej. Hoy no fue sencillo, pero sí me cuidé un poco."></textarea>
 
         <div class="row" style="margin-top:12px">
-          <button class="btn main" id="saveBtn">Guardar registro</button>
-          <button class="btn sec" id="quickBtn">Guardar breve</button>
-          <button class="btn warn" id="clearBtn">Limpiar</button>
+          <button class="btn main" id="saveBtn" type="button">Guardar registro</button>
+          <button class="btn sec" id="quickBtn" type="button">Guardar breve</button>
+          <button class="btn warn" id="clearBtn" type="button">Limpiar</button>
         </div>
 
         <div class="row" style="margin-top:10px">
@@ -562,7 +562,7 @@ canvas{
             <textarea id="medNotes" placeholder="Ej. Tomar después de alimentos / no olvidar llevar al trabajo"></textarea>
 
             <div class="row" style="margin-top:12px">
-              <button class="btn main" id="saveMedBtn">Guardar medicación</button>
+              <button class="btn main" id="saveMedBtn" type="button">Guardar medicación</button>
             </div>
           </div>
         </div>
@@ -632,7 +632,7 @@ canvas{
         <div id="quote" style="font-size:16px;font-weight:900;line-height:1.5">“Puedo sentir esto sin juzgarme.”</div>
         <div class="small" id="quoteSub" style="margin-top:8px">Úsala como una pausa breve.</div>
         <div class="row" style="margin-top:12px">
-          <button class="btn sec" id="newQuoteBtn">Otra frase ✨</button>
+          <button class="btn sec" id="newQuoteBtn" type="button">Otra frase ✨</button>
         </div>
       </div>
 
@@ -736,8 +736,8 @@ canvas{
       <div class="card">
         <h2>Respaldo</h2>
         <div class="row">
-          <button class="btn good" id="exportBtn">Exportar JSON</button>
-          <button class="btn bad" id="deleteAllBtn">Borrar todo</button>
+          <button class="btn good" id="exportBtn" type="button">Exportar JSON</button>
+          <button class="btn bad" id="deleteAllBtn" type="button">Borrar todo</button>
         </div>
 
         <label style="margin-top:12px">Importar respaldo</label>
@@ -761,8 +761,8 @@ canvas{
           <strong>Protección de autoría:</strong> no retirar créditos, aviso de licencia ni referencia de autora en copias o adaptaciones.
         </div>
         <div class="row" style="margin-top:12px">
-          <button class="btn soft" id="aboutBtn">Acerca de…</button>
-          <button class="btn soft" id="licenseBtn">Licencia</button>
+          <button class="btn soft" id="aboutBtn" type="button">Acerca de…</button>
+          <button class="btn soft" id="licenseBtn" type="button">Licencia</button>
         </div>
       </div>
 
@@ -796,7 +796,7 @@ canvas{
       <li>La autoría y la licencia permanecen visibles.</li>
     </ul>
     <div class="row" style="margin-top:16px">
-      <button class="btn main" id="closeWelcomeBtn">Comenzar</button>
+      <button class="btn main" id="closeWelcomeBtn" type="button">Comenzar</button>
     </div>
   </div>
 </div>
@@ -814,7 +814,7 @@ canvas{
       con enfoque de uso personal y educativo.
     </div>
     <div class="row" style="margin-top:14px">
-      <button class="btn main" id="closeAboutBtn">Cerrar</button>
+      <button class="btn main" id="closeAboutBtn" type="button">Cerrar</button>
     </div>
   </div>
 </div>
@@ -838,7 +838,7 @@ canvas{
       <div class="codebox">BE-CA-GH-2026</div>
     </div>
     <div class="row" style="margin-top:14px">
-      <button class="btn main" id="closeLicenseBtn">Cerrar</button>
+      <button class="btn main" id="closeLicenseBtn" type="button">Cerrar</button>
     </div>
   </div>
 </div>
@@ -1122,7 +1122,7 @@ canvas{
 
   function makeEntry(quick = false){
     return {
-      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
+      id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now() + Math.random()),
       createdAt: new Date().toISOString(),
       date: ui.date.value || todayISO(),
       time: quick ? nowTime() : (ui.time.value || nowTime()),
@@ -1232,7 +1232,7 @@ canvas{
           <td>${escapeHtml(e.emotion || "—")}</td>
           <td>${escapeHtml(e.intensity ?? "—")}</td>
           <td>${escapeHtml(note)}</td>
-          <td><button class="btn sec" data-del="${escapeHtml(e.id)}" style="padding:6px 10px;font-size:12px">Eliminar</button></td>
+          <td><button class="btn sec" data-del="${escapeHtml(e.id)}" type="button" style="padding:6px 10px;font-size:12px">Eliminar</button></td>
         </tr>
       `;
     });
@@ -1462,56 +1462,6 @@ canvas{
     ui.medThirdWrap.style.display = freq >= 3 ? "block" : "none";
   }
 
-  function initMedication(){
-    const med = loadMedication();
-    if(med && med.enabled){
-      ui.medEnabled.checked = true;
-      ui.medName.value = med.name || "";
-      ui.medDose.value = med.dose || "";
-      ui.medFrequency.value = String(med.frequency || 1);
-      ui.medTime1.value = med.times?.[0] || "";
-      ui.medTime2.value = med.times?.[1] || "";
-      ui.medTime3.value = med.times?.[2] || "";
-      ui.medNotes.value = med.notes || "";
-    } else {
-      ui.medEnabled.checked = false;
-      ui.medFrequency.value = "1";
-    }
-
-    updateMedicationFrequencyUI();
-    toggleMedicationForm();
-
-    ui.medEnabled.addEventListener("change", toggleMedicationForm);
-    ui.medFrequency.addEventListener("change", updateMedicationFrequencyUI);
-
-    ui.saveMedBtn.addEventListener("click", () => {
-      const enabled = ui.medEnabled.checked;
-      const frequency = Number(ui.medFrequency.value || 1);
-      const times = [ui.medTime1.value, ui.medTime2.value, ui.medTime3.value]
-        .slice(0, frequency)
-        .filter(Boolean);
-
-      const medData = {
-        enabled,
-        name: ui.medName.value.trim(),
-        dose: ui.medDose.value.trim(),
-        frequency,
-        times,
-        notes: ui.medNotes.value.trim()
-      };
-
-      if(enabled && (!medData.name || !medData.dose || !times.length)){
-        alert("Completa al menos nombre, dosis y un horario.");
-        return;
-      }
-
-      saveMedication(medData);
-      renderMedication();
-      maybeNotifyMedication();
-      alert("Medicación guardada.");
-    });
-  }
-
   function toggleMedicationForm(){
     const enabled = ui.medEnabled.checked;
     ui.medFormWrap.style.display = enabled ? "block" : "none";
@@ -1649,9 +1599,9 @@ canvas{
             </div>
           </div>
           <div class="row" style="margin-top:12px">
-            <button class="btn take" data-med-action="a_tiempo" data-med-time="${escapeHtml(t)}">Ya la tomé</button>
-            <button class="btn late" data-med-action="tarde" data-med-time="${escapeHtml(t)}">La tomé tarde</button>
-            <button class="btn skip" data-med-action="omitida" data-med-time="${escapeHtml(t)}">Omitida</button>
+            <button class="btn take" data-med-action="a_tiempo" data-med-time="${escapeHtml(t)}" type="button">Ya la tomé</button>
+            <button class="btn late" data-med-action="tarde" data-med-time="${escapeHtml(t)}" type="button">La tomé tarde</button>
+            <button class="btn skip" data-med-action="omitida" data-med-time="${escapeHtml(t)}" type="button">Omitida</button>
           </div>
         </div>
       `;
@@ -1751,7 +1701,6 @@ canvas{
         }
 
         ui.importMsg.textContent = "Respaldo importado correctamente.";
-        initMedication();
         renderAll();
       }catch{
         ui.importMsg.textContent = "No se pudo importar el archivo. Revisa que sea un JSON válido.";
@@ -1860,6 +1809,56 @@ canvas{
     });
   }
 
+  function initMedication(){
+    const med = loadMedication();
+    if(med && med.enabled){
+      ui.medEnabled.checked = true;
+      ui.medName.value = med.name || "";
+      ui.medDose.value = med.dose || "";
+      ui.medFrequency.value = String(med.frequency || 1);
+      ui.medTime1.value = med.times?.[0] || "";
+      ui.medTime2.value = med.times?.[1] || "";
+      ui.medTime3.value = med.times?.[2] || "";
+      ui.medNotes.value = med.notes || "";
+    } else {
+      ui.medEnabled.checked = false;
+      ui.medFrequency.value = "1";
+    }
+
+    updateMedicationFrequencyUI();
+    toggleMedicationForm();
+
+    ui.medEnabled.addEventListener("change", toggleMedicationForm);
+    ui.medFrequency.addEventListener("change", updateMedicationFrequencyUI);
+
+    ui.saveMedBtn.addEventListener("click", () => {
+      const enabled = ui.medEnabled.checked;
+      const frequency = Number(ui.medFrequency.value || 1);
+      const times = [ui.medTime1.value, ui.medTime2.value, ui.medTime3.value]
+        .slice(0, frequency)
+        .filter(Boolean);
+
+      const medData = {
+        enabled,
+        name: ui.medName.value.trim(),
+        dose: ui.medDose.value.trim(),
+        frequency,
+        times,
+        notes: ui.medNotes.value.trim()
+      };
+
+      if(enabled && (!medData.name || !medData.dose || !times.length)){
+        alert("Completa al menos nombre, dosis y un horario.");
+        return;
+      }
+
+      saveMedication(medData);
+      renderMedication();
+      maybeNotifyMedication();
+      alert("Medicación guardada.");
+    });
+  }
+
   function init(){
     ui.date.value = todayISO();
     ui.time.value = nowTime();
@@ -1930,6 +1929,8 @@ canvas{
 
   init();
 })();
+</script>
+
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
