@@ -1,233 +1,330 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b1220" />
-  <title>Mi App Personal</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registro emocional personal</title>
 
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{
+  --bg:#0f172a;
+  --bg2:#111827;
+  --card:#172036;
+  --card2:#1c2942;
+  --text:#eef4ff;
+  --muted:#a8b6d6;
+  --line:#2a3a5f;
+  --accent:#8b5cf6;
+  --accent2:#c084fc;
+  --good:#4ade80;
+  --warn:#fbbf24;
+  --bad:#fb7185;
+  --soft:#93c5fd;
+  --chip:#10192d;
+  --chipOn:#243b73;
+  --shadow:0 18px 40px rgba(0,0,0,.28);
+}
 
-  <style>
-    :root{
-      --bg:#070b14;
-      --panel:#0b1220;
-      --panel2:#0d1a2c;
-      --muted:#9aa6b2;
-      --text:#e5e7eb;
-      --border:rgba(255,255,255,.10);
-      --shadow:0 18px 50px rgba(0,0,0,.45);
-      --radius:22px;
-      --brand:#7c3aed;
-      --danger:#ef4444;
-      --warn:#f59e0b;
-      --ok:#22c55e;
-      --chip:rgba(255,255,255,.06);
-      --chipOn:rgba(124,58,237,.25);
-    }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(139,92,246,.18), transparent 25%),
+    radial-gradient(circle at top right, rgba(59,130,246,.12), transparent 22%),
+    linear-gradient(160deg, #0b1120, #111827 45%, #0f172a);
+  min-height:100vh;
+}
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
-      background:
-        radial-gradient(900px 600px at 20% 10%, rgba(124,58,237,.25), transparent 55%),
-        radial-gradient(900px 600px at 80% 30%, rgba(34,197,94,.18), transparent 55%),
-        radial-gradient(900px 600px at 70% 85%, rgba(245,158,11,.12), transparent 55%),
-        linear-gradient(180deg, #050914, #070b14 40%, #050914);
-      color:var(--text);
-      min-height:100vh;
-    }
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  backdrop-filter:blur(10px);
+  background:rgba(10,16,30,.86);
+  border-bottom:1px solid var(--line);
+  padding:14px 16px;
+}
 
-    header{
-      position:sticky; top:0; z-index:50;
-      background: linear-gradient(180deg, rgba(7,11,20,.95), rgba(7,11,20,.70));
-      backdrop-filter: blur(12px);
-      border-bottom:1px solid var(--border);
-    }
-    .wrap{max-width:1100px; margin:0 auto; padding:18px 18px;}
-    .top{
-      display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
-    }
-    .title h1{margin:0; font-size:28px; letter-spacing:.2px}
-    .title p{margin:6px 0 0; color:var(--muted)}
-    .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+.wrap{
+  max-width:1200px;
+  margin:auto;
+  padding:0 12px;
+}
 
-    .status{
-      display:flex; align-items:center; gap:10px;
-      padding:10px 12px;
-      border:1px solid var(--border);
-      border-radius:999px;
-      background: rgba(255,255,255,.04);
-    }
-    .dot{
-      width:10px; height:10px; border-radius:99px; background:var(--ok);
-      box-shadow:0 0 0 5px rgba(34,197,94,.15);
-    }
-    #statusText{color:var(--text); font-weight:600; font-size:14px}
+.topbar{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+}
 
-    main{max-width:1100px; margin:0 auto; padding:18px;}
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap:16px;
-    }
-    .card{
-      grid-column: span 6;
-      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow: var(--shadow);
-      padding:18px;
-      overflow:hidden;
-      position:relative;
-    }
-    .card::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: radial-gradient(500px 260px at 10% 0%, rgba(124,58,237,.20), transparent 55%),
-                  radial-gradient(500px 260px at 90% 0%, rgba(34,197,94,.14), transparent 55%);
-      pointer-events:none;
-      opacity:.75;
-    }
-    .card > *{position:relative}
+.brand{
+  flex:1;
+  min-width:250px;
+}
 
-    h2{margin:0 0 10px; font-size:22px}
-    .muted{color:var(--muted)}
-    .tiny{font-size:12px; color:var(--muted)}
-    .divider{height:1px; background:var(--border); margin:14px 0}
+h1{
+  margin:0;
+  font-size:20px;
+  letter-spacing:.2px;
+}
 
-    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.sub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+}
 
-    .chip{
-      border:1px solid var(--border);
-      background: var(--chip);
-      color:var(--text);
-      padding:10px 14px;
-      border-radius:999px;
-      cursor:pointer;
-      font-weight:600;
-      transition: transform .08s ease, background .15s ease;
-      user-select:none;
-    }
-    .chip:hover{transform: translateY(-1px)}
-    .chip.active{background: var(--chipOn); border-color: rgba(124,58,237,.35)}
+.badges{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
 
-    textarea, input, select{
-      width:100%;
-      background: rgba(0,0,0,.18);
-      color:var(--text);
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:12px 12px;
-      outline:none;
-    }
-    textarea{min-height:110px; resize:vertical}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(18,27,46,.95);
+  color:var(--muted);
+  font-size:12px;
+}
 
-    .btn{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.05);
-      color:var(--text);
-      padding:10px 14px;
-      border-radius:14px;
-      cursor:pointer;
-      font-weight:700;
-      transition: transform .08s ease, background .15s ease;
-      user-select:none;
-    }
-    .btn:hover{transform: translateY(-1px)}
-    .btn.primary{background: rgba(124,58,237,.25); border-color: rgba(124,58,237,.40)}
-    .btn.warn{background: rgba(245,158,11,.20); border-color: rgba(245,158,11,.35)}
-    .btn.danger{background: rgba(239,68,68,.20); border-color: rgba(239,68,68,.38)}
-    .btn.ghost{background: rgba(255,255,255,.03)}
+main{
+  max-width:1200px;
+  margin:18px auto;
+  padding:0 12px 28px;
+}
 
-    .two{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
-    .list{
-      border:1px solid var(--border);
-      border-radius:16px;
-      background: rgba(0,0,0,.12);
-      overflow:hidden;
-    }
-    .item{
-      padding:12px 12px;
-      border-top:1px solid var(--border);
-    }
-    .item:first-child{border-top:none}
-    .item .meta{font-size:12px; color:var(--muted); margin-bottom:6px}
-    .pill{
-      display:inline-block;
-      font-size:12px;
-      padding:4px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      margin-right:6px;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:16px;
+}
+@media (max-width: 980px){
+  .grid{grid-template-columns:1fr}
+}
 
-    .overlay{
-      position:fixed; inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      background: rgba(0,0,0,.55);
-      z-index:999;
-    }
-    .modal{
-      width:min(720px, 100%);
-      border-radius:24px;
-      border:1px solid var(--border);
-      background: linear-gradient(180deg, rgba(11,18,32,.96), rgba(11,18,32,.90));
-      box-shadow: 0 30px 90px rgba(0,0,0,.65);
-      padding:18px;
-    }
-    .modal h3{margin:0 0 10px; font-size:20px}
-    .modalActions{display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; margin-top:14px}
+.card{
+  background:linear-gradient(180deg, rgba(23,32,54,.95), rgba(18,26,44,.96));
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+  padding:16px;
+  margin-bottom:16px;
+}
 
-    .tabs{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
-    .tab{
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      cursor:pointer;
-      font-weight:700;
-    }
-    .tab.active{background: rgba(124,58,237,.22); border-color: rgba(124,58,237,.35)}
-    .tabPanel{margin-top:12px}
+h2{
+  margin:0 0 10px;
+  font-size:15px;
+}
+h3{
+  margin:0 0 8px;
+  font-size:14px;
+}
+p{
+  margin:0;
+  line-height:1.45;
+}
 
-    footer{max-width:1100px; margin:0 auto; padding:14px 18px 28px; color:var(--muted)}
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.col{
+  flex:1;
+  min-width:220px;
+}
 
-    /* FIX: Menú desplegable visible en Chrome/Windows */
-    select option {
-      background: #111827 !important;
-      color: #ffffff !important;
-    }
+label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin:10px 0 6px;
+}
 
-    @media (max-width: 920px){
-      .card{grid-column: span 12;}
-      .two{grid-template-columns: 1fr}
-    }
-  </style>
+input,select,textarea{
+  width:100%;
+  border:1px solid var(--line);
+  background:#0f172a;
+  color:var(--text);
+  border-radius:12px;
+  padding:11px 12px;
+  outline:none;
+  font:inherit;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--accent2);
+  box-shadow:0 0 0 3px rgba(192,132,252,.14);
+}
+textarea{
+  resize:vertical;
+  min-height:84px;
+}
+
+.btn{
+  border:none;
+  cursor:pointer;
+  border-radius:12px;
+  padding:11px 14px;
+  font-weight:800;
+  font-size:14px;
+  transition:.18s ease;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn.main{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;
+}
+.btn.sec{
+  background:transparent;
+  color:var(--text);
+  border:1px solid var(--line);
+}
+.btn.good{
+  background:var(--good);
+  color:#082511;
+}
+.btn.warn{
+  background:var(--warn);
+  color:#2a2006;
+}
+.btn.bad{
+  background:var(--bad);
+  color:#300912;
+}
+
+.chips{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.chip{
+  border:1px solid var(--line);
+  background:var(--chip);
+  color:var(--text);
+  border-radius:999px;
+  padding:8px 10px;
+  font-size:12px;
+  cursor:pointer;
+  user-select:none;
+}
+.chip[data-on="1"]{
+  background:var(--chipOn);
+  border-color:#4f6fb7;
+}
+
+.small{
+  font-size:12px;
+  color:var(--muted);
+}
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#10192d;
+  color:var(--muted);
+  font-size:11px;
+}
+.kpis{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.kpi{
+  flex:1;
+  min-width:150px;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:rgba(12,20,40,.9);
+}
+.kpi .v{
+  font-size:18px;
+  font-weight:900;
+  margin-top:4px;
+  color:#fff;
+}
+.hr{
+  height:1px;
+  background:var(--line);
+  margin:14px 0;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+th,td{
+  border-bottom:1px solid var(--line);
+  padding:9px 7px;
+  vertical-align:top;
+  text-align:left;
+}
+th{
+  color:var(--muted);
+  font-weight:800;
+}
+
+.tableWrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:14px;
+  margin-top:10px;
+}
+
+.noteBox{
+  padding:12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:rgba(12,20,40,.85);
+}
+
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:10px 12px 24px;
+}
+
+.hidden{display:none !important}
+
+input[type="file"]{
+  padding:8px;
+  background:#0f172a;
+}
+
+.empty{
+  padding:16px;
+  color:var(--muted);
+  font-size:12px;
+}
+</style>
 </head>
-
 <body>
+
 <header>
-  <div class="wrap top">
-    <div class="title">
-      <h1>Mi App Personal</h1>
-      <p>Regulación emocional: registrar, respirar, entender y avanzar (para todo, no para una sola historia).</p>
+  <div class="wrap topbar">
+    <div class="brand">
+      <h1>Registro emocional personal</h1>
+      <div class="sub">Privado · útil para adolescentes y adultos · se guarda en este dispositivo</div>
     </div>
-
-    <div class="right">
-      <button class="btn danger" id="emergencyBtn" type="button">🧯 Estoy muy mal</button>
-      <button class="btn ghost" id="aboutBtn" type="button">ℹ️ Acerca de</button>
-
-      <div class="status" aria-live="polite">
-        <span class="dot"></span>
-        <span id="statusText">Listo</span>
-      </div>
+    <div class="badges">
+      <span class="pill" id="todayPill">Hoy: —</span>
+      <span class="pill" id="weekPill">Semana: —</span>
+      <span class="pill" id="countPill">Total: —</span>
     </div>
   </div>
 </header>
@@ -235,730 +332,753 @@
 <main>
   <div class="grid">
 
-    <!-- MOOD -->
-    <section class="card">
-      <h2>¿Cómo me siento hoy?</h2>
-      <p class="muted">Elige una opción (o cambia cuando lo necesites).</p>
+    <!-- IZQUIERDA -->
+    <section>
+      <div class="card">
+        <h2>Registro rápido</h2>
+        <div class="small">Completa solo lo que necesites. La idea no es hacerlo perfecto, sino útil.</div>
 
-      <div class="row" id="moodRow">
-        <button class="chip" data-mood="Tranquila" type="button">Tranquila</button>
-        <button class="chip" data-mood="Ansiosa" type="button">Ansiosa</button>
-        <button class="chip" data-mood="Triste" type="button">Triste</button>
-        <button class="chip" data-mood="Indiferente" type="button">Indiferente</button>
-        <button class="chip" data-mood="Molesta" type="button">Molesta</button>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="row">
-        <button class="btn warn" id="pause30Btn" type="button">⏱️ Pausa 30s</button>
-        <button class="btn ghost" id="clearMoodBtn" type="button">Limpiar</button>
-      </div>
-
-      <p class="tiny" style="margin-top:12px;">
-        Tip: si estás “Molesta” o “Ansiosa”, usa “Pausa 30s” antes de escribir. Baja la intensidad primero.
-      </p>
-    </section>
-
-    <!-- THOUGHT -->
-    <section class="card">
-      <h2>¿Qué pensamiento domina?</h2>
-      <p class="muted">Escríbelo tal cual. No es juicio, es registro.</p>
-
-      <textarea id="thoughtInput" placeholder='Ej. “Me siento en alerta…” o “Necesito descansar…”'></textarea>
-
-      <div class="row" style="margin-top:10px; justify-content:space-between;">
-        <button class="btn primary" id="saveThoughtBtn" type="button">Guardar</button>
-        <button class="btn ghost" id="clearThoughtBtn" type="button">Limpiar</button>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="row" style="justify-content:space-between;">
-        <span class="tiny">Fecha del registro</span>
-        <input id="entryDate" type="date" style="max-width:220px" />
-      </div>
-
-      <p class="tiny" id="lastSavedInfo" style="margin-top:10px;"></p>
-    </section>
-
-    <!-- IMPORTANT LOG -->
-    <section class="card">
-      <h2>Registro importante</h2>
-      <p class="muted">Aquí puedes registrar una llamada, un evento, o algo que movió tu día.</p>
-
-      <textarea id="eventInput" placeholder="Ej. “Tuve una conversación difícil”, “Me sentí mejor después de caminar”, etc."></textarea>
-
-      <div class="row" style="margin-top:10px; justify-content:space-between;">
-        <button class="btn primary" id="saveEventBtn" type="button">Guardar</button>
-        <button class="btn ghost" id="clearEventBtn" type="button">Limpiar</button>
-      </div>
-
-      <div class="divider"></div>
-      <div class="list" id="historyList" aria-label="Historial reciente"></div>
-      <p class="tiny" style="margin-top:10px;">Se guarda solo en tu dispositivo (localStorage). No hay cuentas ni servidor.</p>
-    </section>
-
-    <!-- QUOTE -->
-    <section class="card">
-      <h2>Frase para ti</h2>
-      <p class="muted">Elige lo que necesitas hoy. Si no te gusta la frase, cámbiala.</p>
-
-      <div class="two" style="margin-top:10px;">
-        <div>
-          <label class="tiny" for="needSelect">Necesito hoy</label>
-          <select id="needSelect">
-            <option value="calma">Calma</option>
-            <option value="autoestima">Autoestima</option>
-            <option value="apoyo">Apoyo</option>
-            <option value="claridad">Claridad</option>
-            <option value="fuerza">Fuerza</option>
-          </select>
-        </div>
-        <div>
-          <label class="tiny" for="quoteAuthor">Autor (opcional)</label>
-          <input id="quoteAuthor" placeholder="Ej. Anónimo / Maya Angelou / etc." />
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="list">
-        <div class="item">
-          <div class="meta">
-            <span class="pill" id="quoteNeedPill">calma</span>
-            <span class="pill" id="quoteMoodPill">—</span>
+        <div class="row">
+          <div class="col">
+            <label>Fecha</label>
+            <input type="date" id="date">
           </div>
-          <div style="font-size:18px; line-height:1.45; font-weight:800;" id="quoteText">—</div>
-          <div class="tiny" id="quoteBy" style="margin-top:8px;"></div>
+          <div class="col">
+            <label>Hora</label>
+            <input type="time" id="time">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label>Etapa de vida / perfil</label>
+            <select id="profile">
+              <option value="adolescente">Adolescente</option>
+              <option value="adulto" selected>Adulto</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+          <div class="col">
+            <label>Área de la situación</label>
+            <select id="area">
+              <option value="escuela">Escuela</option>
+              <option value="trabajo">Trabajo</option>
+              <option value="familia">Familia</option>
+              <option value="amistades">Amistades</option>
+              <option value="pareja">Pareja</option>
+              <option value="salud">Salud</option>
+              <option value="dinero">Dinero</option>
+              <option value="cambios">Cambios o incertidumbre</option>
+              <option value="personal">Algo personal</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <label>¿Qué emoción predominó?</label>
+        <select id="emotion">
+          <option value="ansiedad">Ansiedad</option>
+          <option value="tristeza">Tristeza</option>
+          <option value="enojo">Enojo</option>
+          <option value="miedo">Miedo</option>
+          <option value="frustracion">Frustración</option>
+          <option value="culpa">Culpa</option>
+          <option value="verguenza">Vergüenza</option>
+          <option value="soledad">Soledad</option>
+          <option value="confusion">Confusión</option>
+          <option value="estres">Estrés</option>
+          <option value="alegria">Alegría</option>
+          <option value="calma">Calma</option>
+          <option value="esperanza">Esperanza</option>
+          <option value="otro">Otra</option>
+        </select>
+
+        <div class="row">
+          <div class="col">
+            <label>Intensidad emocional (0–10)</label>
+            <input type="number" id="intensity" min="0" max="10" value="5">
+          </div>
+          <div class="col">
+            <label>Nivel de energía (0–10)</label>
+            <input type="number" id="energy" min="0" max="10" value="5">
+          </div>
+        </div>
+
+        <label>¿Qué pasó o qué detonó esto?</label>
+        <textarea id="trigger" placeholder="Ej. Tuve un desacuerdo, me sentí ignorada/o, tuve mucha carga de trabajo, me preocupó algo..."></textarea>
+
+        <label>¿Qué pensé en ese momento?</label>
+        <textarea id="thoughts" placeholder="Ej. No voy a poder, nadie me entiende, hice algo mal, necesito calmarme..."></textarea>
+
+        <label>¿Qué noté en mi cuerpo? (elige las que quieras)</label>
+        <div class="chips" id="bodyChips">
+          <div class="chip" data-key="pecho">Pecho apretado</div>
+          <div class="chip" data-key="estomago">Nudo en el estómago</div>
+          <div class="chip" data-key="cansancio">Cansancio</div>
+          <div class="chip" data-key="llanto">Ganas de llorar</div>
+          <div class="chip" data-key="temblor">Temblor / inquietud</div>
+          <div class="chip" data-key="dolor">Dolor de cabeza</div>
+          <div class="chip" data-key="respiracion">Respiración agitada</div>
+          <div class="chip" data-key="tension">Tensión muscular</div>
+          <div class="chip" data-key="normal">Sin cambios claros</div>
+        </div>
+
+        <label>Impulso o reacción que apareció</label>
+        <select id="urge">
+          <option value="evitar">Evitar / aislarme</option>
+          <option value="llorar">Llorar</option>
+          <option value="discutir">Discutir / reclamar</option>
+          <option value="revisar">Revisar mensajes o redes</option>
+          <option value="comer">Comer por emoción</option>
+          <option value="dejar">Dejar pendientes</option>
+          <option value="pedir_ayuda">Buscar apoyo</option>
+          <option value="descansar">Necesidad de parar</option>
+          <option value="rumiar">Pensar demasiado</option>
+          <option value="otro">Otro</option>
+        </select>
+
+        <label>¿Qué hice para cuidarme o regularme? (elige 1 o más)</label>
+        <div class="chips" id="careChips">
+          <div class="chip" data-key="respirar">Respiré profundo</div>
+          <div class="chip" data-key="agua">Tomé agua</div>
+          <div class="chip" data-key="caminar">Caminé / me moví</div>
+          <div class="chip" data-key="escribir">Escribí lo que sentía</div>
+          <div class="chip" data-key="musica">Escuché música</div>
+          <div class="chip" data-key="descanso">Descansé un momento</div>
+          <div class="chip" data-key="hablar">Hablé con alguien</div>
+          <div class="chip" data-key="orar">Oré / medité</div>
+          <div class="chip" data-key="rutina">Seguí con mi rutina</div>
+          <div class="chip" data-key="pausa">Hice una pausa antes de reaccionar</div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label>¿Eso me ayudó?</label>
+            <select id="helped">
+              <option value="si">Sí</option>
+              <option value="masomenos">Más o menos</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div class="col">
+            <label>¿Necesito apoyo adicional?</label>
+            <select id="support">
+              <option value="no">No por ahora</option>
+              <option value="si_pronto">Sí, pronto</option>
+              <option value="si_hoy">Sí, hoy</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Nota final o recordatorio amable</label>
+        <textarea id="note" placeholder="Ej. No estuvo fácil, pero sí me cuidé. / Mañana puedo intentar dormir más temprano."></textarea>
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn main" id="saveBtn">Guardar registro</button>
+          <button class="btn sec" id="quickBtn">Guardar versión breve</button>
+          <button class="btn warn" id="clearFormBtn">Limpiar formulario</button>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <span class="tag">Consejo: nombra la emoción antes de intentar cambiarla</span>
+          <span class="small" id="saveMsg"></span>
         </div>
       </div>
 
-      <div class="row" style="margin-top:12px; justify-content:space-between;">
-        <button class="btn primary" id="newQuoteBtn" type="button">🔁 Cambiar frase</button>
-        <button class="btn ghost" id="saveQuoteBtn" type="button">⭐ Guardar en favoritas</button>
+      <div class="card">
+        <h2>Registros de hoy</h2>
+        <div class="small">Vista rápida de lo que has sentido y qué te ayudó.</div>
+
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hora</th>
+                <th>Área</th>
+                <th>Emoción</th>
+                <th>Int.</th>
+                <th>Ayuda</th>
+                <th>Apoyo</th>
+              </tr>
+            </thead>
+            <tbody id="todayTable">
+              <tr><td colspan="6" class="empty">Aún no hay registros para hoy.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="divider"></div>
-      <h3 style="margin:0 0 8px; font-size:16px;">Favoritas</h3>
-      <div class="list" id="favoritesList"></div>
-      <div class="row" style="margin-top:10px; justify-content:flex-end;">
-        <button class="btn ghost" id="clearFavBtn" type="button">Borrar favoritas</button>
+      <div class="card">
+        <h2>Historial reciente</h2>
+        <div class="small">Últimos 20 registros guardados en este dispositivo.</div>
+
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Área</th>
+                <th>Emoción</th>
+                <th>Int.</th>
+                <th>Nota</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="historyTable">
+              <tr><td colspan="7" class="empty">No hay historial todavía.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
-    <!-- BACKUP -->
-    <section class="card">
-      <h2>Respaldo</h2>
-      <p class="muted">Descarga/recupera tu información. El archivo es <strong>JSON</strong> (un formato de texto para guardar datos).</p>
-
-      <div class="row" style="margin-top:10px;">
-        <button class="btn primary" id="exportBtn" type="button">⬇️ Exportar JSON</button>
-        <label class="btn ghost" for="importFile" style="display:inline-flex; align-items:center; gap:8px;">
-          ⬆️ Importar JSON
-        </label>
-        <input id="importFile" type="file" accept="application/json" style="display:none" />
+    <!-- DERECHA -->
+    <aside>
+      <div class="card">
+        <h2>Frase para acompañarte</h2>
+        <div id="quote" style="font-size:16px;font-weight:900;line-height:1.5">“Puedo sentir esto sin juzgarme.”</div>
+        <div class="small" style="margin-top:8px">Úsala como ancla durante uno o dos minutos.</div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn sec" id="newQuoteBtn">Otra frase ✨</button>
+        </div>
       </div>
 
-      <div class="divider"></div>
+      <div class="card">
+        <h2>Resumen semanal</h2>
+        <div class="small">Te ayuda a notar patrones, no a criticarte.</div>
 
-      <p class="tiny">
-        Importar reemplaza tu información actual por la del archivo. Si quieres, exporta primero.
-      </p>
-    </section>
+        <div class="kpis">
+          <div class="kpi">
+            <div class="small">Registros</div>
+            <div class="v" id="wkCount">—</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Intensidad promedio</div>
+            <div class="v" id="wkAvg">—</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Veces que ayudó</div>
+            <div class="v" id="wkHelped">—</div>
+          </div>
+        </div>
+
+        <div class="tableWrap" style="margin-top:12px">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Reg.</th>
+                <th>Prom.</th>
+                <th>Emoción más frecuente</th>
+                <th>Área más frecuente</th>
+              </tr>
+            </thead>
+            <tbody id="weekTable">
+              <tr><td colspan="5" class="empty">Aún no hay datos semanales.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="hr"></div>
+        <div class="noteBox">
+          <div class="small" id="insightBox">Tu lectura aparecerá aquí cuando haya suficientes registros.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Respaldo de tus datos</h2>
+        <div class="small">Puedes exportar tus registros para guardarlos o importarlos después en este mismo formato.</div>
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn good" id="exportBtn">Exportar JSON</button>
+          <button class="btn bad" id="deleteAllBtn">Borrar todo</button>
+        </div>
+
+        <label style="margin-top:12px">Importar respaldo</label>
+        <input type="file" id="importFile" accept=".json">
+        <div class="small" id="importMsg" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card">
+        <h2>Recordatorio importante</h2>
+        <div class="small" style="line-height:1.6">
+          Este registro puede ayudar a observar emociones y hábitos de autocuidado, pero no sustituye apoyo profesional.
+          Si sientes que estás sobrepasada/o, busca a una persona de confianza o apoyo especializado.
+        </div>
+      </div>
+    </aside>
 
   </div>
 </main>
 
-<footer class="wrap">
-  Hecho para ti ✨ — privado, offline, sin cuentas. <span class="tiny">Por Claudia Alejandra Garza Hernandez.</span>
+<footer>
+  Registro emocional personal · Hecho para uso privado en este dispositivo
 </footer>
 
-<!-- PAUSE MODAL -->
-<div class="overlay" id="pauseOverlay" aria-hidden="true">
-  <div class="modal">
-    <h3>⏱️ Pausa 30s</h3>
-    <p class="muted" style="margin-top:0;">
-      Respira. Suelta hombros. Inhala 4, sostén 2, exhala 6. Repite.
-    </p>
-
-    <div class="divider"></div>
-
-    <div class="list">
-      <div class="item">
-        <div class="meta">Guía rápida</div>
-        <div style="font-weight:800;">1) Pies en el suelo</div>
-        <div class="tiny">2) Nombra 3 cosas que ves · 2 que sientes · 1 que puedes hacer ahora</div>
-      </div>
-    </div>
-
-    <div class="modalActions">
-      <button class="btn danger" id="pauseCloseBtn" type="button">Cerrar</button>
-    </div>
-  </div>
-</div>
-
-<!-- EMERGENCY MODAL -->
-<div class="overlay" id="emergencyOverlay" aria-hidden="true">
-  <div class="modal">
-    <h3>🧯 Kit de emergencia</h3>
-    <p class="muted" style="margin-top:0;">
-      No tienes que resolverlo todo ahorita. Solo baja la intensidad y elige un paso pequeño.
-    </p>
-
-    <div class="tabs">
-      <button class="tab active" data-tab="calm" type="button">Bajan intensidad</button>
-      <button class="tab" data-tab="ground" type="button">Aterrizar</button>
-      <button class="tab" data-tab="anchors" type="button">Mis anclas</button>
-      <button class="tab" data-tab="support" type="button">Pedir apoyo</button>
-    </div>
-
-    <div class="tabPanel" id="tabPanel"></div>
-
-    <div class="modalActions">
-      <button class="btn ghost" id="emStart30" type="button">⏱️ Pausa 30s</button>
-      <button class="btn danger" id="emCloseBtn" type="button">Cerrar</button>
-    </div>
-  </div>
-</div>
-
-<!-- ABOUT MODAL -->
-<div class="overlay" id="aboutOverlay" aria-hidden="true">
-  <div class="modal">
-    <h3>ℹ️ Acerca de</h3>
-    <p class="muted" style="margin-top:0;">
-      <strong>Mi App Personal</strong> es una herramienta de regulación emocional: registrar, respirar, entender y avanzar.
-    </p>
-
-    <div class="divider"></div>
-
-    <p class="muted" style="margin:0;">
-      <strong>Autoría:</strong> Claudia Alejandra Garza Hernandez<br>
-      <strong>©</strong> <span id="aboutYear"></span> · Todos los derechos reservados.
-    </p>
-
-    <p class="tiny muted" style="margin-top:10px;">
-      Esta app funciona offline y guarda la información solo en tu dispositivo (localStorage). No usa cuentas ni servidores.
-    </p>
-
-    <details>
-      <summary>Licencia</summary>
-      <p class="tiny muted">
-        Prohibida la copia, modificación o distribución sin permiso por escrito de la autora.
-      </p>
-    </details>
-
-    <div class="modalActions">
-      <button class="btn ghost" id="aboutCopyBtn" type="button">Copiar autoría</button>
-      <button class="btn danger" id="aboutCloseBtn" type="button">Cerrar</button>
-    </div>
-  </div>
-</div>
-
 <script>
-  // Helpers
-  const $  = (sel)=> document.querySelector(sel);
-  const $$ = (sel)=> Array.from(document.querySelectorAll(sel));
-  const KEY = "mi_app_personal_v2";
+(() => {
+  const KEY = "registro_emocional_general_v2";
 
-  function setStatus(msg){
-    const el = $("#statusText");
-    if (el) el.textContent = msg;
-  }
+  const quotes = [
+    "Puedo sentir esto sin juzgarme.",
+    "Lo que siento importa, aunque no lo entienda del todo todavía.",
+    "No necesito resolver todo en este momento.",
+    "Nombrar lo que siento ya es una forma de cuidarme.",
+    "Una emoción intensa no dura para siempre.",
+    "Puedo pausar antes de reaccionar.",
+    "Hoy no necesito ser perfecta/o, solo honesta/o conmigo.",
+    "Descansar también es una decisión valiosa.",
+    "Pedir ayuda también es fortaleza.",
+    "Puedo acompañarme con más amabilidad.",
+    "No todo pensamiento es una verdad.",
+    "Estoy aprendiendo a escucharme mejor.",
+    "Hice lo que pude con lo que tenía hoy.",
+    "Mi emoción merece atención, no castigo.",
+    "Puedo empezar de nuevo cuantas veces lo necesite."
+  ];
 
-  function nowISO(){ return new Date().toISOString(); }
-  function toDateKey(d){
-    const x = new Date(d);
-    const y = x.getFullYear();
-    const m = String(x.getMonth()+1).padStart(2,"0");
-    const day = String(x.getDate()).padStart(2,"0");
+  const $ = (id) => document.getElementById(id);
+
+  const ui = {
+    date: $("date"),
+    time: $("time"),
+    profile: $("profile"),
+    area: $("area"),
+    emotion: $("emotion"),
+    intensity: $("intensity"),
+    energy: $("energy"),
+    trigger: $("trigger"),
+    thoughts: $("thoughts"),
+    urge: $("urge"),
+    helped: $("helped"),
+    support: $("support"),
+    note: $("note"),
+
+    bodyChips: [...document.querySelectorAll("#bodyChips .chip")],
+    careChips: [...document.querySelectorAll("#careChips .chip")],
+
+    saveBtn: $("saveBtn"),
+    quickBtn: $("quickBtn"),
+    clearFormBtn: $("clearFormBtn"),
+    saveMsg: $("saveMsg"),
+
+    todayPill: $("todayPill"),
+    weekPill: $("weekPill"),
+    countPill: $("countPill"),
+
+    todayTable: $("todayTable"),
+    historyTable: $("historyTable"),
+
+    quote: $("quote"),
+    newQuoteBtn: $("newQuoteBtn"),
+
+    wkCount: $("wkCount"),
+    wkAvg: $("wkAvg"),
+    wkHelped: $("wkHelped"),
+    weekTable: $("weekTable"),
+    insightBox: $("insightBox"),
+
+    exportBtn: $("exportBtn"),
+    deleteAllBtn: $("deleteAllBtn"),
+    importFile: $("importFile"),
+    importMsg: $("importMsg")
+  };
+
+  function todayISO(d = new Date()){
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const day = String(d.getDate()).padStart(2,"0");
     return `${y}-${m}-${day}`;
   }
 
-  // State
-  const state = load() || {
-    mood: null,
-    lastOpenedDate: toDateKey(new Date()),
-    days: {},        // { "YYYY-MM-DD": { mood, thought, event, updatedAt } }
-    favorites: [],   // { t, a, need, addedAt }
-    quoteCurrent: null
-  };
-
-  function save(){
-    localStorage.setItem(KEY, JSON.stringify(state));
+  function nowTime(){
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2,"0");
+    const mm = String(d.getMinutes()).padStart(2,"0");
+    return `${hh}:${mm}`;
   }
 
-  function load(){
+  function loadData(){
     try{
-      const raw = localStorage.getItem(KEY);
-      return raw ? JSON.parse(raw) : null;
-    }catch(e){ return null; }
-  }
-
-  function ensureDay(dateKey){
-    if (!state.days[dateKey]) state.days[dateKey] = { mood:null, thought:"", event:"", updatedAt:null };
-    return state.days[dateKey];
-  }
-
-  // Quotes (muchas, por categoría)
-  const QUOTES = {
-    calma: [
-      {t:"Respira. Esto también pasará.", a:"Anónimo"},
-      {t:"Haz las paces con el minuto que estás viviendo.", a:"Anónimo"},
-      {t:"Un paso pequeño sigue siendo un paso.", a:"Anónimo"},
-      {t:"No tienes que hacer todo hoy. Solo lo siguiente.", a:"Anónimo"},
-      {t:"La calma no es ausencia de caos; es presencia de ti.", a:"Anónimo"},
-      {t:"Tu mente grita, pero tu cuerpo puede volver al presente.", a:"Anónimo"}
-    ],
-    autoestima: [
-      {t:"Eres más que tu peor día.", a:"Anónimo"},
-      {t:"Habla contigo como hablarías con alguien que amas.", a:"Anónimo"},
-      {t:"Tu valor no depende de tu productividad.", a:"Anónimo"},
-      {t:"No naciste para encogerte.", a:"Anónimo"},
-      {t:"Hay una versión de ti que ya sobrevivió a esto.", a:"Anónimo"},
-      {t:"Tu historia merece ternura.", a:"Anónimo"}
-    ],
-    apoyo: [
-      {t:"Pedir ayuda también es fuerza.", a:"Anónimo"},
-      {t:"No tienes que cargarlo sola.", a:"Anónimo"},
-      {t:"Un mensaje a la persona correcta puede cambiar tu día.", a:"Anónimo"},
-      {t:"A veces, sostenerte es dejarte sostener.", a:"Anónimo"},
-      {t:"Estoy contigo: una cosa a la vez.", a:"Anónimo"},
-      {t:"Tu dolor merece cuidado, no silencio.", a:"Anónimo"}
-    ],
-    claridad: [
-      {t:"No decidas en medio de la tormenta.", a:"Anónimo"},
-      {t:"Lo que hoy parece confuso, mañana será aprendizaje.", a:"Anónimo"},
-      {t:"Escribe: lo que nombras, se ordena.", a:"Anónimo"},
-      {t:"Primero calma, luego claridad.", a:"Anónimo"},
-      {t:"Tu intuición se escucha mejor cuando bajas el ruido.", a:"Anónimo"},
-      {t:"Elige el siguiente paso, no el final de la historia.", a:"Anónimo"}
-    ],
-    fuerza: [
-      {t:"Has sobrevivido a días difíciles antes. Puedes hoy.", a:"Anónimo"},
-      {t:"La valentía también tiembla.", a:"Anónimo"},
-      {t:"Sigue, aunque sea despacio.", a:"Anónimo"},
-      {t:"Tu fortaleza no se ve en el silencio: se ve en que sigues aquí.", a:"Anónimo"},
-      {t:"No te rindas con la versión cansada de ti.", a:"Anónimo"},
-      {t:"Hoy cuenta. Tú cuentas.", a:"Anónimo"}
-    ]
-  };
-
-  const GROUND_GUIDES = [
-    "Nombra 5 cosas que ves, 4 que sientes, 3 que escuchas, 2 que hueles, 1 que saboreas.",
-    "Presiona tus pies contra el suelo 10 segundos. Suelta. Repite 3 veces.",
-    "Toca una superficie fría. Describe su textura con detalle.",
-    "Mueve tu cuello suave: izquierda, derecha. Suelta mandíbula."
-  ];
-
-  function pick(arr){
-    return arr[Math.floor(Math.random()*arr.length)];
-  }
-
-  function ensureCurrentQuote(){
-    const need = $("#needSelect")?.value || "calma";
-    const pool = QUOTES[need] || QUOTES.calma;
-    const q = pick(pool);
-    state.quoteCurrent = { t:q.t, a:q.a, need };
-    save();
-  }
-
-  function renderQuote(){
-    const q = state.quoteCurrent;
-    if (!q){
-      ensureCurrentQuote();
-    }
-    const qq = state.quoteCurrent;
-    $("#quoteText").textContent = qq.t;
-    $("#quoteNeedPill").textContent = qq.need;
-    $("#quoteMoodPill").textContent = state.mood || "—";
-    const authorInput = $("#quoteAuthor")?.value?.trim();
-    const by = authorInput ? authorInput : (qq.a || "Anónimo");
-    $("#quoteBy").textContent = by ? "— " + by : "";
-  }
-
-  function renderMood(){
-    $$("#moodRow .chip").forEach(btn=>{
-      btn.classList.toggle("active", btn.getAttribute("data-mood") === state.mood);
-    });
-  }
-
-  function renderHistory(){
-    const list = $("#historyList");
-    if (!list) return;
-    const keys = Object.keys(state.days || {}).sort().reverse().slice(0, 12);
-
-    if (keys.length === 0){
-      list.innerHTML = `<div class="item"><div class="meta">Aún no hay registros</div><div class="tiny">Cuando guardes un pensamiento o evento, aparecerá aquí.</div></div>`;
-      return;
-    }
-
-    list.innerHTML = keys.map(k=>{
-      const d = state.days[k];
-      const mood = d.mood || "—";
-      const thought = (d.thought || "").trim();
-      const event = (d.event || "").trim();
-      const updated = d.updatedAt ? new Date(d.updatedAt).toLocaleString() : "";
-      return `
-        <div class="item">
-          <div class="meta"><span class="pill">${k}</span><span class="pill">${mood}</span> ${updated ? "· " + updated : ""}</div>
-          ${thought ? `<div><strong>Pensamiento:</strong> ${escapeHtml(thought)}</div>` : `<div class="tiny muted">Sin pensamiento</div>`}
-          ${event ? `<div style="margin-top:6px;"><strong>Evento:</strong> ${escapeHtml(event)}</div>` : ""}
-        </div>
-      `;
-    }).join("");
-  }
-
-  function renderFavorites(){
-    const box = $("#favoritesList");
-    if (!box) return;
-    const favs = state.favorites || [];
-    if (!favs.length){
-      box.innerHTML = `<div class="item"><div class="tiny muted">Aún no tienes favoritas.</div></div>`;
-      return;
-    }
-    box.innerHTML = favs.slice().reverse().map(f=>{
-      const when = f.addedAt ? new Date(f.addedAt).toLocaleString() : "";
-      return `
-        <div class="item">
-          <div class="meta"><span class="pill">${escapeHtml(f.need||"")}</span> ${when}</div>
-          <div style="font-weight:800;">${escapeHtml(f.t)}</div>
-          ${f.a ? `<div class="tiny">${escapeHtml(f.a)}</div>` : ""}
-        </div>
-      `;
-    }).join("");
-  }
-
-  function renderAll(){
-    // date
-    const today = toDateKey(new Date());
-    $("#entryDate").value = state.lastOpenedDate || today;
-
-    // restore day fields
-    const day = ensureDay($("#entryDate").value);
-    state.mood = day.mood || state.mood || null;
-    $("#thoughtInput").value = day.thought || "";
-    $("#eventInput").value = day.event || "";
-
-    renderMood();
-    ensureCurrentQuote();
-    renderQuote();
-    renderHistory();
-    renderFavorites();
-
-    $("#lastSavedInfo").textContent = day.updatedAt ? `Último guardado: ${new Date(day.updatedAt).toLocaleString()}` : "";
-  }
-
-  function autoSaveDay(){
-    const dateKey = $("#entryDate").value || toDateKey(new Date());
-    const d = ensureDay(dateKey);
-    d.mood = state.mood || null;
-    d.thought = $("#thoughtInput").value || "";
-    d.event = $("#eventInput").value || "";
-    d.updatedAt = nowISO();
-    save();
-    $("#lastSavedInfo").textContent = `Último guardado: ${new Date(d.updatedAt).toLocaleString()}`;
-  }
-
-  function openOverlay(id){
-    const ov = $(id);
-    if (!ov) return;
-    ov.style.display = "flex";
-    ov.setAttribute("aria-hidden","false");
-  }
-  function closeOverlay(id){
-    const ov = $(id);
-    if (!ov) return;
-    ov.style.display = "none";
-    ov.setAttribute("aria-hidden","true");
-  }
-
-  function copyToClipboard(txt){
-    if (navigator.clipboard?.writeText){
-      navigator.clipboard.writeText(txt).then(()=> setStatus("Copiado ✅")).catch(()=> setStatus("No se pudo copiar"));
-    }else{
-      setStatus("Copia no disponible");
+      const raw = JSON.parse(localStorage.getItem(KEY) || "[]");
+      return Array.isArray(raw) ? raw : [];
+    }catch{
+      return [];
     }
   }
 
-  function escapeHtml(s){
-    return String(s)
+  function saveData(data){
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+
+  function clamp010(n){
+    n = Number(n);
+    if(!Number.isFinite(n)) return 0;
+    return Math.max(0, Math.min(10, n));
+  }
+
+  function avg(list){
+    if(!list.length) return null;
+    return list.reduce((a,b)=>a+b,0) / list.length;
+  }
+
+  function showMsg(text, ms = 1600){
+    ui.saveMsg.textContent = text;
+    setTimeout(() => ui.saveMsg.textContent = "", ms);
+  }
+
+  function toggleChip(chip){
+    chip.dataset.on = chip.dataset.on === "1" ? "0" : "1";
+  }
+
+  function selectedChips(chips){
+    return chips.filter(c => c.dataset.on === "1").map(c => c.dataset.key);
+  }
+
+  function resetChips(chips){
+    chips.forEach(c => c.dataset.on = "0");
+  }
+
+  function lastNDaysISO(n){
+    const out = [];
+    const base = new Date();
+    for(let i=0; i<n; i++){
+      const d = new Date(base);
+      d.setDate(base.getDate() - i);
+      out.push(todayISO(d));
+    }
+    return out.reverse();
+  }
+
+  function mostFrequent(arr){
+    if(!arr.length) return "—";
+    const count = {};
+    for(const item of arr){
+      count[item] = (count[item] || 0) + 1;
+    }
+    return Object.entries(count).sort((a,b)=>b[1]-a[1])[0][0];
+  }
+
+  function escapeHtml(str){
+    return String(str || "")
       .replaceAll("&","&amp;")
       .replaceAll("<","&lt;")
       .replaceAll(">","&gt;")
       .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
+      .replaceAll("'","&#39;");
   }
 
-  // Emergency tabs
-  function setEmergencyTab(tab){
-    $$("#emergencyOverlay .tab").forEach(b=>{
-      b.classList.toggle("active", b.getAttribute("data-tab") === tab);
-    });
-
-    const panel = $("#tabPanel");
-    if (!panel) return;
-
-    if (tab === "calm"){
-      panel.innerHTML = `
-        <div class="list">
-          <div class="item">
-            <div class="meta">1 minuto</div>
-            <div style="font-weight:900;">Inhala 4 · sostén 2 · exhala 6 (x5)</div>
-            <div class="tiny">Suaviza mandíbula, baja hombros.</div>
-          </div>
-          <div class="item">
-            <div class="meta">Bajar intensidad</div>
-            <div class="tiny">Agua fría en muñecas / cara · camina 2 minutos · nombra lo que sientes sin juzgar.</div>
-          </div>
-        </div>
-      `;
-    } else if (tab === "ground"){
-      panel.innerHTML = `
-        <div class="list">
-          <div class="item">
-            <div class="meta">Aterrizar</div>
-            <div style="font-weight:900;">${escapeHtml(pick(GROUND_GUIDES))}</div>
-            <div class="tiny">Repite si lo necesitas.</div>
-          </div>
-        </div>
-      `;
-    } else if (tab === "anchors"){
-      panel.innerHTML = `
-        <div class="list">
-          <div class="item">
-            <div class="meta">Mis anclas</div>
-            <div class="tiny">Escribe 1 cosa que sí controlas hoy (aunque sea pequeña).</div>
-            <textarea id="emAnchor" placeholder="Ej. “Tomar agua”, “Bañarme”, “Enviar un mensaje”, “Salir a caminar”"></textarea>
-            <div class="row" style="margin-top:10px; justify-content:flex-end;">
-              <button class="btn primary" id="emSaveAnchor" type="button">Guardar en evento</button>
-            </div>
-          </div>
-        </div>
-      `;
-      // wire anchor button
-      setTimeout(()=>{
-        const b = $("#emSaveAnchor");
-        if (b) b.addEventListener("click", ()=>{
-          const t = $("#emAnchor")?.value?.trim();
-          if (!t) return;
-          const prev = $("#eventInput").value?.trim();
-          $("#eventInput").value = prev ? (prev + "\n• " + t) : ("• " + t);
-          autoSaveDay();
-          setStatus("Ancla guardada ⭐");
-        });
-      }, 0);
-    } else if (tab === "support"){
-      panel.innerHTML = `
-        <div class="list">
-          <div class="item">
-            <div class="meta">Mensaje sugerido</div>
-            <div style="font-weight:900;">“Hola, ¿me puedes acompañar un momento? No necesito soluciones, solo compañía.”</div>
-            <div class="row" style="margin-top:10px; justify-content:flex-end;">
-              <button class="btn ghost" id="emCopyMsg" type="button">Copiar mensaje</button>
-            </div>
-          </div>
-        </div>
-      `;
-      setTimeout(()=>{
-        const b = $("#emCopyMsg");
-        if (b) b.addEventListener("click", ()=> copyToClipboard("Hola, ¿me puedes acompañar un momento? No necesito soluciones, solo compañía."));
-      }, 0);
-    }
-  }
-
-  // Wire all
-  function wire(){
-    // default date
-    const today = toDateKey(new Date());
-    $("#entryDate").value = state.lastOpenedDate || today;
-
-    // date change
-    $("#entryDate").addEventListener("change", ()=>{
-      state.lastOpenedDate = $("#entryDate").value;
-      const d = ensureDay(state.lastOpenedDate);
-      state.mood = d.mood || null;
-      $("#thoughtInput").value = d.thought || "";
-      $("#eventInput").value = d.event || "";
-      renderMood();
-      renderQuote();
-      renderHistory();
-      $("#lastSavedInfo").textContent = d.updatedAt ? `Último guardado: ${new Date(d.updatedAt).toLocaleString()}` : "";
-      save();
-      setStatus("Fecha cambiada");
-    });
-
-    // mood chips
-    $$("#moodRow .chip").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        state.mood = btn.getAttribute("data-mood");
-        renderMood();
-        autoSaveDay();
-        setStatus("Estado guardado");
-      });
-    });
-
-    $("#clearMoodBtn").addEventListener("click", ()=>{
-      state.mood = null;
-      renderMood();
-      autoSaveDay();
-      setStatus("Mood limpio");
-    });
-
-    // thought
-    $("#saveThoughtBtn").addEventListener("click", ()=>{
-      autoSaveDay();
-      renderHistory();
-      setStatus("Guardado");
-    });
-    $("#clearThoughtBtn").addEventListener("click", ()=>{
-      $("#thoughtInput").value = "";
-      autoSaveDay();
-      renderHistory();
-      setStatus("Borrado");
-    });
-
-    // event
-    $("#saveEventBtn").addEventListener("click", ()=>{
-      autoSaveDay();
-      renderHistory();
-      setStatus("Guardado");
-    });
-    $("#clearEventBtn").addEventListener("click", ()=>{
-      $("#eventInput").value = "";
-      autoSaveDay();
-      renderHistory();
-      setStatus("Borrado");
-    });
-
-    // quote
-    $("#needSelect").addEventListener("change", ()=>{
-      ensureCurrentQuote();
-      renderQuote();
-      setStatus("Frase actualizada");
-    });
-
-    $("#newQuoteBtn").addEventListener("click", ()=>{
-      ensureCurrentQuote();
-      renderQuote();
-      setStatus("Nueva frase");
-    });
-
-    // “Guardar frase” = favorita
-    $("#saveQuoteBtn").addEventListener("click", ()=>{
-      ensureCurrentQuote();
-      const q = state.quoteCurrent;
-      if (q){
-        const authorInput = $("#quoteAuthor")?.value?.trim();
-        const a = authorInput ? authorInput : (q.a || "");
-        const exists = (state.favorites || []).some(f=> f.t===q.t && f.need===q.need);
-        if (!exists){
-          state.favorites.push({ t:q.t, a, need:q.need, addedAt: nowISO() });
-          save();
-          renderFavorites();
-          setStatus("Frase guardada ⭐");
-        }else{
-          setStatus("Ya estaba en favoritas");
-        }
-      }
-    });
-
-    $("#clearFavBtn").addEventListener("click", ()=>{
-      if (!confirm("¿Borrar todas las favoritas?")) return;
-      state.favorites = [];
-      save();
-      renderFavorites();
-      setStatus("Favoritas borradas");
-    });
-
-    // Pause
-    $("#pause30Btn").addEventListener("click", ()=> openOverlay("#pauseOverlay"));
-    $("#pauseCloseBtn").addEventListener("click", ()=> closeOverlay("#pauseOverlay"));
-    $("#pauseOverlay").addEventListener("click", (e)=>{ if (e.target.id==="pauseOverlay") closeOverlay("#pauseOverlay"); });
-
-    // Emergency
-    $("#emergencyBtn").addEventListener("click", ()=>{
-      openOverlay("#emergencyOverlay");
-      setEmergencyTab("calm");
-    });
-    $("#emCloseBtn").addEventListener("click", ()=> closeOverlay("#emergencyOverlay"));
-    $("#emergencyOverlay").addEventListener("click", (e)=>{ if (e.target.id==="emergencyOverlay") closeOverlay("#emergencyOverlay"); });
-
-    $$("#emergencyOverlay .tab").forEach(t=>{
-      t.addEventListener("click", ()=> setEmergencyTab(t.getAttribute("data-tab")));
-    });
-
-    $("#emStart30").addEventListener("click", ()=>{
-      closeOverlay("#emergencyOverlay");
-      openOverlay("#pauseOverlay");
-    });
-
-    // About (autoría)
-    $("#aboutBtn").addEventListener("click", ()=>{
-      $("#aboutYear").textContent = new Date().getFullYear();
-      openOverlay("#aboutOverlay");
-    });
-    $("#aboutCloseBtn").addEventListener("click", ()=> closeOverlay("#aboutOverlay"));
-    $("#aboutOverlay").addEventListener("click", (e)=>{ if (e.target.id==="aboutOverlay") closeOverlay("#aboutOverlay"); });
-
-    $("#aboutCopyBtn").addEventListener("click", ()=>{
-      const txt =
-        "Mi App Personal — Autoría: Claudia Alejandra Garza Hernandez. © " +
-        new Date().getFullYear() +
-        " Claudia Alejandra Garza Hernandez. Todos los derechos reservados.";
-      copyToClipboard(txt);
-    });
-
-    // Export / Import JSON
-    $("#exportBtn").addEventListener("click", ()=>{
-      const data = JSON.stringify(state, null, 2);
-      const blob = new Blob([data], {type:"application/json"});
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = `mi-app-personal-respaldo-${toDateKey(new Date())}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setStatus("Respaldo descargado");
-    });
-
-    $("#importFile").addEventListener("change", async (e)=>{
-      const file = e.target.files?.[0];
-      if (!file) return;
-      if (!confirm("Importar reemplazará tu información actual. ¿Continuar?")){ e.target.value=""; return; }
-
-      try{
-        const text = await file.text();
-        const obj = JSON.parse(text);
-        // mínima validación
-        if (!obj || typeof obj !== "object") throw new Error("Formato inválido");
-        localStorage.setItem(KEY, JSON.stringify(obj));
-        location.reload();
-      }catch(err){
-        alert("No se pudo importar ese archivo. Asegúrate de que sea un JSON de esta app.");
-      }finally{
-        e.target.value="";
-      }
-    });
-
-    // Service Worker
-    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
-  }
-
-  // Boot
-  (function(){
-    // fecha por si cambia de día
-    const today = toDateKey(new Date());
-    if (!state.lastOpenedDate) state.lastOpenedDate = today;
-    ensureDay(state.lastOpenedDate);
-    save();
+  function addEntry(entry){
+    const data = loadData();
+    data.push(entry);
+    saveData(data);
     renderAll();
-  })();
+  }
 
-  document.addEventListener("DOMContentLoaded", ()=>{
-    wire();
-  });
+  function clearForm(keepDate = true){
+    const oldDate = ui.date.value;
+    ui.time.value = nowTime();
+    ui.profile.value = "adulto";
+    ui.area.value = "escuela";
+    ui.emotion.value = "ansiedad";
+    ui.intensity.value = 5;
+    ui.energy.value = 5;
+    ui.trigger.value = "";
+    ui.thoughts.value = "";
+    ui.urge.value = "evitar";
+    ui.helped.value = "si";
+    ui.support.value = "no";
+    ui.note.value = "";
+    resetChips(ui.bodyChips);
+    resetChips(ui.careChips);
+    if(keepDate) ui.date.value = oldDate || todayISO();
+  }
+
+  function makeQuickEntry(){
+    return {
+      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+      createdAt: new Date().toISOString(),
+      date: ui.date.value || todayISO(),
+      time: nowTime(),
+      profile: ui.profile.value || "adulto",
+      area: ui.area.value || "personal",
+      emotion: ui.emotion.value || "ansiedad",
+      intensity: clamp010(ui.intensity.value),
+      energy: clamp010(ui.energy.value),
+      trigger: "",
+      thoughts: "",
+      body: [],
+      urge: "pausa",
+      care: ["respirar","rutina"],
+      helped: "masomenos",
+      support: "no",
+      note: "Registro breve guardado."
+    };
+  }
+
+  function makeFullEntry(){
+    return {
+      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+      createdAt: new Date().toISOString(),
+      date: ui.date.value || todayISO(),
+      time: ui.time.value || nowTime(),
+      profile: ui.profile.value,
+      area: ui.area.value,
+      emotion: ui.emotion.value,
+      intensity: clamp010(ui.intensity.value),
+      energy: clamp010(ui.energy.value),
+      trigger: ui.trigger.value.trim(),
+      thoughts: ui.thoughts.value.trim(),
+      body: selectedChips(ui.bodyChips),
+      urge: ui.urge.value,
+      care: selectedChips(ui.careChips),
+      helped: ui.helped.value,
+      support: ui.support.value,
+      note: ui.note.value.trim()
+    };
+  }
+
+  function renderHeaderInfo(data){
+    const today = todayISO();
+    ui.todayPill.textContent = `Hoy: ${today}`;
+    const days = lastNDaysISO(7);
+    ui.weekPill.textContent = `Semana: ${days[0]} → ${days[6]}`;
+    ui.countPill.textContent = `Total: ${data.length}`;
+  }
+
+  function renderToday(data){
+    const today = todayISO();
+    const rows = data
+      .filter(e => e.date === today)
+      .sort((a,b)=>(a.time || "").localeCompare(b.time || ""));
+
+    ui.todayTable.innerHTML = "";
+    if(!rows.length){
+      ui.todayTable.innerHTML = `<tr><td colspan="6" class="empty">Aún no hay registros para hoy.</td></tr>`;
+      return;
+    }
+
+    rows.slice().reverse().forEach(e => {
+      ui.todayTable.innerHTML += `
+        <tr>
+          <td>${escapeHtml(e.time || "—")}</td>
+          <td>${escapeHtml(e.area || "—")}</td>
+          <td>${escapeHtml(e.emotion || "—")}</td>
+          <td>${escapeHtml(e.intensity ?? "—")}</td>
+          <td>${escapeHtml(e.helped || "—")}</td>
+          <td>${escapeHtml(e.support || "—")}</td>
+        </tr>
+      `;
+    });
+  }
+
+  function renderHistory(data){
+    const rows = data.slice().sort((a,b)=>{
+      const aa = `${a.date || ""} ${a.time || ""}`;
+      const bb = `${b.date || ""} ${b.time || ""}`;
+      return bb.localeCompare(aa);
+    }).slice(0,20);
+
+    ui.historyTable.innerHTML = "";
+    if(!rows.length){
+      ui.historyTable.innerHTML = `<tr><td colspan="7" class="empty">No hay historial todavía.</td></tr>`;
+      return;
+    }
+
+    rows.forEach(e => {
+      const note = e.note || e.trigger || e.thoughts || "—";
+      const care = (e.care && e.care.length) ? e.care.join(", ") : "—";
+      ui.historyTable.innerHTML += `
+        <tr>
+          <td>${escapeHtml(e.date || "—")}</td>
+          <td>${escapeHtml(e.time || "—")}</td>
+          <td>${escapeHtml(e.area || "—")}</td>
+          <td>${escapeHtml(e.emotion || "—")}</td>
+          <td>${escapeHtml(e.intensity ?? "—")}</td>
+          <td>${escapeHtml(note)}</td>
+          <td>${escapeHtml(care)}</td>
+        </tr>
+      `;
+    });
+  }
+
+  function renderWeek(data){
+    const days = lastNDaysISO(7);
+    let weekCount = 0;
+    let helpedCount = 0;
+    const intensityAll = [];
+
+    ui.weekTable.innerHTML = "";
+    let hasRows = false;
+
+    days.forEach(date => {
+      const entries = data.filter(e => e.date === date);
+      if(!entries.length) return;
+      hasRows = true;
+
+      weekCount += entries.length;
+      helpedCount += entries.filter(e => e.helped === "si").length;
+      intensityAll.push(...entries.map(e => Number(e.intensity)).filter(Number.isFinite));
+
+      const avgIntensity = avg(entries.map(e => Number(e.intensity)).filter(Number.isFinite));
+      const emotionTop = mostFrequent(entries.map(e => e.emotion).filter(Boolean));
+      const areaTop = mostFrequent(entries.map(e => e.area).filter(Boolean));
+
+      ui.weekTable.innerHTML += `
+        <tr>
+          <td>${escapeHtml(date)}</td>
+          <td>${entries.length}</td>
+          <td>${avgIntensity == null ? "—" : avgIntensity.toFixed(1)}</td>
+          <td>${escapeHtml(emotionTop)}</td>
+          <td>${escapeHtml(areaTop)}</td>
+        </tr>
+      `;
+    });
+
+    if(!hasRows){
+      ui.weekTable.innerHTML = `<tr><td colspan="5" class="empty">Aún no hay datos semanales.</td></tr>`;
+    }
+
+    const weekAvg = avg(intensityAll);
+    ui.wkCount.textContent = String(weekCount || 0);
+    ui.wkAvg.textContent = weekAvg == null ? "—" : weekAvg.toFixed(1);
+    ui.wkHelped.textContent = String(helpedCount || 0);
+
+    renderInsight(data, weekCount, weekAvg, helpedCount);
+  }
+
+  function renderInsight(data, weekCount, weekAvg, helpedCount){
+    const last7 = lastNDaysISO(7);
+    const recent = data.filter(e => last7.includes(e.date));
+
+    if(!recent.length){
+      ui.insightBox.textContent = "Tu lectura aparecerá aquí cuando haya suficientes registros.";
+      return;
+    }
+
+    const topEmotion = mostFrequent(recent.map(e => e.emotion).filter(Boolean));
+    const topArea = mostFrequent(recent.map(e => e.area).filter(Boolean));
+    const topCare = mostFrequent(recent.flatMap(e => Array.isArray(e.care) ? e.care : []));
+    const supportNeed = recent.filter(e => e.support === "si_hoy" || e.support === "si_pronto").length;
+
+    let msg = `En los últimos 7 días registraste ${weekCount} momento(s). `;
+    msg += `La emoción más frecuente fue "${topEmotion}" y el área más repetida fue "${topArea}". `;
+
+    if(topCare !== "—"){
+      msg += `La estrategia de cuidado que más aparece es "${topCare}". `;
+    }
+
+    if(weekAvg != null){
+      if(weekAvg >= 7){
+        msg += `La intensidad promedio fue alta (${weekAvg.toFixed(1)}), así que conviene priorizar descanso, apoyo y pausas más claras. `;
+      } else if(weekAvg >= 4){
+        msg += `La intensidad promedio fue media (${weekAvg.toFixed(1)}), lo que sugiere que hay malestar, pero también oportunidad de regularlo con constancia. `;
+      } else {
+        msg += `La intensidad promedio fue baja (${weekAvg.toFixed(1)}), lo cual puede indicar mayor estabilidad esta semana. `;
+      }
+    }
+
+    if(supportNeed > 0){
+      msg += `Marcaste necesidad de apoyo adicional ${supportNeed} vez/veces. Tómalo en serio.`;
+    } else if(helpedCount > 0){
+      msg += `También es valioso que registraste momentos en los que algo sí te ayudó.`;
+    }
+
+    ui.insightBox.textContent = msg;
+  }
+
+  function renderAll(){
+    const data = loadData();
+    renderHeaderInfo(data);
+    renderToday(data);
+    renderHistory(data);
+    renderWeek(data);
+  }
+
+  function exportJSON(){
+    const data = loadData();
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `registro-emocional-${todayISO()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importJSON(file){
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try{
+        const parsed = JSON.parse(reader.result);
+        if(!Array.isArray(parsed)) throw new Error("Formato inválido");
+        saveData(parsed);
+        ui.importMsg.textContent = "Respaldo importado correctamente.";
+        renderAll();
+      }catch{
+        ui.importMsg.textContent = "No se pudo importar el archivo. Revisa que sea un JSON válido.";
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function init(){
+    ui.date.value = todayISO();
+    ui.time.value = nowTime();
+
+    [...ui.bodyChips, ...ui.careChips].forEach(ch => {
+      ch.dataset.on = "0";
+      ch.addEventListener("click", () => toggleChip(ch));
+    });
+
+    ui.quote.textContent = `“${quotes[Math.floor(Math.random() * quotes.length)]}”`;
+
+    ui.newQuoteBtn.addEventListener("click", () => {
+      ui.quote.textContent = `“${quotes[Math.floor(Math.random() * quotes.length)]}”`;
+    });
+
+    ui.saveBtn.addEventListener("click", () => {
+      const entry = makeFullEntry();
+      addEntry(entry);
+      clearForm(true);
+      showMsg("Registro guardado ✓");
+    });
+
+    ui.quickBtn.addEventListener("click", () => {
+      const entry = makeQuickEntry();
+      addEntry(entry);
+      clearForm(true);
+      showMsg("Versión breve guardada ✓");
+    });
+
+    ui.clearFormBtn.addEventListener("click", () => {
+      clearForm(true);
+      showMsg("Formulario limpio");
+    });
+
+    ui.exportBtn.addEventListener("click", exportJSON);
+
+    ui.deleteAllBtn.addEventListener("click", () => {
+      const ok = confirm("¿Seguro que quieres borrar todos los registros guardados en este dispositivo?");
+      if(!ok) return;
+      localStorage.removeItem(KEY);
+      renderAll();
+      ui.importMsg.textContent = "";
+      showMsg("Datos borrados");
+    });
+
+    ui.importFile.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      importJSON(file);
+    });
+
+    renderAll();
+  }
+
+  init();
+})();
 </script>
-
 </body>
 </html>
