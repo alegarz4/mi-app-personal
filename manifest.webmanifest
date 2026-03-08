@@ -1,12 +1,13 @@
 {
-  "name": "Mi App Personal",
-  "short_name": "Mi App",
-  "description": "Regulación emocional personal",
-  "start_url": "./",
+  "name": "Brújula Emocional",
+  "short_name": "Brújula",
+  "description": "Registro personal de emociones y bienestar.",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0b1220",
-  "theme_color": "#0b1220",
+  "background_color": "#f7f2ff",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icons/icon-192.png",
