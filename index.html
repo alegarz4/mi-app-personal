@@ -26,7 +26,7 @@
   --shadow:0 18px 40px rgba(0,0,0,.26);
 }
 
-/* SOLO 1 OSCURO */
+/* OSCURO */
 body.theme-noche{
   --bg:#0f172a; --bg-soft:#172033; --panel:#1b2740; --panel-2:#22304f;
   --text:#eef4ff; --muted:#adbad8; --line:#314363; --accent:#7c3aed; --accent-2:#a78bfa;
@@ -77,6 +77,39 @@ body{
     radial-gradient(circle at top right, var(--hero2), transparent 22%),
     linear-gradient(160deg,var(--bg),var(--bg-soft));
 }
+
+body.discreet header .brand h1,
+body.discreet .heroTitle,
+body.discreet .brand .sub,
+body.discreet .author,
+body.discreet .themeBar,
+body.discreet #quote,
+body.discreet #quoteSub,
+body.discreet .welcomeOverlay,
+body.discreet .license-note,
+body.discreet .footer-brand{
+  display:none !important;
+}
+body.discreet .brand::after{
+  content:"Panel personal";
+  font-size:22px;
+  font-weight:800;
+}
+body.discreet .heroText::before{
+  content:"Vista personal de seguimiento.";
+  color:var(--muted);
+}
+body.discreet .heroText{
+  font-size:0;
+}
+body.discreet .privacy-mask{
+  filter:blur(7px);
+  user-select:none;
+}
+body.discreet .discreet-safe{
+  filter:none !important;
+}
+
 header{
   position:sticky; top:0; z-index:30;
   padding:14px 16px;
@@ -140,6 +173,11 @@ textarea{resize:vertical;min-height:84px}
 .btn.good{background:var(--good);color:#072514}
 .btn.warn{background:var(--warn);color:#2b2004}
 .btn.bad{background:var(--bad);color:#fff}
+.btn.soft{
+  background:var(--chip);
+  border:1px solid var(--line);
+  color:var(--text);
+}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{
   padding:8px 11px;border-radius:999px;border:1px solid var(--line);
@@ -183,11 +221,11 @@ input[type="file"]{padding:8px}
 canvas{
   width:100%;height:220px;background:var(--chip);border:1px solid var(--line);border-radius:14px;display:block
 }
-.welcomeOverlay{
+.welcomeOverlay,.modal{
   position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:60;padding:16px
 }
-.welcomeCard{
-  width:min(560px,100%);background:var(--panel);border:1px solid var(--line);border-radius:20px;
+.welcomeCard,.modalCard{
+  width:min(680px,100%);background:var(--panel);border:1px solid var(--line);border-radius:20px;
   box-shadow:var(--shadow);padding:22px
 }
 .welcomeTitle{font-size:24px;font-weight:900;margin:0 0 8px}
@@ -197,6 +235,35 @@ canvas{
   padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--chip);margin-top:10px
 }
 .author{font-size:12px;color:var(--muted);margin-top:8px}
+.switch{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap
+}
+.switch input[type="checkbox"]{
+  width:auto;
+  transform:scale(1.15);
+}
+.license-note{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px dashed var(--line);
+  background:var(--chip);
+}
+.tendency-up{color:var(--bad)}
+.tendency-down{color:var(--good)}
+.tendency-flat{color:var(--warn)}
+.footer-brand{
+  font-weight:700;
+}
+.codebox{
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  font-size:12px;
+  background:var(--chip);
+  border:1px solid var(--line);
+  padding:8px 10px;
+  border-radius:10px;
+  display:inline-block;
+}
 </style>
 </head>
 <body class="theme-noche">
@@ -208,9 +275,9 @@ canvas{
         <div class="sub">Registro personal de emociones y bienestar · privado · útil para adolescentes y adultos</div>
       </div>
       <div class="badges">
-        <span class="pill" id="todayPill">Hoy: —</span>
-        <span class="pill" id="weekPill">Semana: —</span>
-        <span class="pill" id="countPill">Total: —</span>
+        <span class="pill discreet-safe" id="todayPill">Hoy: —</span>
+        <span class="pill discreet-safe" id="weekPill">Semana: —</span>
+        <span class="pill discreet-safe" id="countPill">Total: —</span>
       </div>
     </div>
 
@@ -234,26 +301,29 @@ canvas{
           Brújula Emocional te ayuda a registrar emociones, situaciones, cuidado personal y patrones de bienestar.
           Puedes usarla en momentos difíciles o simplemente como una rutina diaria de autoconocimiento.
         </div>
-        <div class="author">Diseño base adaptado para Claudia Alejandra Garza Hernández</div>
+        <div class="author">Autoría y adaptación visual: Claudia Alejandra Garza Hernández</div>
+        <div class="license-note">
+          <div class="small"><strong>Licencia y autoría protegida.</strong> Esta app conserva crédito visible de autoría, bloque “Acerca de” y referencia de uso personal/educativo. No debe redistribuirse eliminando la atribución.</div>
+        </div>
       </div>
       <div class="heroBox">
         <div class="small">Vista rápida</div>
         <div class="heroMini">
           <div class="miniStat">
             <div class="small">Registros hoy</div>
-            <div class="v" id="heroToday">0</div>
+            <div class="v discreet-safe" id="heroToday">0</div>
           </div>
           <div class="miniStat">
             <div class="small">Promedio semana</div>
-            <div class="v" id="heroWeekAvg">—</div>
+            <div class="v discreet-safe" id="heroWeekAvg">—</div>
           </div>
           <div class="miniStat">
             <div class="small">Emoción frecuente</div>
-            <div class="v" id="heroEmotion">—</div>
+            <div class="v discreet-safe" id="heroEmotion">—</div>
           </div>
           <div class="miniStat">
             <div class="small">Tema activo</div>
-            <div class="v" id="heroTheme">Noche</div>
+            <div class="v discreet-safe" id="heroTheme">Noche</div>
           </div>
         </div>
       </div>
@@ -408,7 +478,7 @@ canvas{
         </div>
       </div>
 
-      <div class="card">
+      <div class="card privacy-mask">
         <h2>Registros de hoy</h2>
         <div class="tableWrap">
           <table>
@@ -429,7 +499,7 @@ canvas{
         </div>
       </div>
 
-      <div class="card">
+      <div class="card privacy-mask">
         <h2>Historial reciente</h2>
         <div class="tableWrap">
           <table>
@@ -463,6 +533,50 @@ canvas{
       </div>
 
       <div class="card">
+        <h2>Indicadores personales</h2>
+        <div class="kpis">
+          <div class="kpi">
+            <div class="small">Tendencia</div>
+            <div class="v discreet-safe" id="trendBadge">—</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Recordatorio</div>
+            <div class="v discreet-safe" id="reminderStatus">Off</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Modo discreto</div>
+            <div class="v discreet-safe" id="discreetStatus">Off</div>
+          </div>
+        </div>
+
+        <div class="noteBox">
+          <div class="switch">
+            <label style="margin:0">
+              <input type="checkbox" id="reminderToggle">
+              Activar recordatorio diario local
+            </label>
+          </div>
+          <label>Hora del recordatorio</label>
+          <input type="time" id="reminderTime">
+          <div class="small" style="margin-top:8px" id="reminderMsg">
+            Si el navegador lo permite, recibirás un aviso local cuando abras la app cerca de esa hora.
+          </div>
+        </div>
+
+        <div class="noteBox">
+          <div class="switch">
+            <label style="margin:0">
+              <input type="checkbox" id="discreetToggle">
+              Activar modo discreto
+            </label>
+          </div>
+          <div class="small" style="margin-top:8px">
+            Oculta nombres sensibles y difumina tablas para usar la app en público con más privacidad.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
         <h2>Gráfica semanal</h2>
         <div class="small">Muestra la intensidad promedio de los últimos 7 días.</div>
         <div style="margin-top:10px">
@@ -470,20 +584,20 @@ canvas{
         </div>
       </div>
 
-      <div class="card">
+      <div class="card privacy-mask">
         <h2>Resumen semanal</h2>
         <div class="kpis">
           <div class="kpi">
             <div class="small">Registros</div>
-            <div class="v" id="wkCount">—</div>
+            <div class="v discreet-safe" id="wkCount">—</div>
           </div>
           <div class="kpi">
             <div class="small">Promedio</div>
-            <div class="v" id="wkAvg">—</div>
+            <div class="v discreet-safe" id="wkAvg">—</div>
           </div>
           <div class="kpi">
             <div class="small">Ayudó</div>
-            <div class="v" id="wkHelped">—</div>
+            <div class="v discreet-safe" id="wkHelped">—</div>
           </div>
         </div>
 
@@ -508,7 +622,7 @@ canvas{
         </div>
       </div>
 
-      <div class="card">
+      <div class="card privacy-mask">
         <h2>Reflexión breve</h2>
         <div class="reflectionItem"><strong>¿Qué me ayudó más hoy?</strong><div class="small" id="reflect1">Aún no hay suficientes datos.</div></div>
         <div class="reflectionItem"><strong>¿Qué emoción se repitió más esta semana?</strong><div class="small" id="reflect2">Aún no hay suficientes datos.</div></div>
@@ -528,6 +642,27 @@ canvas{
       </div>
 
       <div class="card">
+        <h2>Crédito, licencia y acerca de</h2>
+        <div class="small">
+          <strong>Brújula Emocional</strong> es una herramienta de registro personal y bienestar con autoría visible.
+        </div>
+        <div class="small" style="margin-top:8px">
+          <strong>Autora / adaptación y desarrollo visual:</strong><br>
+          Claudia Alejandra Garza Hernández
+        </div>
+        <div class="small" style="margin-top:8px">
+          <strong>Uso sugerido:</strong> personal, educativo y de acompañamiento emocional.
+        </div>
+        <div class="small" style="margin-top:8px">
+          <strong>Protección de autoría:</strong> no retirar créditos, aviso de licencia ni referencia de autora en copias o adaptaciones.
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn soft" id="aboutBtn">Acerca de…</button>
+          <button class="btn soft" id="licenseBtn">Licencia</button>
+        </div>
+      </div>
+
+      <div class="card">
         <h2>Importante</h2>
         <div class="small" style="line-height:1.6">
           Esta herramienta ayuda a observar emociones, patrones y estrategias de cuidado.
@@ -539,7 +674,7 @@ canvas{
 </main>
 
 <div class="footer">
-  Brújula Emocional · guardado local en este dispositivo
+  <span class="footer-brand">Brújula Emocional</span> · guardado local en este dispositivo · © Claudia Alejandra Garza Hernández
 </div>
 
 <div class="welcomeOverlay" id="welcomeOverlay">
@@ -552,7 +687,8 @@ canvas{
     <ul class="listClean">
       <li>Puedes elegir temas de color.</li>
       <li>Puedes guardar, exportar e importar tus registros.</li>
-      <li>Ahora hay un solo tema oscuro y cinco temas claros.</li>
+      <li>Ahora incluye tendencia emocional, recordatorio local y modo discreto.</li>
+      <li>La autoría y la licencia permanecen visibles.</li>
     </ul>
     <div class="row" style="margin-top:16px">
       <button class="btn main" id="closeWelcomeBtn">Comenzar</button>
@@ -560,11 +696,57 @@ canvas{
   </div>
 </div>
 
+<div class="modal" id="aboutModal">
+  <div class="modalCard">
+    <h2>Acerca de Brújula Emocional</h2>
+    <div class="small" style="line-height:1.7">
+      Brújula Emocional es una app pensada para adolescentes y adultos que desean registrar emociones,
+      reconocer detonantes, observar el cuerpo, anotar estrategias de cuidado y revisar tendencias de bienestar.
+      <br><br>
+      Fue adaptada y desarrollada visualmente por <strong>Claudia Alejandra Garza Hernández</strong>,
+      con enfoque de uso personal y educativo.
+      <br><br>
+      La app prioriza privacidad local, claridad visual y una experiencia estable entre temas.
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn main" id="closeAboutBtn">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="licenseModal">
+  <div class="modalCard">
+    <h2>Licencia y protección de autoría</h2>
+    <div class="small" style="line-height:1.7">
+      Esta app conserva autoría visible y crédito de adaptación/desarrollo visual para:
+      <br><br>
+      <strong>Claudia Alejandra Garza Hernández</strong>
+      <br><br>
+      Condiciones de uso sugeridas:
+      <br>
+      1. Puede utilizarse con fines personales y educativos.<br>
+      2. No debe eliminarse el crédito de autora ni el bloque de licencia/acerca de.<br>
+      3. Si se adapta o comparte, debe mantenerse la atribución visible.<br>
+      4. No implica sustitución de atención profesional en salud mental.
+      <br><br>
+      Identificador interno de licencia:
+      <div class="codebox">BE-CA-GH-2026</div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn main" id="closeLicenseBtn">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (() => {
-  const DATA_KEY = "brujula_emocional_v3";
+  const DATA_KEY = "brujula_emocional_v4";
   const THEME_KEY = "brujula_emocional_theme";
   const FIRST_KEY = "brujula_emocional_first_open";
+  const REMINDER_ENABLED_KEY = "brujula_emocional_reminder_enabled";
+  const REMINDER_TIME_KEY = "brujula_emocional_reminder_time";
+  const REMINDER_LAST_KEY = "brujula_emocional_last_reminder";
+  const DISCREET_KEY = "brujula_emocional_discreet";
 
   const quotesByEmotion = {
     calma: ["Puedo seguir cuidando esta paz.","La calma también merece espacio.","No tengo que estar mal para escucharme."],
@@ -613,7 +795,17 @@ canvas{
     themeBtns: [...document.querySelectorAll(".themeBtn")],
     weekChart: $("weekChart"), reflect1: $("reflect1"), reflect2: $("reflect2"), reflect3: $("reflect3"),
     heroToday: $("heroToday"), heroWeekAvg: $("heroWeekAvg"), heroEmotion: $("heroEmotion"), heroTheme: $("heroTheme"),
-    welcomeOverlay: $("welcomeOverlay"), closeWelcomeBtn: $("closeWelcomeBtn")
+    welcomeOverlay: $("welcomeOverlay"), closeWelcomeBtn: $("closeWelcomeBtn"),
+    aboutBtn: $("aboutBtn"), licenseBtn: $("licenseBtn"),
+    aboutModal: $("aboutModal"), licenseModal: $("licenseModal"),
+    closeAboutBtn: $("closeAboutBtn"), closeLicenseBtn: $("closeLicenseBtn"),
+    trendBadge: $("trendBadge"),
+    reminderToggle: $("reminderToggle"),
+    reminderTime: $("reminderTime"),
+    reminderMsg: $("reminderMsg"),
+    reminderStatus: $("reminderStatus"),
+    discreetToggle: $("discreetToggle"),
+    discreetStatus: $("discreetStatus")
   };
 
   function todayISO(d = new Date()){
@@ -709,7 +901,10 @@ canvas{
   }
 
   function setTheme(theme){
-    document.body.className = `theme-${theme}`;
+    document.body.classList.remove(
+      "theme-noche","theme-orquidea","theme-cielo","theme-bosque","theme-aurora","theme-vino"
+    );
+    document.body.classList.add(`theme-${theme}`);
     localStorage.setItem(THEME_KEY, theme);
     ui.themeBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.theme === theme));
     ui.heroTheme.textContent = themeLabel(theme);
@@ -890,6 +1085,32 @@ canvas{
     });
   }
 
+  function computeTrend(data){
+    const days = lastNDaysISO(7);
+    const recent4 = days.slice(-4);
+    const prev3 = days.slice(0,3);
+
+    const avgBlock = (arrDates) => {
+      const values = data
+        .filter(e => arrDates.includes(e.date))
+        .map(e => Number(e.intensity))
+        .filter(Number.isFinite);
+      return values.length ? avg(values) : null;
+    };
+
+    const prevAvg = avgBlock(prev3);
+    const recentAvg = avgBlock(recent4);
+
+    if(prevAvg == null || recentAvg == null){
+      return { label:"Insuficiente", cls:"tendency-flat" };
+    }
+
+    const diff = recentAvg - prevAvg;
+    if(diff >= 0.8) return { label:"Subiendo ↑", cls:"tendency-up" };
+    if(diff <= -0.8) return { label:"Bajando ↓", cls:"tendency-down" };
+    return { label:"Estable →", cls:"tendency-flat" };
+  }
+
   function renderWeek(data){
     const days = lastNDaysISO(7);
     let weekCount = 0;
@@ -927,6 +1148,10 @@ canvas{
     ui.wkCount.textContent = weekCount || 0;
     ui.wkAvg.textContent = weekAvg == null ? "—" : weekAvg.toFixed(1);
     ui.wkHelped.textContent = helpedCount || 0;
+
+    const trend = computeTrend(data);
+    ui.trendBadge.textContent = trend.label;
+    ui.trendBadge.className = `v discreet-safe ${trend.cls}`;
 
     renderInsight(data, weekCount, weekAvg, helpedCount);
     renderReflections(data);
@@ -1082,6 +1307,8 @@ canvas{
     renderHistory(data);
     renderWeek(data);
     drawWeekChart(data);
+    updateReminderUI();
+    updateDiscreetUI();
   }
 
   function exportJSON(){
@@ -1117,6 +1344,101 @@ canvas{
     if(!seen) ui.welcomeOverlay.style.display = "flex";
   }
 
+  function initReminder(){
+    const enabled = localStorage.getItem(REMINDER_ENABLED_KEY) === "1";
+    const reminderTime = localStorage.getItem(REMINDER_TIME_KEY) || "20:00";
+
+    ui.reminderToggle.checked = enabled;
+    ui.reminderTime.value = reminderTime;
+
+    ui.reminderToggle.addEventListener("change", () => {
+      localStorage.setItem(REMINDER_ENABLED_KEY, ui.reminderToggle.checked ? "1" : "0");
+      updateReminderUI();
+      maybeNotifyReminder();
+    });
+
+    ui.reminderTime.addEventListener("change", () => {
+      localStorage.setItem(REMINDER_TIME_KEY, ui.reminderTime.value || "20:00");
+      updateReminderUI();
+    });
+
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission().catch(()=>{});
+    }
+  }
+
+  function updateReminderUI(){
+    const enabled = localStorage.getItem(REMINDER_ENABLED_KEY) === "1";
+    const reminderTime = localStorage.getItem(REMINDER_TIME_KEY) || "20:00";
+    ui.reminderStatus.textContent = enabled ? reminderTime : "Off";
+    ui.reminderMsg.textContent = enabled
+      ? `Recordatorio activado a las ${reminderTime}. Se mostrará cuando abras la app cerca de esa hora.`
+      : "Si el navegador lo permite, recibirás un aviso local cuando abras la app cerca de esa hora.";
+  }
+
+  function maybeNotifyReminder(){
+    const enabled = localStorage.getItem(REMINDER_ENABLED_KEY) === "1";
+    if(!enabled) return;
+
+    const reminderTime = localStorage.getItem(REMINDER_TIME_KEY) || "20:00";
+    const [hh, mm] = reminderTime.split(":").map(Number);
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const targetMinutes = (hh * 60) + mm;
+
+    if(Math.abs(currentMinutes - targetMinutes) > 20) return;
+
+    const today = todayISO();
+    const last = localStorage.getItem(REMINDER_LAST_KEY);
+    if(last === today) return;
+
+    const message = "Momento de registrar cómo te sientes en Brújula Emocional.";
+    if ("Notification" in window && Notification.permission === "granted") {
+      try{
+        new Notification("Brújula Emocional", { body: message });
+      }catch{}
+    } else {
+      ui.reminderMsg.textContent = message;
+    }
+
+    localStorage.setItem(REMINDER_LAST_KEY, today);
+  }
+
+  function initDiscreetMode(){
+    const enabled = localStorage.getItem(DISCREET_KEY) === "1";
+    ui.discreetToggle.checked = enabled;
+    applyDiscreet(enabled);
+
+    ui.discreetToggle.addEventListener("change", () => {
+      const on = ui.discreetToggle.checked;
+      localStorage.setItem(DISCREET_KEY, on ? "1" : "0");
+      applyDiscreet(on);
+      updateDiscreetUI();
+    });
+  }
+
+  function applyDiscreet(on){
+    document.body.classList.toggle("discreet", on);
+  }
+
+  function updateDiscreetUI(){
+    const on = localStorage.getItem(DISCREET_KEY) === "1";
+    ui.discreetStatus.textContent = on ? "On" : "Off";
+  }
+
+  function initModals(){
+    ui.aboutBtn.addEventListener("click", () => ui.aboutModal.style.display = "flex");
+    ui.licenseBtn.addEventListener("click", () => ui.licenseModal.style.display = "flex");
+    ui.closeAboutBtn.addEventListener("click", () => ui.aboutModal.style.display = "none");
+    ui.closeLicenseBtn.addEventListener("click", () => ui.licenseModal.style.display = "none");
+
+    [ui.aboutModal, ui.licenseModal].forEach(modal => {
+      modal.addEventListener("click", (e) => {
+        if(e.target === modal) modal.style.display = "none";
+      });
+    });
+  }
+
   function init(){
     ui.date.value = todayISO();
     ui.time.value = nowTime();
@@ -1124,6 +1446,10 @@ canvas{
     initTheme();
     initMoodButtons();
     maybeShowWelcome();
+    initReminder();
+    initDiscreetMode();
+    initModals();
+    maybeNotifyReminder();
 
     ui.closeWelcomeBtn.addEventListener("click", () => {
       ui.welcomeOverlay.style.display = "none";
