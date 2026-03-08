@@ -1930,6 +1930,17 @@ canvas{
 
   init();
 })();
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async () => {
+    try {
+      await navigator.serviceWorker.register("./sw.js");
+      console.log("Service worker registrado");
+    } catch (err) {
+      console.error("Error registrando service worker:", err);
+    }
+  });
+}
 </script>
 </body>
 </html>
