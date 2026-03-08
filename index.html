@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Brújula Emocional</title>
-<meta name="theme-color" content="#7c3aed">
+<meta name="theme-color" content="#8b5cf6">
 <style>
 :root{
   --bg:#0b1020;
   --bg-soft:#121933;
-  --card:#18213f;
-  --card-2:#1d2850;
+  --panel:#18213f;
+  --panel-2:#1d2850;
   --text:#edf2ff;
   --muted:#a9b6da;
   --line:#2a3967;
@@ -21,90 +21,41 @@
   --bad:#fb7185;
   --chip:#121a34;
   --chip-on:#263b7d;
+  --hero1:rgba(139,92,246,.18);
+  --hero2:rgba(59,130,246,.14);
   --shadow:0 18px 40px rgba(0,0,0,.28);
 }
 
 /* TEMAS */
 body.theme-orquidea{
-  --bg:#0b1020;
-  --bg-soft:#121933;
-  --card:#18213f;
-  --card-2:#1d2850;
-  --text:#edf2ff;
-  --muted:#a9b6da;
-  --line:#2a3967;
-  --accent:#8b5cf6;
-  --accent-2:#c084fc;
-  --good:#4ade80;
-  --warn:#fbbf24;
-  --bad:#fb7185;
-  --chip:#121a34;
-  --chip-on:#263b7d;
+  --bg:#0b1020; --bg-soft:#121933; --panel:#18213f; --panel-2:#1d2850;
+  --text:#edf2ff; --muted:#a9b6da; --line:#2a3967; --accent:#8b5cf6; --accent-2:#c084fc;
+  --good:#4ade80; --warn:#fbbf24; --bad:#fb7185; --chip:#121a34; --chip-on:#263b7d;
+  --hero1:rgba(139,92,246,.18); --hero2:rgba(59,130,246,.14); --shadow:0 18px 40px rgba(0,0,0,.28);
 }
 body.theme-cielo{
-  --bg:#071824;
-  --bg-soft:#0d2231;
-  --card:#102a3c;
-  --card-2:#14364c;
-  --text:#effbff;
-  --muted:#a7d1df;
-  --line:#26506a;
-  --accent:#38bdf8;
-  --accent-2:#67e8f9;
-  --good:#34d399;
-  --warn:#fbbf24;
-  --bad:#fb7185;
-  --chip:#0d2030;
-  --chip-on:#1f4866;
+  --bg:#071824; --bg-soft:#0d2231; --panel:#102a3c; --panel-2:#14364c;
+  --text:#effbff; --muted:#a7d1df; --line:#26506a; --accent:#38bdf8; --accent-2:#67e8f9;
+  --good:#34d399; --warn:#fbbf24; --bad:#fb7185; --chip:#0d2030; --chip-on:#1f4866;
+  --hero1:rgba(56,189,248,.18); --hero2:rgba(103,232,249,.12); --shadow:0 18px 40px rgba(0,0,0,.26);
 }
 body.theme-bosque{
-  --bg:#081712;
-  --bg-soft:#10231b;
-  --card:#143126;
-  --card-2:#1a3b2f;
-  --text:#effff6;
-  --muted:#a7d1bd;
-  --line:#2f5d4d;
-  --accent:#22c55e;
-  --accent-2:#86efac;
-  --good:#4ade80;
-  --warn:#fbbf24;
-  --bad:#fb7185;
-  --chip:#11261d;
-  --chip-on:#24513f;
+  --bg:#081712; --bg-soft:#10231b; --panel:#143126; --panel-2:#1a3b2f;
+  --text:#effff6; --muted:#a7d1bd; --line:#2f5d4d; --accent:#22c55e; --accent-2:#86efac;
+  --good:#4ade80; --warn:#fbbf24; --bad:#fb7185; --chip:#11261d; --chip-on:#24513f;
+  --hero1:rgba(34,197,94,.18); --hero2:rgba(134,239,172,.10); --shadow:0 18px 40px rgba(0,0,0,.26);
 }
 body.theme-aurora{
-  --bg:#14101d;
-  --bg-soft:#1d1630;
-  --card:#261d3d;
-  --card-2:#2d2348;
-  --text:#faf3ff;
-  --muted:#d2b7e8;
-  --line:#523d77;
-  --accent:#ec4899;
-  --accent-2:#a855f7;
-  --good:#4ade80;
-  --warn:#f59e0b;
-  --bad:#fb7185;
-  --chip:#21182f;
-  --chip-on:#4b2d72;
+  --bg:#14101d; --bg-soft:#1d1630; --panel:#261d3d; --panel-2:#2d2348;
+  --text:#faf3ff; --muted:#d2b7e8; --line:#523d77; --accent:#ec4899; --accent-2:#a855f7;
+  --good:#4ade80; --warn:#f59e0b; --bad:#fb7185; --chip:#21182f; --chip-on:#4b2d72;
+  --hero1:rgba(236,72,153,.18); --hero2:rgba(168,85,247,.10); --shadow:0 18px 40px rgba(0,0,0,.28);
 }
 body.theme-claro{
-  --bg:#eef4ff;
-  --bg-soft:#f7faff;
-  --card:#ffffff;
-  --card-2:#f6f8ff;
-  --text:#172033;
-  --muted:#5f6f95;
-  --line:#d8e1f2;
-  --accent:#7c3aed;
-  --accent-2:#a78bfa;
-  --good:#16a34a;
-  --warn:#d97706;
-  --bad:#e11d48;
-  --chip:#eef3ff;
-  --chip-on:#ddd9ff;
-  --shadow:0 14px 30px rgba(46,67,111,.10);
+  --bg:#eef4ff; --bg-soft:#f8fbff; --panel:#ffffff; --panel-2:#f5f8ff;
+  --text:#172033; --muted:#5f6f95; --line:#d8e1f2; --accent:#7c3aed; --accent-2:#a78bfa;
+  --good:#16a34a; --warn:#d97706; --bad:#e11d48; --chip:#eef3ff; --chip-on:#ddd9ff;
+  --hero1:rgba(124,58,237,.10); --hero2:rgba(59,130,246,.08); --shadow:0 14px 30px rgba(46,67,111,.10);
 }
 
 *{box-sizing:border-box}
@@ -114,290 +65,132 @@ body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 22%, transparent), transparent 24%),
-    radial-gradient(circle at top right, color-mix(in srgb, var(--accent-2) 16%, transparent), transparent 22%),
+    radial-gradient(circle at top left, var(--hero1), transparent 24%),
+    radial-gradient(circle at top right, var(--hero2), transparent 22%),
     linear-gradient(160deg,var(--bg),var(--bg-soft));
 }
 header{
-  position:sticky;
-  top:0;
-  z-index:30;
+  position:sticky; top:0; z-index:30;
   padding:14px 16px;
   border-bottom:1px solid var(--line);
   backdrop-filter:blur(10px);
-  background:color-mix(in srgb, var(--bg) 78%, transparent);
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
 }
-.wrap{
-  max-width:1200px;
-  margin:auto;
-}
-.topbar{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-.brand{
-  flex:1;
-  min-width:250px;
-}
-h1{
-  margin:0;
-  font-size:22px;
-  letter-spacing:.2px;
-}
-.sub{
-  margin-top:5px;
-  font-size:12px;
-  color:var(--muted);
-}
-.badges,.themeBar{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
+.wrap{max-width:1240px;margin:auto}
+.topbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.brand{flex:1;min-width:250px}
+h1{margin:0;font-size:22px;letter-spacing:.2px}
+.sub{margin-top:5px;font-size:12px;color:var(--muted)}
+.badges,.themeBar,.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .pill{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 12px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:color-mix(in srgb, var(--card) 90%, transparent);
-  color:var(--muted);
-  font-size:12px;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 12px;border-radius:999px;border:1px solid var(--line);
+  background:color-mix(in srgb, var(--panel) 90%, transparent);
+  color:var(--muted);font-size:12px
 }
-main{
-  max-width:1200px;
-  margin:18px auto;
-  padding:0 12px 26px;
-}
-.grid{
-  display:grid;
-  grid-template-columns:1.15fr .85fr;
-  gap:16px;
-}
-@media (max-width:980px){
-  .grid{grid-template-columns:1fr}
-}
+main{max-width:1240px;margin:18px auto;padding:0 12px 28px}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
+@media (max-width:980px){.grid{grid-template-columns:1fr}}
 .card{
-  background:linear-gradient(180deg, color-mix(in srgb, var(--card) 95%, transparent), color-mix(in srgb, var(--card-2) 96%, transparent));
-  border:1px solid var(--line);
-  border-radius:20px;
-  box-shadow:var(--shadow);
-  padding:16px;
-  margin-bottom:16px;
+  background:linear-gradient(180deg, color-mix(in srgb, var(--panel) 96%, transparent), color-mix(in srgb, var(--panel-2) 98%, transparent));
+  border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px
 }
-h2{
-  margin:0 0 10px;
-  font-size:16px;
+.hero{
+  display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:center
 }
-p{margin:0;line-height:1.45}
-.small{
-  font-size:12px;
-  color:var(--muted);
+@media (max-width:900px){.hero{grid-template-columns:1fr}}
+.heroTitle{font-size:24px;font-weight:900;line-height:1.15;margin:0 0 8px}
+.heroText{font-size:14px;line-height:1.55;color:var(--muted)}
+.heroBox{
+  border:1px solid var(--line);border-radius:18px;padding:16px;background:var(--chip)
 }
-.row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
+.heroMini{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px
 }
-.col{
-  flex:1;
-  min-width:220px;
+.miniStat{
+  border:1px solid var(--line);border-radius:14px;padding:12px;background:color-mix(in srgb, var(--panel) 80%, transparent)
 }
-label{
-  display:block;
-  margin:10px 0 6px;
-  color:var(--muted);
-  font-size:12px;
-}
+.miniStat .v{font-weight:900;font-size:20px;margin-top:4px}
+h2{margin:0 0 10px;font-size:16px}
+.small{font-size:12px;color:var(--muted)}
+.col{flex:1;min-width:220px}
+label{display:block;margin:10px 0 6px;color:var(--muted);font-size:12px}
 input,select,textarea{
-  width:100%;
-  padding:11px 12px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:var(--chip);
-  color:var(--text);
-  outline:none;
-  font:inherit;
+  width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);
+  background:var(--chip);color:var(--text);outline:none;font:inherit
 }
 input:focus,select:focus,textarea:focus{
   border-color:var(--accent-2);
-  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent)
 }
-textarea{
-  resize:vertical;
-  min-height:84px;
-}
+textarea{resize:vertical;min-height:84px}
 .btn{
-  padding:11px 14px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  font-weight:800;
-  transition:.18s ease;
+  padding:11px 14px;border:none;border-radius:12px;cursor:pointer;font-weight:800;transition:.18s ease
 }
 .btn:hover{transform:translateY(-1px)}
-.btn.main{
-  background:linear-gradient(135deg,var(--accent),var(--accent-2));
-  color:white;
-}
-.btn.sec{
-  background:transparent;
-  border:1px solid var(--line);
-  color:var(--text);
-}
-.btn.good{
-  background:var(--good);
-  color:#072514;
-}
-.btn.warn{
-  background:var(--warn);
-  color:#2b2004;
-}
-.btn.bad{
-  background:var(--bad);
-  color:#320813;
-}
-.chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
+.btn.main{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white}
+.btn.sec{background:transparent;border:1px solid var(--line);color:var(--text)}
+.btn.good{background:var(--good);color:#072514}
+.btn.warn{background:var(--warn);color:#2b2004}
+.btn.bad{background:var(--bad);color:#320813}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{
-  padding:8px 11px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:var(--chip);
-  font-size:12px;
-  cursor:pointer;
-  user-select:none;
+  padding:8px 11px;border-radius:999px;border:1px solid var(--line);
+  background:var(--chip);font-size:12px;cursor:pointer;user-select:none
 }
-.chip[data-on="1"]{
-  background:var(--chip-on);
-  border-color:color-mix(in srgb, var(--accent) 55%, white);
-}
+.chip[data-on="1"]{background:var(--chip-on);border-color:color-mix(in srgb, var(--accent) 55%, white)}
 .tag{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:6px 10px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  background:var(--chip);
-  color:var(--muted);
-  font-size:11px;
+  display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);
+  border-radius:999px;background:var(--chip);color:var(--muted);font-size:11px
 }
-.tableWrap{
-  overflow:auto;
-  border:1px solid var(--line);
-  border-radius:14px;
-  margin-top:10px;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:12px;
-}
-th,td{
-  padding:9px 7px;
-  border-bottom:1px solid var(--line);
-  text-align:left;
-  vertical-align:top;
-}
-th{
-  color:var(--muted);
-  font-weight:800;
-}
-.empty{
-  padding:16px;
-  color:var(--muted);
-  font-size:12px;
-}
-.kpis{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:10px;
-}
+.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:14px;margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:9px 7px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:800}
+.empty{padding:16px;color:var(--muted);font-size:12px}
+.kpis{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .kpi{
-  flex:1;
-  min-width:140px;
-  padding:12px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:var(--chip);
+  flex:1;min-width:140px;padding:12px;border:1px solid var(--line);
+  border-radius:14px;background:var(--chip)
 }
-.kpi .v{
-  margin-top:4px;
-  font-size:18px;
-  font-weight:900;
-}
+.kpi .v{margin-top:4px;font-size:18px;font-weight:900}
 .noteBox{
-  padding:12px;
-  margin-top:12px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:var(--chip);
+  padding:12px;margin-top:12px;border-radius:14px;border:1px solid var(--line);background:var(--chip)
 }
 .themeBtn{
-  padding:8px 12px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:var(--chip);
-  color:var(--text);
-  cursor:pointer;
-  font-size:12px;
-  font-weight:700;
+  padding:8px 12px;border-radius:999px;border:1px solid var(--line);
+  background:var(--chip);color:var(--text);cursor:pointer;font-size:12px;font-weight:700
 }
-.themeBtn.active{
-  outline:2px solid color-mix(in srgb, var(--accent) 55%, white);
-}
-.themePreview{
-  width:12px;
-  height:12px;
-  border-radius:50%;
-  display:inline-block;
-  margin-right:6px;
-  vertical-align:-1px;
-}
-.footer{
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-  padding:8px 12px 22px;
-}
-.moodGrid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
-}
-@media (max-width:650px){
-  .moodGrid{grid-template-columns:repeat(2,1fr)}
-}
+.themeBtn.active{outline:2px solid color-mix(in srgb, var(--accent) 55%, white)}
+.themePreview{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:-1px}
+.footer{text-align:center;font-size:12px;color:var(--muted);padding:8px 12px 22px}
+.moodGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media (max-width:650px){.moodGrid{grid-template-columns:repeat(2,1fr)}}
 .moodBtn{
-  border:1px solid var(--line);
-  background:var(--chip);
-  color:var(--text);
-  border-radius:14px;
-  padding:10px 8px;
-  cursor:pointer;
-  text-align:center;
-  font-size:13px;
+  border:1px solid var(--line);background:var(--chip);color:var(--text);
+  border-radius:14px;padding:10px 8px;cursor:pointer;text-align:center;font-size:13px
 }
-.moodBtn.active{
-  background:var(--chip-on);
-  border-color:color-mix(in srgb, var(--accent) 55%, white);
+.moodBtn.active{background:var(--chip-on);border-color:color-mix(in srgb, var(--accent) 55%, white)}
+.moodBtn .emoji{display:block;font-size:22px;margin-bottom:4px}
+input[type="file"]{padding:8px}
+canvas{
+  width:100%;height:220px;background:var(--chip);border:1px solid var(--line);border-radius:14px;display:block
 }
-.moodBtn .emoji{
-  display:block;
-  font-size:22px;
-  margin-bottom:4px;
+.welcomeOverlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:60;padding:16px
 }
-input[type="file"]{
-  padding:8px;
+.welcomeCard{
+  width:min(560px,100%);background:var(--panel);border:1px solid var(--line);border-radius:20px;
+  box-shadow:var(--shadow);padding:22px
+}
+.welcomeTitle{font-size:24px;font-weight:900;margin:0 0 8px}
+.welcomeText{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:14px}
+.listClean{margin:0;padding-left:18px;color:var(--muted);font-size:14px;line-height:1.6}
+.reflectionItem{
+  padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--chip);margin-top:10px
+}
+.author{
+  font-size:12px;color:var(--muted);margin-top:8px
 }
 </style>
 </head>
@@ -427,8 +220,41 @@ input[type="file"]{
 </header>
 
 <main>
-  <div class="grid">
+  <div class="card">
+    <div class="hero">
+      <div>
+        <div class="heroTitle">Una app para observar cómo te sientes, no para juzgarte</div>
+        <div class="heroText">
+          Brújula Emocional te ayuda a registrar emociones, situaciones, cuidado personal y patrones de bienestar.
+          Puedes usarla en momentos difíciles o simplemente como una rutina diaria de autoconocimiento.
+        </div>
+        <div class="author">Diseño base adaptado para Claudia Alejandra Garza Hernández</div>
+      </div>
+      <div class="heroBox">
+        <div class="small">Vista rápida</div>
+        <div class="heroMini">
+          <div class="miniStat">
+            <div class="small">Registros hoy</div>
+            <div class="v" id="heroToday">0</div>
+          </div>
+          <div class="miniStat">
+            <div class="small">Promedio semana</div>
+            <div class="v" id="heroWeekAvg">—</div>
+          </div>
+          <div class="miniStat">
+            <div class="small">Emoción frecuente</div>
+            <div class="v" id="heroEmotion">—</div>
+          </div>
+          <div class="miniStat">
+            <div class="small">Tema activo</div>
+            <div class="v" id="heroTheme">Orquídea</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <div class="grid">
     <section>
       <div class="card">
         <h2>Registro emocional</h2>
@@ -624,9 +450,17 @@ input[type="file"]{
       <div class="card">
         <h2>Frase para acompañarte</h2>
         <div id="quote" style="font-size:16px;font-weight:900;line-height:1.5">“Puedo sentir esto sin juzgarme.”</div>
-        <div class="small" style="margin-top:8px">Úsala como una pausa breve.</div>
+        <div class="small" id="quoteSub" style="margin-top:8px">Úsala como una pausa breve.</div>
         <div class="row" style="margin-top:12px">
           <button class="btn sec" id="newQuoteBtn">Otra frase ✨</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Gráfica semanal</h2>
+        <div class="small">Muestra la intensidad promedio de los últimos 7 días.</div>
+        <div style="margin-top:10px">
+          <canvas id="weekChart" width="520" height="220"></canvas>
         </div>
       </div>
 
@@ -669,6 +503,13 @@ input[type="file"]{
       </div>
 
       <div class="card">
+        <h2>Reflexión breve</h2>
+        <div class="reflectionItem"><strong>¿Qué me ayudó más hoy?</strong><div class="small" id="reflect1">Aún no hay suficientes datos.</div></div>
+        <div class="reflectionItem"><strong>¿Qué emoción se repitió más esta semana?</strong><div class="small" id="reflect2">Aún no hay suficientes datos.</div></div>
+        <div class="reflectionItem"><strong>¿Qué puedo intentar mañana?</strong><div class="small" id="reflect3">Registra un par de días para recibir sugerencias más útiles.</div></div>
+      </div>
+
+      <div class="card">
         <h2>Respaldo</h2>
         <div class="row">
           <button class="btn good" id="exportBtn">Exportar JSON</button>
@@ -688,7 +529,6 @@ input[type="file"]{
         </div>
       </div>
     </aside>
-
   </div>
 </main>
 
@@ -696,12 +536,104 @@ input[type="file"]{
   Brújula Emocional · guardado local en este dispositivo
 </div>
 
+<div class="welcomeOverlay" id="welcomeOverlay">
+  <div class="welcomeCard">
+    <div class="welcomeTitle">Bienvenida a Brújula Emocional</div>
+    <div class="welcomeText">
+      Esta app te ayuda a registrar emociones, notar patrones y reconocer qué cosas sí te ayudan.
+      Todo se guarda en este dispositivo.
+    </div>
+    <ul class="listClean">
+      <li>Puedes elegir temas de color.</li>
+      <li>Puedes guardar, exportar e importar tus registros.</li>
+      <li>El tema claro tiene exactamente el mismo diseño que los temas oscuros.</li>
+    </ul>
+    <div class="row" style="margin-top:16px">
+      <button class="btn main" id="closeWelcomeBtn">Comenzar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (() => {
-  const DATA_KEY = "brujula_emocional_v1";
+  const DATA_KEY = "brujula_emocional_v2";
   const THEME_KEY = "brujula_emocional_theme";
+  const FIRST_KEY = "brujula_emocional_first_open";
 
-  const quotes = [
+  const quotesByEmotion = {
+    calma: [
+      "Puedo seguir cuidando esta paz.",
+      "La calma también merece espacio.",
+      "No tengo que estar mal para escucharme."
+    ],
+    alegria: [
+      "También puedo registrar los días buenos.",
+      "La alegría también cuenta.",
+      "Reconocer lo bueno fortalece mi equilibrio."
+    ],
+    estres: [
+      "Puedo ir una cosa a la vez.",
+      "No todo se resuelve hoy.",
+      "Una pausa también es avanzar."
+    ],
+    tristeza: [
+      "Lo que siento merece ternura, no castigo.",
+      "Puedo estar triste sin dejar de cuidarme.",
+      "No tengo que apurar mi proceso."
+    ],
+    enojo: [
+      "Puedo sentir enojo sin dañarme ni dañar.",
+      "Respirar antes de reaccionar también es fuerza.",
+      "Mi emoción tiene un mensaje, no una orden."
+    ],
+    ansiedad: [
+      "Puedo sentir esto sin obedecer a la urgencia.",
+      "La ansiedad sube y baja; yo puedo acompañarme.",
+      "Primero respiro, luego decido."
+    ],
+    miedo: [
+      "Puedo darme seguridad paso a paso.",
+      "No necesito tener todo resuelto para seguir.",
+      "Mi cuerpo merece calma mientras mi mente se aclara."
+    ],
+    frustracion: [
+      "Lo difícil no significa que yo esté fallando.",
+      "Puedo reajustar, no rendirme.",
+      "Hoy avanzo como puedo."
+    ],
+    culpa: [
+      "Puedo revisar mis actos sin destruirme.",
+      "Aprender vale más que castigarme.",
+      "Cometer errores no borra mi valor."
+    ],
+    verguenza: [
+      "Puedo hablarme con más respeto.",
+      "Mi valor no desaparece por un momento difícil.",
+      "No necesito esconderme para merecer cuidado."
+    ],
+    soledad: [
+      "Puedo acompañarme mientras busco conexión.",
+      "Sentirme sola/o no significa que no importe.",
+      "Pedir compañía también es valentía."
+    ],
+    confusion: [
+      "No entender todo hoy también está permitido.",
+      "Puedo ir aclarando una cosa a la vez.",
+      "La claridad no siempre llega de golpe."
+    ],
+    esperanza: [
+      "La esperanza también necesita cuidado.",
+      "Puedo confiar sin dejar de observarme.",
+      "Esto puede mejorar paso a paso."
+    ],
+    otro: [
+      "Lo que siento merece atención.",
+      "Puedo darme un poco de amabilidad hoy.",
+      "Escucharme ya es una forma de cuidado."
+    ]
+  };
+
+  const generalQuotes = [
     "Puedo sentir esto sin juzgarme.",
     "No necesito resolver todo en este momento.",
     "Nombrar lo que siento ya es una forma de cuidarme.",
@@ -711,11 +643,7 @@ input[type="file"]{
     "Descansar también es valioso.",
     "Pedir ayuda también es fortaleza.",
     "Puedo acompañarme con más amabilidad.",
-    "No todo pensamiento es una verdad.",
-    "Estoy aprendiendo a escucharme mejor.",
-    "Hice lo que pude con lo que tenía hoy.",
-    "Mi emoción merece atención, no castigo.",
-    "Puedo empezar de nuevo cuantas veces lo necesite."
+    "No todo pensamiento es una verdad."
   ];
 
   const $ = (id) => document.getElementById(id);
@@ -743,6 +671,7 @@ input[type="file"]{
     todayTable: $("todayTable"),
     historyTable: $("historyTable"),
     quote: $("quote"),
+    quoteSub: $("quoteSub"),
     newQuoteBtn: $("newQuoteBtn"),
     wkCount: $("wkCount"),
     wkAvg: $("wkAvg"),
@@ -756,7 +685,17 @@ input[type="file"]{
     moodBtns: [...document.querySelectorAll(".moodBtn")],
     bodyChips: [...document.querySelectorAll("#bodyChips .chip")],
     careChips: [...document.querySelectorAll("#careChips .chip")],
-    themeBtns: [...document.querySelectorAll(".themeBtn")]
+    themeBtns: [...document.querySelectorAll(".themeBtn")],
+    weekChart: $("weekChart"),
+    reflect1: $("reflect1"),
+    reflect2: $("reflect2"),
+    reflect3: $("reflect3"),
+    heroToday: $("heroToday"),
+    heroWeekAvg: $("heroWeekAvg"),
+    heroEmotion: $("heroEmotion"),
+    heroTheme: $("heroTheme"),
+    welcomeOverlay: $("welcomeOverlay"),
+    closeWelcomeBtn: $("closeWelcomeBtn")
   };
 
   function todayISO(d = new Date()){
@@ -840,13 +779,25 @@ input[type="file"]{
     return Object.entries(map).sort((a,b)=>b[1]-a[1])[0][0];
   }
 
+  function themeLabel(theme){
+    return {
+      orquidea:"Orquídea",
+      cielo:"Cielo",
+      bosque:"Bosque",
+      aurora:"Aurora",
+      claro:"Claro"
+    }[theme] || theme;
+  }
+
   function setTheme(theme){
     document.body.className = `theme-${theme}`;
     localStorage.setItem(THEME_KEY, theme);
     ui.themeBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.theme === theme));
+    ui.heroTheme.textContent = themeLabel(theme);
     const accent = getComputedStyle(document.body).getPropertyValue("--accent").trim() || "#7c3aed";
     const meta = document.querySelector('meta[name="theme-color"]');
     if(meta) meta.setAttribute("content", accent);
+    drawWeekChart(loadData());
   }
 
   function initTheme(){
@@ -863,6 +814,7 @@ input[type="file"]{
         ui.moodBtns.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         ui.emotion.value = btn.dataset.mood;
+        setQuoteForEmotion(btn.dataset.mood);
       });
     });
   }
@@ -875,9 +827,23 @@ input[type="file"]{
       btn.classList.toggle("active", on);
       if(on) found = true;
     });
+    setQuoteForEmotion(mood);
     if(!found){
       ui.moodBtns.forEach(btn => btn.classList.remove("active"));
     }
+  }
+
+  function setQuoteForEmotion(emotion){
+    const list = quotesByEmotion[emotion] || generalQuotes;
+    const text = list[Math.floor(Math.random() * list.length)];
+    ui.quote.textContent = `“${text}”`;
+    ui.quoteSub.textContent = `Frase sugerida para la emoción: ${emotion}.`;
+  }
+
+  function randomGeneralQuote(){
+    const text = generalQuotes[Math.floor(Math.random() * generalQuotes.length)];
+    ui.quote.textContent = `“${text}”`;
+    ui.quoteSub.textContent = "Úsala como una pausa breve.";
   }
 
   function addEntry(entry){
@@ -926,6 +892,7 @@ input[type="file"]{
     ui.moodBtns.forEach(btn => btn.classList.remove("active"));
     const calmBtn = ui.moodBtns.find(btn => btn.dataset.mood === "calma");
     if(calmBtn) calmBtn.classList.add("active");
+    setQuoteForEmotion("calma");
   }
 
   function deleteEntry(id){
@@ -942,18 +909,25 @@ input[type="file"]{
     ui.countPill.textContent = `Total: ${data.length}`;
   }
 
+  function renderHero(data){
+    const today = todayISO();
+    const todayCount = data.filter(e => e.date === today).length;
+    const last7 = lastNDaysISO(7);
+    const recent = data.filter(e => last7.includes(e.date));
+    const allInt = recent.map(e => Number(e.intensity)).filter(Number.isFinite);
+    ui.heroToday.textContent = todayCount;
+    ui.heroWeekAvg.textContent = allInt.length ? avg(allInt).toFixed(1) : "—";
+    ui.heroEmotion.textContent = mostFrequent(recent.map(e => e.emotion).filter(Boolean));
+  }
+
   function renderToday(data){
     const today = todayISO();
-    const rows = data
-      .filter(e => e.date === today)
-      .sort((a,b)=>(a.time || "").localeCompare(b.time || ""));
-
+    const rows = data.filter(e => e.date === today).sort((a,b)=>(a.time || "").localeCompare(b.time || ""));
     ui.todayTable.innerHTML = "";
     if(!rows.length){
       ui.todayTable.innerHTML = `<tr><td colspan="6" class="empty">Aún no hay registros para hoy.</td></tr>`;
       return;
     }
-
     rows.slice().reverse().forEach(e => {
       ui.todayTable.innerHTML += `
         <tr>
@@ -1014,7 +988,6 @@ input[type="file"]{
       const entries = data.filter(e => e.date === date);
       if(!entries.length) return;
       any = true;
-
       weekCount += entries.length;
       helpedCount += entries.filter(e => e.helped === "si").length;
       allIntensity.push(...entries.map(e => Number(e.intensity)).filter(Number.isFinite));
@@ -1042,6 +1015,7 @@ input[type="file"]{
     ui.wkHelped.textContent = helpedCount || 0;
 
     renderInsight(data, weekCount, weekAvg, helpedCount);
+    renderReflections(data);
   }
 
   function renderInsight(data, weekCount, weekAvg, helpedCount){
@@ -1060,11 +1034,7 @@ input[type="file"]{
 
     let text = `En los últimos 7 días registraste ${weekCount} momento(s). `;
     text += `La emoción más frecuente fue "${topEmotion}" y el área más repetida fue "${topArea}". `;
-
-    if(topCare !== "—"){
-      text += `La estrategia de cuidado más usada fue "${topCare}". `;
-    }
-
+    if(topCare !== "—") text += `La estrategia de cuidado más usada fue "${topCare}". `;
     if(weekAvg != null){
       if(weekAvg >= 7){
         text += `La intensidad promedio fue alta (${weekAvg.toFixed(1)}), así que conviene priorizar descanso, apoyo y pausas más claras. `;
@@ -1074,22 +1044,130 @@ input[type="file"]{
         text += `La intensidad promedio fue baja (${weekAvg.toFixed(1)}), señal de una semana más estable. `;
       }
     }
-
     if(supportNeed > 0){
       text += `Marcaste necesidad de apoyo adicional ${supportNeed} vez/veces. Tómalo en serio.`;
     } else if(helpedCount > 0){
       text += `También hubo momentos en los que tus estrategias sí ayudaron.`;
     }
-
     ui.insightBox.textContent = text;
+  }
+
+  function renderReflections(data){
+    const today = todayISO();
+    const todayEntries = data.filter(e => e.date === today);
+    const last7 = lastNDaysISO(7);
+    const recent = data.filter(e => last7.includes(e.date));
+
+    const bestCare = mostFrequent(todayEntries.flatMap(e => Array.isArray(e.care) ? e.care : []));
+    const topEmotion = mostFrequent(recent.map(e => e.emotion).filter(Boolean));
+    const needs = recent.filter(e => e.helped === "no").length;
+    const topArea = mostFrequent(recent.map(e => e.area).filter(Boolean));
+
+    ui.reflect1.textContent = bestCare === "—" ? "Todavía no hay una estrategia destacada hoy." : `Lo que más aparece hoy es: ${bestCare}.`;
+    ui.reflect2.textContent = topEmotion === "—" ? "Aún no hay suficientes datos." : `La emoción que más se repite es: ${topEmotion}.`;
+    ui.reflect3.textContent = recent.length === 0
+      ? "Registra un par de días para recibir sugerencias más útiles."
+      : needs >= 2
+        ? `Tal vez mañana convenga probar una pausa más clara o pedir apoyo en el área: ${topArea}.`
+        : "Mañana puedes repetir la estrategia que más te ayudó hoy y registrar cómo te fue.";
+  }
+
+  function drawWeekChart(data){
+    const canvas = ui.weekChart;
+    if(!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+
+    const styles = getComputedStyle(document.body);
+    const text = styles.getPropertyValue("--text").trim();
+    const muted = styles.getPropertyValue("--muted").trim();
+    const line = styles.getPropertyValue("--line").trim();
+    const accent = styles.getPropertyValue("--accent").trim();
+    const chip = styles.getPropertyValue("--chip").trim();
+
+    ctx.fillStyle = chip;
+    ctx.fillRect(0,0,w,h);
+
+    const pad = {left:38,right:16,top:16,bottom:34};
+    const cw = w - pad.left - pad.right;
+    const ch = h - pad.top - pad.bottom;
+
+    ctx.strokeStyle = line;
+    ctx.lineWidth = 1;
+
+    for(let i=0;i<=5;i++){
+      const y = pad.top + (ch/5)*i;
+      ctx.beginPath();
+      ctx.moveTo(pad.left, y);
+      ctx.lineTo(w-pad.right, y);
+      ctx.stroke();
+    }
+
+    ctx.fillStyle = muted;
+    ctx.font = "11px system-ui";
+    for(let i=0;i<=5;i++){
+      const val = 10 - i*2;
+      const y = pad.top + (ch/5)*i + 4;
+      ctx.fillText(String(val), 8, y);
+    }
+
+    const days = lastNDaysISO(7);
+    const values = days.map(date => {
+      const entries = data.filter(e => e.date === date);
+      const vals = entries.map(e => Number(e.intensity)).filter(Number.isFinite);
+      return vals.length ? avg(vals) : null;
+    });
+
+    const stepX = cw / (days.length - 1);
+
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+
+    let started = false;
+    values.forEach((v, i) => {
+      if(v == null) return;
+      const x = pad.left + stepX*i;
+      const y = pad.top + ch - (v/10)*ch;
+      if(!started){
+        ctx.moveTo(x,y);
+        started = true;
+      } else {
+        ctx.lineTo(x,y);
+      }
+    });
+    ctx.stroke();
+
+    values.forEach((v, i) => {
+      const x = pad.left + stepX*i;
+      const label = days[i].slice(5);
+      ctx.fillStyle = muted;
+      ctx.font = "11px system-ui";
+      ctx.fillText(label, x-14, h-12);
+
+      if(v != null){
+        const y = pad.top + ch - (v/10)*ch;
+        ctx.beginPath();
+        ctx.fillStyle = accent;
+        ctx.arc(x,y,4,0,Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = text;
+        ctx.font = "10px system-ui";
+        ctx.fillText(v.toFixed(1), x-10, y-10);
+      }
+    });
   }
 
   function renderAll(){
     const data = loadData();
     renderHeader(data);
+    renderHero(data);
     renderToday(data);
     renderHistory(data);
     renderWeek(data);
+    drawWeekChart(data);
   }
 
   function exportJSON(){
@@ -1120,13 +1198,26 @@ input[type="file"]{
     reader.readAsText(file);
   }
 
+  function maybeShowWelcome(){
+    const seen = localStorage.getItem(FIRST_KEY);
+    if(!seen){
+      ui.welcomeOverlay.style.display = "flex";
+    }
+  }
+
   function init(){
     ui.date.value = todayISO();
     ui.time.value = nowTime();
-    ui.quote.textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
+    randomGeneralQuote();
 
     initTheme();
     initMoodButtons();
+    maybeShowWelcome();
+
+    ui.closeWelcomeBtn.addEventListener("click", () => {
+      ui.welcomeOverlay.style.display = "none";
+      localStorage.setItem(FIRST_KEY, "1");
+    });
 
     ui.emotion.addEventListener("change", syncMoodFromEmotion);
 
@@ -1155,7 +1246,7 @@ input[type="file"]{
     });
 
     ui.newQuoteBtn.addEventListener("click", () => {
-      ui.quote.textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
+      setQuoteForEmotion(ui.emotion.value || getSelectedMood() || "calma");
     });
 
     ui.exportBtn.addEventListener("click", exportJSON);
