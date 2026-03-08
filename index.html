@@ -178,6 +178,9 @@ textarea{resize:vertical;min-height:84px}
   border:1px solid var(--line);
   color:var(--text);
 }
+.btn.take{background:var(--good);color:#052010}
+.btn.late{background:var(--warn);color:#2a1b05}
+.btn.skip{background:var(--bad);color:#fff}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{
   padding:8px 11px;border-radius:999px;border:1px solid var(--line);
@@ -264,6 +267,25 @@ canvas{
   border-radius:10px;
   display:inline-block;
 }
+.med-card{
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+  margin-top:12px;
+  background:var(--chip);
+}
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  font-size:11px;
+}
+.status-ok{background:rgba(34,197,94,.15)}
+.status-warn{background:rgba(245,158,11,.15)}
+.status-bad{background:rgba(244,63,94,.15)}
 </style>
 </head>
 <body class="theme-noche">
@@ -299,7 +321,7 @@ canvas{
         <div class="heroTitle">Una app para observar cómo te sientes, no para juzgarte</div>
         <div class="heroText">
           Brújula Emocional te ayuda a registrar emociones, situaciones, cuidado personal y patrones de bienestar.
-          Puedes usarla en momentos difíciles o simplemente como una rutina diaria de autoconocimiento.
+          Ahora también puede ayudarte a dar seguimiento a medicación prescrita, con recordatorio local dentro de la app.
         </div>
         <div class="author">Autoría y adaptación visual: Claudia Alejandra Garza Hernández</div>
         <div class="license-note">
@@ -478,6 +500,82 @@ canvas{
         </div>
       </div>
 
+      <div class="card">
+        <h2>Medicación prescrita</h2>
+        <div class="small">
+          Este espacio es solo para seguimiento personal de medicación indicada por un profesional. No cambia dosis ni sustituye orientación médica.
+        </div>
+
+        <div class="noteBox">
+          <div class="switch">
+            <label style="margin:0">
+              <input type="checkbox" id="medEnabled">
+              Tengo medicación prescrita
+            </label>
+          </div>
+
+          <div id="medFormWrap">
+            <div class="row">
+              <div class="col">
+                <label>Nombre del medicamento</label>
+                <input type="text" id="medName" placeholder="Ej. Sertralina">
+              </div>
+              <div class="col">
+                <label>Dosis</label>
+                <input type="text" id="medDose" placeholder="Ej. 50 mg">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>Frecuencia</label>
+                <select id="medFrequency">
+                  <option value="1">1 vez al día</option>
+                  <option value="2">2 veces al día</option>
+                  <option value="3">3 veces al día</option>
+                </select>
+              </div>
+              <div class="col">
+                <label>Hora principal</label>
+                <input type="time" id="medTime1">
+              </div>
+            </div>
+
+            <div class="row" id="medExtraTimesRow" style="display:none">
+              <div class="col">
+                <label>Segunda hora</label>
+                <input type="time" id="medTime2">
+              </div>
+              <div class="col" id="medThirdWrap" style="display:none">
+                <label>Tercera hora</label>
+                <input type="time" id="medTime3">
+              </div>
+            </div>
+
+            <label>Notas médicas personales</label>
+            <textarea id="medNotes" placeholder="Ej. Tomar después de alimentos / no olvidar llevar al trabajo"></textarea>
+
+            <div class="row" style="margin-top:12px">
+              <button class="btn main" id="saveMedBtn">Guardar medicación</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="med-card">
+          <div class="row">
+            <div>
+              <h3 style="margin:0 0 8px">Estado de hoy</h3>
+              <div class="small" id="medTodaySummary">Aún no hay medicación configurada.</div>
+            </div>
+            <div style="margin-left:auto">
+              <span class="status-pill discreet-safe" id="medAlertBadge">Sin alerta</span>
+            </div>
+          </div>
+
+          <div id="medDailyCards"></div>
+        </div>
+      </div>
+
       <div class="card privacy-mask">
         <h2>Registros de hoy</h2>
         <div class="tableWrap">
@@ -556,7 +654,7 @@ canvas{
               Activar recordatorio diario local
             </label>
           </div>
-          <label>Hora del recordatorio</label>
+          <label>Hora del recordatorio emocional</label>
           <input type="time" id="reminderTime">
           <div class="small" style="margin-top:8px" id="reminderMsg">
             Si el navegador lo permite, recibirás un aviso local cuando abras la app cerca de esa hora.
@@ -666,7 +764,7 @@ canvas{
         <h2>Importante</h2>
         <div class="small" style="line-height:1.6">
           Esta herramienta ayuda a observar emociones, patrones y estrategias de cuidado.
-          No sustituye apoyo profesional. Si sientes que hoy necesitas ayuda real, busca a alguien de confianza o atención especializada.
+          No sustituye apoyo profesional. La sección de medicación es solo un apoyo de seguimiento personal para tratamientos ya prescritos.
         </div>
       </div>
     </aside>
@@ -687,7 +785,8 @@ canvas{
     <ul class="listClean">
       <li>Puedes elegir temas de color.</li>
       <li>Puedes guardar, exportar e importar tus registros.</li>
-      <li>Ahora incluye tendencia emocional, recordatorio local y modo discreto.</li>
+      <li>Incluye tendencia emocional, recordatorio local y modo discreto.</li>
+      <li>Ahora también puede ayudarte a dar seguimiento a medicación prescrita.</li>
       <li>La autoría y la licencia permanecen visibles.</li>
     </ul>
     <div class="row" style="margin-top:16px">
@@ -703,10 +802,10 @@ canvas{
       Brújula Emocional es una app pensada para adolescentes y adultos que desean registrar emociones,
       reconocer detonantes, observar el cuerpo, anotar estrategias de cuidado y revisar tendencias de bienestar.
       <br><br>
+      Incluye apoyo de seguimiento local para medicación prescrita, sin sustituir indicaciones médicas.
+      <br><br>
       Fue adaptada y desarrollada visualmente por <strong>Claudia Alejandra Garza Hernández</strong>,
       con enfoque de uso personal y educativo.
-      <br><br>
-      La app prioriza privacidad local, claridad visual y una experiencia estable entre temas.
     </div>
     <div class="row" style="margin-top:14px">
       <button class="btn main" id="closeAboutBtn">Cerrar</button>
@@ -727,7 +826,7 @@ canvas{
       1. Puede utilizarse con fines personales y educativos.<br>
       2. No debe eliminarse el crédito de autora ni el bloque de licencia/acerca de.<br>
       3. Si se adapta o comparte, debe mantenerse la atribución visible.<br>
-      4. No implica sustitución de atención profesional en salud mental.
+      4. No implica sustitución de atención profesional en salud mental ni recomendaciones farmacológicas.
       <br><br>
       Identificador interno de licencia:
       <div class="codebox">BE-CA-GH-2026</div>
@@ -740,13 +839,16 @@ canvas{
 
 <script>
 (() => {
-  const DATA_KEY = "brujula_emocional_v4";
+  const DATA_KEY = "brujula_emocional_v5";
   const THEME_KEY = "brujula_emocional_theme";
   const FIRST_KEY = "brujula_emocional_first_open";
   const REMINDER_ENABLED_KEY = "brujula_emocional_reminder_enabled";
   const REMINDER_TIME_KEY = "brujula_emocional_reminder_time";
   const REMINDER_LAST_KEY = "brujula_emocional_last_reminder";
   const DISCREET_KEY = "brujula_emocional_discreet";
+  const MED_KEY = "brujula_emocional_medication";
+  const MED_LOG_KEY = "brujula_emocional_medication_log";
+  const MED_ALERT_LAST_KEY = "brujula_emocional_medication_alert_last";
 
   const quotesByEmotion = {
     calma: ["Puedo seguir cuidando esta paz.","La calma también merece espacio.","No tengo que estar mal para escucharme."],
@@ -805,7 +907,23 @@ canvas{
     reminderMsg: $("reminderMsg"),
     reminderStatus: $("reminderStatus"),
     discreetToggle: $("discreetToggle"),
-    discreetStatus: $("discreetStatus")
+    discreetStatus: $("discreetStatus"),
+
+    medEnabled: $("medEnabled"),
+    medName: $("medName"),
+    medDose: $("medDose"),
+    medFrequency: $("medFrequency"),
+    medTime1: $("medTime1"),
+    medTime2: $("medTime2"),
+    medTime3: $("medTime3"),
+    medExtraTimesRow: $("medExtraTimesRow"),
+    medThirdWrap: $("medThirdWrap"),
+    medNotes: $("medNotes"),
+    saveMedBtn: $("saveMedBtn"),
+    medFormWrap: $("medFormWrap"),
+    medTodaySummary: $("medTodaySummary"),
+    medDailyCards: $("medDailyCards"),
+    medAlertBadge: $("medAlertBadge")
   };
 
   function todayISO(d = new Date()){
@@ -818,6 +936,13 @@ canvas{
   function nowTime(){
     const d = new Date();
     return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+  }
+
+  function timeToMinutes(t){
+    if(!t || !t.includes(":")) return null;
+    const [h,m] = t.split(":").map(Number);
+    if(!Number.isFinite(h) || !Number.isFinite(m)) return null;
+    return h*60+m;
   }
 
   function clamp010(n){
@@ -842,6 +967,32 @@ canvas{
 
   function saveData(data){
     localStorage.setItem(DATA_KEY, JSON.stringify(data));
+  }
+
+  function loadMedication(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(MED_KEY) || "null");
+      return parsed;
+    }catch{
+      return null;
+    }
+  }
+
+  function saveMedication(data){
+    localStorage.setItem(MED_KEY, JSON.stringify(data));
+  }
+
+  function loadMedLog(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(MED_LOG_KEY) || "{}");
+      return parsed && typeof parsed === "object" ? parsed : {};
+    }catch{
+      return {};
+    }
+  }
+
+  function saveMedLog(data){
+    localStorage.setItem(MED_LOG_KEY, JSON.stringify(data));
   }
 
   function escapeHtml(str){
@@ -1299,6 +1450,257 @@ canvas{
     });
   }
 
+  function updateMedicationFrequencyUI(){
+    const freq = Number(ui.medFrequency.value || 1);
+    ui.medExtraTimesRow.style.display = freq >= 2 ? "flex" : "none";
+    ui.medThirdWrap.style.display = freq >= 3 ? "block" : "none";
+  }
+
+  function initMedication(){
+    const med = loadMedication();
+    if(med && med.enabled){
+      ui.medEnabled.checked = true;
+      ui.medName.value = med.name || "";
+      ui.medDose.value = med.dose || "";
+      ui.medFrequency.value = String(med.frequency || 1);
+      ui.medTime1.value = med.times?.[0] || "";
+      ui.medTime2.value = med.times?.[1] || "";
+      ui.medTime3.value = med.times?.[2] || "";
+      ui.medNotes.value = med.notes || "";
+    } else {
+      ui.medEnabled.checked = false;
+      ui.medFrequency.value = "1";
+    }
+
+    updateMedicationFrequencyUI();
+    toggleMedicationForm();
+
+    ui.medEnabled.addEventListener("change", toggleMedicationForm);
+    ui.medFrequency.addEventListener("change", updateMedicationFrequencyUI);
+
+    ui.saveMedBtn.addEventListener("click", () => {
+      const enabled = ui.medEnabled.checked;
+      const frequency = Number(ui.medFrequency.value || 1);
+      const times = [ui.medTime1.value, ui.medTime2.value, ui.medTime3.value]
+        .slice(0, frequency)
+        .filter(Boolean);
+
+      const medData = {
+        enabled,
+        name: ui.medName.value.trim(),
+        dose: ui.medDose.value.trim(),
+        frequency,
+        times,
+        notes: ui.medNotes.value.trim()
+      };
+
+      if(enabled && (!medData.name || !medData.dose || !times.length)){
+        alert("Completa al menos nombre, dosis y un horario.");
+        return;
+      }
+
+      saveMedication(medData);
+      renderMedication();
+      maybeNotifyMedication();
+      alert("Medicación guardada.");
+    });
+  }
+
+  function toggleMedicationForm(){
+    const enabled = ui.medEnabled.checked;
+    ui.medFormWrap.style.display = enabled ? "block" : "none";
+
+    if(!enabled){
+      saveMedication({ enabled:false, name:"", dose:"", frequency:1, times:[], notes:"" });
+      renderMedication();
+    }
+  }
+
+  function ensureTodayMedLog(med){
+    const today = todayISO();
+    const log = loadMedLog();
+    if(!log[today]) log[today] = {};
+    const times = med?.times || [];
+
+    times.forEach(t => {
+      if(!log[today][t]){
+        log[today][t] = {
+          scheduled: t,
+          status: "pendiente",
+          takenAt: ""
+        };
+      }
+    });
+
+    Object.keys(log[today]).forEach(k => {
+      if(!times.includes(k)){
+        delete log[today][k];
+      }
+    });
+
+    saveMedLog(log);
+    return log;
+  }
+
+  function markMedicationStatus(timeKey, status){
+    const med = loadMedication();
+    if(!med || !med.enabled) return;
+    const today = todayISO();
+    const log = ensureTodayMedLog(med);
+    const now = nowTime();
+
+    if(!log[today][timeKey]){
+      log[today][timeKey] = { scheduled: timeKey, status:"pendiente", takenAt:"" };
+    }
+
+    if(status === "omitida"){
+      log[today][timeKey].status = "omitida";
+      log[today][timeKey].takenAt = "";
+    } else {
+      log[today][timeKey].status = status;
+      log[today][timeKey].takenAt = now;
+    }
+
+    saveMedLog(log);
+    renderMedication();
+  }
+
+  function evaluateMedicationAlert(med, dayLog){
+    if(!med || !med.enabled) return { label:"Sin alerta", cls:"status-pill" };
+
+    const nowMin = timeToMinutes(nowTime());
+    let hasLate = false;
+    let hasMissed = false;
+    let hasPendingSoon = false;
+
+    med.times.forEach(t => {
+      const entry = dayLog?.[t];
+      const sched = timeToMinutes(t);
+      if(sched == null || nowMin == null) return;
+
+      if(entry?.status === "omitida"){
+        hasMissed = true;
+        return;
+      }
+      if(entry?.status === "pendiente"){
+        const diff = nowMin - sched;
+        if(diff > 60) hasMissed = true;
+        else if(diff > 15) hasLate = true;
+        else if(diff >= -15 && diff <= 15) hasPendingSoon = true;
+      }
+    });
+
+    if(hasMissed) return { label:"Dosis omitida o muy retrasada", cls:"status-pill status-bad" };
+    if(hasLate) return { label:"Pendiente con retraso", cls:"status-pill status-warn" };
+    if(hasPendingSoon) return { label:"Hora cercana de toma", cls:"status-pill status-warn" };
+    return { label:"En seguimiento", cls:"status-pill status-ok" };
+  }
+
+  function renderMedication(){
+    const med = loadMedication();
+    ui.medDailyCards.innerHTML = "";
+
+    if(!med || !med.enabled){
+      ui.medTodaySummary.textContent = "Aún no hay medicación configurada.";
+      ui.medAlertBadge.textContent = "Sin alerta";
+      ui.medAlertBadge.className = "status-pill";
+      return;
+    }
+
+    const log = ensureTodayMedLog(med);
+    const today = todayISO();
+    const dayLog = log[today] || {};
+
+    ui.medTodaySummary.textContent =
+      `${med.name || "Medicamento"} · ${med.dose || "—"} · ${med.frequency || 1} toma(s) al día`;
+
+    const badge = evaluateMedicationAlert(med, dayLog);
+    ui.medAlertBadge.textContent = badge.label;
+    ui.medAlertBadge.className = badge.cls;
+
+    med.times.forEach((t) => {
+      const entry = dayLog[t] || { status:"pendiente", takenAt:"" };
+      let text = "Pendiente";
+      let cls = "status-pill";
+      if(entry.status === "a_tiempo"){
+        text = `Tomada a tiempo${entry.takenAt ? ` · ${entry.takenAt}` : ""}`;
+        cls = "status-pill status-ok";
+      } else if(entry.status === "tarde"){
+        text = `Tomada tarde${entry.takenAt ? ` · ${entry.takenAt}` : ""}`;
+        cls = "status-pill status-warn";
+      } else if(entry.status === "omitida"){
+        text = "Omitida";
+        cls = "status-pill status-bad";
+      }
+
+      ui.medDailyCards.innerHTML += `
+        <div class="med-card">
+          <div class="row">
+            <div>
+              <div><strong>${escapeHtml(med.name)}</strong> · ${escapeHtml(med.dose)}</div>
+              <div class="small">Horario programado: ${escapeHtml(t)}</div>
+              <div class="${cls}" style="margin-top:8px">${escapeHtml(text)}</div>
+            </div>
+          </div>
+          <div class="row" style="margin-top:12px">
+            <button class="btn take" data-med-action="a_tiempo" data-med-time="${escapeHtml(t)}">Ya la tomé</button>
+            <button class="btn late" data-med-action="tarde" data-med-time="${escapeHtml(t)}">La tomé tarde</button>
+            <button class="btn skip" data-med-action="omitida" data-med-time="${escapeHtml(t)}">Omitida</button>
+          </div>
+        </div>
+      `;
+    });
+
+    [...document.querySelectorAll("[data-med-action]")].forEach(btn => {
+      btn.addEventListener("click", () => {
+        markMedicationStatus(btn.dataset.medTime, btn.dataset.medAction);
+      });
+    });
+  }
+
+  function maybeNotifyMedication(){
+    const med = loadMedication();
+    if(!med || !med.enabled || !med.times?.length) return;
+
+    const today = todayISO();
+    const lastAlert = localStorage.getItem(MED_ALERT_LAST_KEY);
+    const nowMin = timeToMinutes(nowTime());
+    const log = ensureTodayMedLog(med);
+    const dayLog = log[today] || {};
+
+    let shouldAlert = false;
+    let msg = "";
+
+    med.times.forEach(t => {
+      const sched = timeToMinutes(t);
+      if(sched == null || nowMin == null) return;
+      const diff = nowMin - sched;
+      const entry = dayLog[t];
+
+      if(entry?.status === "pendiente" && diff >= -10 && diff <= 20){
+        shouldAlert = true;
+        msg = `Recordatorio: ${med.name} (${med.dose}) programado a las ${t}.`;
+      }
+      if(entry?.status === "pendiente" && diff > 60){
+        shouldAlert = true;
+        msg = `Atención: la toma de ${med.name} de las ${t} sigue pendiente o pudo omitirse.`;
+      }
+    });
+
+    if(!shouldAlert) return;
+    if(lastAlert === `${today}-${msg}`) return;
+
+    if ("Notification" in window && Notification.permission === "granted") {
+      try{
+        new Notification("Brújula Emocional · Medicación", { body: msg });
+      }catch{}
+    } else {
+      ui.medTodaySummary.textContent = msg;
+    }
+
+    localStorage.setItem(MED_ALERT_LAST_KEY, `${today}-${msg}`);
+  }
+
   function renderAll(){
     const data = loadData();
     renderHeader(data);
@@ -1309,10 +1711,15 @@ canvas{
     drawWeekChart(data);
     updateReminderUI();
     updateDiscreetUI();
+    renderMedication();
   }
 
   function exportJSON(){
-    const data = loadData();
+    const data = {
+      emotionalLogs: loadData(),
+      medication: loadMedication(),
+      medicationLog: loadMedLog()
+    };
     const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -1328,9 +1735,17 @@ canvas{
     reader.onload = () => {
       try{
         const parsed = JSON.parse(reader.result);
-        if(!Array.isArray(parsed)) throw new Error("Formato inválido");
-        saveData(parsed);
+
+        if(Array.isArray(parsed)){
+          saveData(parsed);
+        } else {
+          if(Array.isArray(parsed.emotionalLogs)) saveData(parsed.emotionalLogs);
+          if(parsed.medication && typeof parsed.medication === "object") saveMedication(parsed.medication);
+          if(parsed.medicationLog && typeof parsed.medicationLog === "object") saveMedLog(parsed.medicationLog);
+        }
+
         ui.importMsg.textContent = "Respaldo importado correctamente.";
+        initMedication();
         renderAll();
       }catch{
         ui.importMsg.textContent = "No se pudo importar el archivo. Revisa que sea un JSON válido.";
@@ -1372,7 +1787,7 @@ canvas{
     const reminderTime = localStorage.getItem(REMINDER_TIME_KEY) || "20:00";
     ui.reminderStatus.textContent = enabled ? reminderTime : "Off";
     ui.reminderMsg.textContent = enabled
-      ? `Recordatorio activado a las ${reminderTime}. Se mostrará cuando abras la app cerca de esa hora.`
+      ? `Recordatorio emocional activado a las ${reminderTime}. Se mostrará cuando abras la app cerca de esa hora.`
       : "Si el navegador lo permite, recibirás un aviso local cuando abras la app cerca de esa hora.";
   }
 
@@ -1449,7 +1864,9 @@ canvas{
     initReminder();
     initDiscreetMode();
     initModals();
+    initMedication();
     maybeNotifyReminder();
+    maybeNotifyMedication();
 
     ui.closeWelcomeBtn.addEventListener("click", () => {
       ui.welcomeOverlay.style.display = "none";
@@ -1491,6 +1908,7 @@ canvas{
     ui.deleteAllBtn.addEventListener("click", () => {
       if(!confirm("¿Seguro que quieres borrar todos los registros guardados en este dispositivo?")) return;
       localStorage.removeItem(DATA_KEY);
+      localStorage.removeItem(MED_LOG_KEY);
       renderAll();
       ui.importMsg.textContent = "";
       showMsg("Datos borrados");
