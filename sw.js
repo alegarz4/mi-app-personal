@@ -1,48 +1,52 @@
-const CACHE = "mi-app-personal-cache-v3";
+const CACHE = "brujula-emocional-cache-v4";
 
 const ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./icon.svg",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
   "./sw.js"
 ];
 
-// Instala y precarga archivos base
+// Instala y guarda archivos base
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE)
+    caches
+      .open(CACHE)
       .then((cache) => cache.addAll(ASSETS))
       .then(() => self.skipWaiting())
   );
 });
 
-// Borra caches viejos
+// Activa y borra cachés viejos
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE) {
-            return caches.delete(key);
-          }
-        })
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys.map((key) => {
+            if (key !== CACHE) {
+              return caches.delete(key);
+            }
+          })
+        )
       )
-    ).then(() => self.clients.claim())
+      .then(() => self.clients.claim())
   );
 });
 
-// Estrategia:
-// - Para navegación e index.html: primero red, luego caché
-// - Para otros archivos: primero caché, luego red
+// Manejo de peticiones
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   const url = new URL(request.url);
 
-  // Solo manejar peticiones GET
+  // Solo manejar GET
   if (request.method !== "GET") return;
 
-  // Navegación o index.html: network first
+  // Para navegación y página principal: primero red, luego caché
   if (
     request.mode === "navigate" ||
     url.pathname.endsWith("/index.html") ||
@@ -52,29 +56,61 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE).then((cache) => cache.put("./index.html", copy));
+          if (response && response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE).then((cache) => {
+              cache.put("./index.html", copy);
+            });
+          }
           return response;
         })
-        .catch(() => caches.match(request).then((r) => r || caches.match("./index.html")))
+        .catch(() =>
+          caches.match(request).then((cached) => {
+            return cached || caches.match("./index.html");
+          })
+        )
     );
     return;
   }
 
-  // Resto de archivos: cache first con actualización en segundo plano
-  event.respondWith(
-    caches.match(request).then((cached) => {
-      const networkFetch = fetch(request)
+  // Para manifest: primero red, luego caché
+  if (url.pathname.endsWith("/manifest.webmanifest")) {
+    event.respondWith(
+      fetch(request)
         .then((response) => {
           if (response && response.status === 200) {
             const copy = response.clone();
-            caches.open(CACHE).then((cache) => cache.put(request, copy));
+            caches.open(CACHE).then((cache) => {
+              cache.put("./manifest.webmanifest", copy);
+            });
           }
           return response;
         })
-        .catch(() => cached);
+        .catch(() => caches.match("./manifest.webmanifest"))
+    );
+    return;
+  }
 
-      return cached || networkFetch;
+  // Para iconos, svg y otros archivos: caché primero, luego red
+  event.respondWith(
+    caches.match(request).then((cached) => {
+      if (cached) return cached;
+
+      return fetch(request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE).then((cache) => {
+              cache.put(request, copy);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          if (url.pathname.endsWith("/icon.svg")) {
+            return caches.match("./icon.svg");
+          }
+        });
     })
   );
 });
