@@ -1,26 +1,26 @@
 {
-  "id": "./",
   "name": "Brújula Emocional",
   "short_name": "Brújula",
-  "description": "Registro personal de emociones y bienestar.",
-  "start_url": "./",
+  "description": "Registro personal de emociones y bienestar con guardado local en este dispositivo.",
+  "start_url": "./index.html?v=7",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f7f2ff",
+  "background_color": "#0f172a",
   "theme_color": "#7c3aed",
+  "lang": "es-MX",
   "icons": [
     {
       "src": "./icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
       "src": "./icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }
