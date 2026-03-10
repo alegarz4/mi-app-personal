@@ -312,6 +312,11 @@ canvas{
 .status-warn{background:rgba(245,158,11,.15)}
 .status-bad{background:rgba(244,63,94,.15)}
 .installWrap{margin-top:12px}
+.versionBadge{
+  margin-top:6px;
+  font-size:11px;
+  color:var(--muted);
+}
 </style>
 </head>
 <body class="theme-noche">
@@ -321,6 +326,7 @@ canvas{
       <div class="brand">
         <h1>Brújula Emocional</h1>
         <div class="sub">Registro personal de emociones y bienestar · privado · útil para adolescentes y adultos</div>
+        <div class="versionBadge">Versión: v7.0 estable</div>
       </div>
       <div class="badges">
         <span class="pill discreet-safe" id="todayPill">Hoy: —</span>
@@ -879,7 +885,8 @@ canvas{
 
 <script>
 (() => {
-  const DATA_KEY = "brujula_emocional_v6";
+  const APP_VERSION = "v7.0-estable";
+  const DATA_KEY = "brujula_emocional_v7";
   const THEME_KEY = "brujula_emocional_theme";
   const FIRST_KEY = "brujula_emocional_first_open";
   const REMINDER_ENABLED_KEY = "brujula_emocional_reminder_enabled";
@@ -976,6 +983,46 @@ canvas{
     installMsg: $("installMsg")
   };
 
+  function storageDisponible() {
+    try {
+      const testKey = "__test_storage__";
+      localStorage.setItem(testKey, "ok");
+      const value = localStorage.getItem(testKey);
+      localStorage.removeItem(testKey);
+      return value === "ok";
+    } catch (e) {
+      console.error("Storage no disponible:", e);
+      return false;
+    }
+  }
+
+  function migrateOldDataIfNeeded(){
+    const current = localStorage.getItem(DATA_KEY);
+    if(current) return;
+
+    const oldKeys = [
+      "brujula_emocional_v6",
+      "brujula_emocional_v5",
+      "brujula_emocional_v4",
+      "brujula_emocional"
+    ];
+
+    for(const key of oldKeys){
+      const oldData = localStorage.getItem(key);
+      if(!oldData) continue;
+      try{
+        const parsed = JSON.parse(oldData);
+        if(Array.isArray(parsed)){
+          localStorage.setItem(DATA_KEY, JSON.stringify(parsed));
+          console.log("Migración de datos completada desde:", key);
+          break;
+        }
+      }catch(e){
+        console.error("Error migrando datos desde:", key, e);
+      }
+    }
+  }
+
   function todayISO(d = new Date()){
     const y = d.getFullYear();
     const m = String(d.getMonth()+1).padStart(2,"0");
@@ -1014,13 +1061,20 @@ canvas{
     try{
       const parsed = JSON.parse(localStorage.getItem(DATA_KEY) || "[]");
       return Array.isArray(parsed) ? parsed : [];
-    }catch{
+    }catch(e){
+      console.error("Error leyendo datos:", e);
       return [];
     }
   }
 
   function saveData(data){
-    localStorage.setItem(DATA_KEY, JSON.stringify(data));
+    try{
+      localStorage.setItem(DATA_KEY, JSON.stringify(data));
+      console.log("Datos guardados:", data.length);
+    }catch(e){
+      console.error("Error al guardar en localStorage:", e);
+      alert("No se pudo guardar la información en este navegador.");
+    }
   }
 
   function normalizeMedication(raw){
@@ -1068,7 +1122,9 @@ canvas{
       try{
         const parsed = JSON.parse(oldMed);
         saveMedication(normalizeMedication(parsed));
-      }catch{}
+      }catch(e){
+        console.error("Error migrando medicación antigua:", e);
+      }
     }
 
     if(oldLog){
@@ -1086,7 +1142,9 @@ canvas{
           });
           saveMedLog(normalizedLog);
         }
-      }catch{}
+      }catch(e){
+        console.error("Error migrando bitácora antigua:", e);
+      }
     }
   }
 
@@ -1094,7 +1152,8 @@ canvas{
     try{
       const parsed = JSON.parse(localStorage.getItem(MED_KEY) || "null");
       return normalizeMedication(parsed);
-    }catch{
+    }catch(e){
+      console.error("Error leyendo medicación:", e);
       return { enabled:false, items:[] };
     }
   }
@@ -1102,20 +1161,31 @@ canvas{
   function saveMedication(data){
     const normalized = normalizeMedication(data);
     normalized.enabled = normalized.items.length > 0 ? !!data.enabled : false;
-    localStorage.setItem(MED_KEY, JSON.stringify(normalized));
+    try{
+      localStorage.setItem(MED_KEY, JSON.stringify(normalized));
+    }catch(e){
+      console.error("Error al guardar medicación:", e);
+      alert("No se pudo guardar la medicación en este dispositivo.");
+    }
   }
 
   function loadMedLog(){
     try{
       const parsed = JSON.parse(localStorage.getItem(MED_LOG_KEY) || "{}");
       return parsed && typeof parsed === "object" ? parsed : {};
-    }catch{
+    }catch(e){
+      console.error("Error leyendo bitácora de medicación:", e);
       return {};
     }
   }
 
   function saveMedLog(data){
-    localStorage.setItem(MED_LOG_KEY, JSON.stringify(data));
+    try{
+      localStorage.setItem(MED_LOG_KEY, JSON.stringify(data));
+    }catch(e){
+      console.error("Error al guardar bitácora de medicación:", e);
+      alert("No se pudo guardar el seguimiento de medicación.");
+    }
   }
 
   function escapeHtml(str){
@@ -1871,6 +1941,7 @@ canvas{
 
   function exportJSON(){
     const data = {
+      appVersion: APP_VERSION,
       emotionalLogs: loadData(),
       medication: loadMedication(),
       medicationLog: loadMedLog()
@@ -1904,7 +1975,8 @@ canvas{
         renderMedicationDraft();
         ui.importMsg.textContent = "Respaldo importado correctamente.";
         renderAll();
-      }catch{
+      }catch(e){
+        console.error("Error importando respaldo:", e);
         ui.importMsg.textContent = "No se pudo importar el archivo. Revisa que sea un JSON válido.";
       }
     };
@@ -2080,7 +2152,39 @@ canvas{
     });
   }
 
+  async function registerServiceWorker(){
+    if (!("serviceWorker" in navigator)) return;
+
+    try {
+      const reg = await navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" });
+      console.log("Service worker registrado:", reg);
+
+      if (reg.waiting) {
+        reg.waiting.postMessage({ type: "SKIP_WAITING" });
+      }
+
+      reg.addEventListener("updatefound", () => {
+        const newWorker = reg.installing;
+        if (!newWorker) return;
+        newWorker.addEventListener("statechange", () => {
+          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+            console.log("Nueva versión del service worker instalada.");
+          }
+        });
+      });
+    } catch (err) {
+      console.error("Error registrando service worker:", err);
+    }
+  }
+
   function init(){
+    console.log("Brújula Emocional:", APP_VERSION);
+
+    if (!storageDisponible()) {
+      alert("Este navegador está bloqueando el almacenamiento local o no lo está conservando.");
+    }
+
+    migrateOldDataIfNeeded();
     migrateOldMedicationIfNeeded();
 
     ui.date.value = todayISO();
@@ -2154,23 +2258,11 @@ canvas{
     });
 
     renderAll();
+    registerServiceWorker();
   }
 
   init();
 })();
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", async () => {
-    try {
-      await navigator.serviceWorker.register("./sw.js");
-      console.log("Service worker registrado");
-    } catch (err) {
-      console.error("Error registrando service worker:", err);
-    }
-  });
-}
 </script>
 </body>
 </html>
